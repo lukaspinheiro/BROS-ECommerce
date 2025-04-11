@@ -17,9 +17,10 @@
 ### 🔧 Área Administrativa
 - 🧑‍💼 **Administrador & Gestor de Produtos**  
   - CRUD de produtos
-  - Gerenciamento de estoque  
+  - Gerenciamento de estoque
 - 📈 **Administrador**  
-  - Geração de relatórios de apoio à decisão  
+  - Geração de relatórios de apoio à decisão
+  - Gerenciamento de usuarios   
 - 📤 **Exportação de Dados**  
   - Exportar para CSV, PDF e Excel  
 - 📦 **Operador de Pedidos**  
