@@ -16,7 +16,8 @@
 
 ### 🔧 Área Administrativa
 - 🧑‍💼 **Administrador & Gestor de Produtos**  
-  - CRUD de produtos e gerenciamento de estoque  
+  - CRUD de produtos
+  - Gerenciamento de estoque  
 - 📈 **Administrador**  
   - Geração de relatórios de apoio à decisão  
 - 📤 **Exportação de Dados**  
@@ -37,10 +38,10 @@
 
 ## 🧰 Tecnologias Utilizadas
 
-- ⚙️ **.NET 7 / ASP.NET Core MVC** – Backend e estrutura web  
+- ⚙️ **.NET 9 / ASP.NET Core MVC** – Backend e estrutura web  
 - 🧱 **Entity Framework Core** – ORM para acesso a dados  
 - 💾 **SQL Server** – Banco de dados relacional  
-- 💡 **Clean Architecture** – Organização modular por responsabilidades  
+- 💡 **DDD e Clean Architecture** – Organização modular por responsabilidades  
 - 🎨 **Razor Views (.cshtml)** – Renderização do frontend com HTML dinâmico  
 - 🌐 **Bootstrap / CSS** – Estilização da interface  
 
