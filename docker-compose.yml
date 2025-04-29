@@ -1,0 +1,6 @@
+services:
+  bros-ecommerce.web:
+    image: ${DOCKER_REGISTRY-}brosecommerceweb
+    build:
+      context: .
+      dockerfile: BROS-ECommerce.Web/Dockerfile
