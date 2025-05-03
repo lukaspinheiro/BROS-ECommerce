@@ -1,30 +1,35 @@
-﻿<nav class="navbar navbar-expand-lg" style="background-color: #FF4E4E; color: white; height: 90px">
-    <div class="container-fluid d-flex justify-content-between align-items-center py-2" style="padding-left: 80px; padding-right: 80px;">
-
-        <div class="d-flex flex-column">
-            <a class="fw-bold fst-italic text-white" style="font-size: 1.5rem; font-weight: 900 !important;" href="@Url.Action("Index", "Home")">GymBros</a>
-            <a class="fw-bold fst-italic text-white" style="margin-top: -5px;" href="@Url.Action("Index", "Home")">Supplements</a>
-        </div>
-
-
-        <form class="d-flex mx-3 w-50 bg-light rounded-2 overflow-hidden" style="height: 50px;">
-            <input class="form-control border-0" type="search" placeholder="Buscar..." aria-label="Buscar" style="height: 100%;">
-            <button class="btn btn-light bg-light d-flex align-items-center justify-content-center px-3" type="submit" style="height: 100%;">
-                <i class="fa-solid fa-magnifying-glass fa-2xl" style="color: #4a4a4a;"></i>
-            </button>
-        </form>
-
-        <a href="@Url.Action("Login", "Autenticacao")" class="d-flex align-items-center gap-3 text-white text-decoration-none">
-            <div class="text-start">
-                <span class="d-block">Cadastre-se</span>
-                <span>ou Faça Login</span>
-            </div>
-            <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
-        </a>
+﻿<nav class="navbar navbar-expand-lg" style="background-color: #FF4E4E; color: white; height: 90px;">
+    <div class="container-fluid py-2" style="padding-left: 80px; padding-right: 80px;">
+        <div class="row w-100 align-items-center">
             
-        <i class="fa-solid fa-heart fa-2xl"></i>
+            <div class="col-2 d-flex flex-column">
+                <a class="fw-bold fst-italic text-white" style="font-size: 1.5rem; font-weight: 900 !important;" href="@Url.Action("Index", "Home")">GymBros</a>
+                <a class="fw-bold fst-italic text-white" style="margin-top: -5px;" href="@Url.Action("Index", "Home")">Supplements</a>
+            </div>
 
-        <i class="fa-solid fa-cart-shopping fa-2xl"></i>
+            <div class="col-5" style="padding-left: 0.50rem !important; padding-right: unset !important; max-width: 37%;">
+                <form class="d-flex bg-light rounded-2 overflow-hidden w-100" style="height: 50px;">
+                    <input class="form-control border-0" type="search" placeholder="Buscar..." aria-label="Buscar" style="height: 100%;">
+                    <button class="btn btn-light bg-light d-flex align-items-center justify-content-center px-3" type="submit" style="height: 100%;">
+                        <i class="fa-solid fa-magnifying-glass fa-2xl" style="color: #4a4a4a;"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="col justify-content-end">
+            <div class="d-flex align-items-center justify-content-between gap-4" style="padding-left: 22%;margin-right: -1.5rem;">
+                <a href="@Url.Action("Login", "Autenticacao")" class="d-flex align-items-center gap-3 text-white text-decoration-none">
+                    <div class="text-start">
+                        <span class="d-block">Cadastre-se</span>
+                        <span>ou Faça Login</span>
+                    </div>
+                    <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
+                </a>
+
+                <i class="fa-solid fa-heart fa-2xl" style="color: #ffffff;"></i>
+                <i class="fa-solid fa-cart-shopping fa-2xl" style="color: #ffffff;"></i>
+            </div>
+
+        </div>
     </div>
 </nav>
-
