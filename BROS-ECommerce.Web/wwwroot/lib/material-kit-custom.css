@@ -16255,7 +16255,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 footer {
-    padding: 0.9375rem 0;
+    padding: 0 0;
     text-align: center;
     display: -webkit-flex;
     /* Safari */
