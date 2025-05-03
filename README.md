@@ -1,4 +1,4 @@
-# 🏋️ BroStock – E-commerce de Produtos de Academia
+# 🏋️ GymBros – E-commerce de Produtos de Academia
 
 **BroStock** é um sistema de e-commerce voltado para a venda de produtos de academia, como suplementos, equipamentos e acessórios. O sistema foi desenvolvido com foco em escalabilidade, organização de perfis e usabilidade para os diferentes usuários da plataforma.
 
