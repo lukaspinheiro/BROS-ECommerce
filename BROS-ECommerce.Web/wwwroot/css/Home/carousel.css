@@ -1,0 +1,48 @@
+﻿.vert .carousel-item-next.carousel-item-left,
+.vert .carousel-item-prev.carousel-item-right {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.vert .carousel-item-next,
+.vert .active.carousel-item-right {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+}
+
+.vert .carousel-item-prev,
+.vert .active.carousel-item-left {
+    -webkit-transform: translate3d(0,-100%, 0);
+    transform: translate3d(0,-100%, 0);
+}
+
+.banner-section .carousel-inner img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
+}
+
+.carousel-indicators {
+    bottom: -30px;
+    justify-content: center;
+}
+
+    .carousel-indicators li {
+        height: 0.5rem;
+        border-radius: 5px;
+        background-color: #999;
+        margin: 0 5px;
+        opacity: 0.5;
+        transition: opacity 0.3s, background-color 0.3s;
+    }
+
+    .carousel-indicators .active {
+        background-color: #333;
+        opacity: 1
+    }
+
+.carousel .carousel-indicators li {
+    width: 2rem !important;
+}
