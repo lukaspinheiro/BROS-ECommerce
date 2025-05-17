@@ -29,3 +29,8 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.paddingX {
+    padding-left: clamp(16px, 6vw, 120px);
+    padding-right: clamp(16px, 6vw, 120px);
+}
