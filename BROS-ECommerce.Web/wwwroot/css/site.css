@@ -31,8 +31,8 @@ body {
 }
 
 .paddingX {
-    padding-left: clamp(16px, 6vw, 120px) !important;
-    padding-right: clamp(16px, 6vw, 120px) !important;
+    padding-left: clamp(16px, 10vw, 160px) !important;
+    padding-right: clamp(16px, 10vw, 160px) !important;
 }
 .extra-bold {
     font-family: 'Montserrat', sans-serif;

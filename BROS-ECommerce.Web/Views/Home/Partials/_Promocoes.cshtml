@@ -1,218 +1,34 @@
-﻿<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Promoções</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #fff;
-            margin: 0;
-            padding: 0;
-        }
+﻿<section class="promocao-section paddingX">
+    <h2 class="text-center extra-bold mb-4">EM PROMOÇÃO</h2>
+    <div class="carousel-wrapper">
+        <button class="scroll-btn left" id="btn-left">‹</button>
+        <div class="produtos-container d-flex justify-content-between gap-5" id="carousel">
 
-        .promocao-section {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .produtos-container {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            gap: 20px;
-            padding: 10px;
-        }
-
-            .produtos-container::-webkit-scrollbar {
-                display: none; /* oculta a barra no Chrome */
-            }
-
-        .card {
-            width: 320px;
-            flex: 0 0 auto;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-top: unset;
-            margin-bottom: unset;
-            transition: transform 0.2s ease;
-            font-size: 1rem;
-        }
-
-            .card:hover {
-                transform: scale(1.03);
-            }
-
-            .card:hover .btn-comprar {
-                background-color: #377139;
-            }
-
-            .card img {
-                max-width: 100%;
-                max-height: 100%;
-            }
-        .imagem-produto{
-            height: clamp(120px, 13.4vw, 230px);
-            width: auto;
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-        }
-
-        .desconto {
-            background-color: #4cd964;
-            color: #272C30;
-            font-weight: bold;
-            padding: 5px 0;
-        }
-
-        .descricao {
-            padding: 10px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .precos {
-            font-size: 14px;
-            line-height: 1.5;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            margin-left: 1.0rem;
-            margin-right: 1.0rem;
-        }
-
-            .precos del {
-                color: #888;
-            }
-
-            .precos strong {
-                color: #3B973F;
-                font-size: clamp(14px, 1.0vw, 20px);
-                font-weight: 900 !important;
-            }
-
-
-        .btn-comprar {
-            background-color: #38b24d;
-            color: white;
-            font-weight: bold;
-            padding: 10px 0;
-            display: block;
-            text-decoration: none;
-            margin: 1.0rem;
-            font-size: clamp(14px, 1.0vw, 20px);
-            font-weight: 900 !important;
-        }
-
-            .btn-comprar:hover {
-                background-color: #377139;
-                color: white;
-            }
-
-        .carousel-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .scroll-btn {
-            background-color: #ff5a5f; /* cor do círculo (vermelho) */
-            color: white;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background 0.3s;
-        }
-
-            .scroll-btn:hover {
-                background-color: #e94a50; /* tom mais escuro no hover */
-            }
-
-            .scroll-btn.left {
-                position: absolute;
-                left: -3rem; /* ajuste conforme necessário */
-            }
-
-            .scroll-btn.right {
-                position: absolute;
-                right: -3rem; /* ajuste conforme necessário */
-            }
-
-    </style>
-</head>
-<body>
-
-    <section class="promocao-section paddingX">
-        <h2 class="text-center extra-bold mb-4">EM PROMOÇÃO</h2>
-        <div class="carousel-wrapper">
-            <button class="scroll-btn left" id="btn-left">‹</button>
-            <div class="produtos-container d-flex justify-content-between gap-5" id="carousel">
-
-                    <div class="card d-flex justify-content-between">
-                        <div class="d-flex justify-content-center align-items-center imagem-produto">
-                            <img src="https://www.gsuplementos.com.br/upload/produto/layout/185/image01-interna.webp" alt="Produto 1">
-                        </div>
-                        <div class="desconto extra-bold">10% OFF</div>
-                        <div class="descricao fw-bolder">Whey Protein Concentrado (1KG) - Growth Supplements</div>
-                        <div class="precos">
-                            <del>De R$ 138,80</del>
-                            <strong>POR R$ 124,90</strong>
-                        </div>
-                        <a href="#" class="btn-comprar">COMPRAR</a>
+                <div class="card d-flex justify-content-between">
+                    <div class="d-flex justify-content-center align-items-center imagem-produto">
+                        <img src="https://www.gsuplementos.com.br/upload/produto/layout/185/image01-interna.webp" alt="Produto 1">
                     </div>
-
-                    <div class="card d-flex justify-content-between">
-                        <div class="d-flex justify-content-center align-items-center imagem-produto">
-                            <img src="https://lojamaxtitanium.vtexassets.com/arquivos/ids/157482-1920-0/horus-max-titanium-300g-citrus-1.jpg?v=638348659717270000" alt="Produto 2">
-                        </div>
-                        <div class="desconto extra-bold">22% OFF</div>
-                        <div class="descricao">Pré-Treino Horus Max Titanium - 300g</div>
-                        <div class="precos">
-                            <del>De R$ 159,90</del>
-                            <strong>POR R$ 125,30</strong>
-                        </div>
-                        <a href="#" class="btn-comprar">COMPRAR</a>
+                    <div class="desconto extra-bold">10% OFF</div>
+                    <div class="descricao fw-bolder">Whey Protein Concentrado (1KG) - Growth Supplements</div>
+                    <div class="precos">
+                        <del>De R$ 138,80</del>
+                        <strong>POR R$ 124,90</strong>
                     </div>
+                    <a href="#" class="btn-comprar">COMPRAR</a>
+                </div>
 
-                    <div class="card d-flex justify-content-between">
-                        <div class="d-flex justify-content-center align-items-center imagem-produto">
-                            <img src="https://m.media-amazon.com/images/I/613IDf7CzFL._AC_SX679_.jpg" alt="Produto 3">
-                        </div>
-                        <div class="desconto extra-bold">10% OFF</div>
-                        <div class="descricao">Whey Protein Black Skull - 900G</div>
-                        <div class="precos">
-                            <del>De R$ 99,90</del>
-                            <strong>POR R$ 89,91</strong>
-                        </div>
-                        <a href="#" class="btn-comprar">COMPRAR</a>
+                <div class="card d-flex justify-content-between">
+                    <div class="d-flex justify-content-center align-items-center imagem-produto">
+                        <img src="https://lojamaxtitanium.vtexassets.com/arquivos/ids/157482-1920-0/horus-max-titanium-300g-citrus-1.jpg?v=638348659717270000" alt="Produto 2">
                     </div>
-
-                    <div class="card d-flex justify-content-between">
-                        <div class="d-flex justify-content-center align-items-center imagem-produto">
-                            <img src="https://www.gsuplementos.com.br/upload/produto/layout/1387/produto-principal-v2.webp" alt="Produto 4">
-                        </div>
-                        <div class="desconto extra-bold">10% OFF</div>
-                        <div class="descricao">Pasta de Amendoim Growth Sabor Cookies - 500G</div>
-                        <div class="precos">
-                            <del>De R$ 31,00</del>
-                            <strong>POR R$ 27,90</strong>
-                        </div>
-                        <a href="#" class="btn-comprar">COMPRAR</a>
+                    <div class="desconto extra-bold">22% OFF</div>
+                    <div class="descricao">Pré-Treino Horus Max Titanium - 300g</div>
+                    <div class="precos">
+                        <del>De R$ 159,90</del>
+                        <strong>POR R$ 125,30</strong>
                     </div>
+                    <a href="#" class="btn-comprar">COMPRAR</a>
+                </div>
 
                 <div class="card d-flex justify-content-between">
                     <div class="d-flex justify-content-center align-items-center imagem-produto">
@@ -239,57 +55,58 @@
                     </div>
                     <a href="#" class="btn-comprar">COMPRAR</a>
                 </div>
-                <div class="card d-flex justify-content-between">
-                    <div class="d-flex justify-content-center align-items-center imagem-produto">
-                        <img src="https://m.media-amazon.com/images/I/613IDf7CzFL._AC_SX679_.jpg" alt="Produto 3">
-                    </div>
-                    <div class="desconto extra-bold">10% OFF</div>
-                    <div class="descricao">Whey Protein Black Skull - 900G</div>
-                    <div class="precos">
-                        <del>De R$ 99,90</del>
-                        <strong>POR R$ 89,91</strong>
-                    </div>
-                    <a href="#" class="btn-comprar">COMPRAR</a>
+
+            <div class="card d-flex justify-content-between">
+                <div class="d-flex justify-content-center align-items-center imagem-produto">
+                    <img src="https://m.media-amazon.com/images/I/613IDf7CzFL._AC_SX679_.jpg" alt="Produto 3">
                 </div>
-
-                <div class="card d-flex justify-content-between">
-                    <div class="d-flex justify-content-center align-items-center imagem-produto">
-                        <img src="https://www.gsuplementos.com.br/upload/produto/layout/1387/produto-principal-v2.webp" alt="Produto 4">
-                    </div>
-                    <div class="desconto extra-bold">10% OFF</div>
-                    <div class="descricao">Pasta de Amendoim Growth Sabor Cookies - 500G</div>
-                    <div class="precos">
-                        <del>De R$ 31,00</del>
-                        <strong>POR R$ 27,90</strong>
-                    </div>
-                    <a href="#" class="btn-comprar">COMPRAR</a>
+                <div class="desconto extra-bold">10% OFF</div>
+                <div class="descricao">Whey Protein Black Skull - 900G</div>
+                <div class="precos">
+                    <del>De R$ 99,90</del>
+                    <strong>POR R$ 89,91</strong>
                 </div>
+                <a href="#" class="btn-comprar">COMPRAR</a>
+            </div>
+
+            <div class="card d-flex justify-content-between">
+                <div class="d-flex justify-content-center align-items-center imagem-produto">
+                    <img src="https://www.gsuplementos.com.br/upload/produto/layout/1387/produto-principal-v2.webp" alt="Produto 4">
                 </div>
-            <button class="scroll-btn right" id="btn-right">›</button>
-        </div>
-    </section>
+                <div class="desconto extra-bold">10% OFF</div>
+                <div class="descricao">Pasta de Amendoim Growth Sabor Cookies - 500G</div>
+                <div class="precos">
+                    <del>De R$ 31,00</del>
+                    <strong>POR R$ 27,90</strong>
+                </div>
+                <a href="#" class="btn-comprar">COMPRAR</a>
+            </div>
+            <div class="card d-flex justify-content-between">
+                <div class="d-flex justify-content-center align-items-center imagem-produto">
+                    <img src="https://m.media-amazon.com/images/I/613IDf7CzFL._AC_SX679_.jpg" alt="Produto 3">
+                </div>
+                <div class="desconto extra-bold">10% OFF</div>
+                <div class="descricao">Whey Protein Black Skull - 900G</div>
+                <div class="precos">
+                    <del>De R$ 99,90</del>
+                    <strong>POR R$ 89,91</strong>
+                </div>
+                <a href="#" class="btn-comprar">COMPRAR</a>
+            </div>
 
-</body>
-</html>
-<script>
-    const btnLeft = document.getElementById('btn-left');
-    const btnRight = document.getElementById('btn-right');
-    const container = document.getElementById('carousel');
-
-    const scrollAmount = () => {
-        const cards = container.querySelectorAll('.card');
-        if (cards.length >= 2) {
-            const gap = cards[1].offsetLeft - cards[0].offsetLeft - cards[0].offsetWidth;
-            return cards[0].offsetWidth + gap;
-        }
-        return 300; 
-    };
-
-    btnLeft.addEventListener('click', () => {
-        container.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
-    });
-
-    btnRight.addEventListener('click', () => {
-        container.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
-    });
-</script>
+            <div class="card d-flex justify-content-between">
+                <div class="d-flex justify-content-center align-items-center imagem-produto">
+                    <img src="https://www.gsuplementos.com.br/upload/produto/layout/1387/produto-principal-v2.webp" alt="Produto 4">
+                </div>
+                <div class="desconto extra-bold">10% OFF</div>
+                <div class="descricao">Pasta de Amendoim Growth Sabor Cookies - 500G</div>
+                <div class="precos">
+                    <del>De R$ 31,00</del>
+                    <strong>POR R$ 27,90</strong>
+                </div>
+                <a href="#" class="btn-comprar">COMPRAR</a>
+            </div>
+            </div>
+        <button class="scroll-btn right" id="btn-right">›</button>
+    </div>
+</section>
