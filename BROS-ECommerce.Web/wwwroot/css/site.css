@@ -31,6 +31,15 @@ body {
 }
 
 .paddingX {
-    padding-left: clamp(16px, 6vw, 120px);
-    padding-right: clamp(16px, 6vw, 120px);
+    padding-left: clamp(16px, 6vw, 120px) !important;
+    padding-right: clamp(16px, 6vw, 120px) !important;
+}
+.extra-bold {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900 !important;
+    text-shadow: 1px 1px 0 #00000033;
+}
+.inner-shadow {
+    color: #fff;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
 }
