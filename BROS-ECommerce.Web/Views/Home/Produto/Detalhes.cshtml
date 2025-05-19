@@ -1,0 +1,16 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Produto.ProdutoViewModel;
+@{
+    ViewData["Title"] = Model.Nome;
+}
+
+<div class="produto-detalhe">
+    <h1>@Model.Nome</h1>
+
+    <img src="@Model.ImagemUrl" alt="@Model.Nome" style="max-width: 300px;" />
+
+    <p><strong>Descrição:</strong> @Model.Descricao</p>
+
+    <p><strong>Preço:</strong> @Model.Preco.ToString("C")</p>
+
+    <a href="/carrinho/adicionar/@Model.Slug" class="btn btn-primary">Adicionar ao Carrinho</a>
+</div>
