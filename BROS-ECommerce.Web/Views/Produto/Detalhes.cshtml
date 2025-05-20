@@ -2,15 +2,117 @@
 @{
     ViewData["Title"] = Model.Nome;
 }
+@section Head{
+    <head>
+        <link href="~/css/Shared/promocoes.css" rel="stylesheet" />
+<style>
+    .produto-detalhes-container {
+        display: flex;
+        gap: 2rem;
+        margin: 2rem;
+        align-items: flex-start;
+    }
 
-<div class="produto-detalhe">
-    <h1>@Model.Nome</h1>
+    .produto-descricao {
+        flex: 1;
+        max-width: 30%;
+    }
 
-    <img src="@Model.ImagemUrl" alt="@Model.Nome" style="max-width: 300px;" />
+    .produto-imagens {
+        flex: 1;
+        text-align: center;
+    }
 
-    <p><strong>Descrição:</strong> @Model.Descricao</p>
+        .produto-imagens img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
 
-    <p><strong>Preço:</strong> @Model.Preco.ToString("C")</p>
+    .produto-compra {
+        flex: 1;
+        max-width: 30%;
+        background: #f9f9f9;
+        padding: 1rem;
+        border-radius: 8px;
+    }
 
-    <a href="/carrinho/adicionar/@Model.Slug" class="btn btn-primary">Adicionar ao Carrinho</a>
+        .produto-compra .marca {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .produto-compra .preco {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: red;
+        }
+
+    .btn-comprar {
+        background-color: #00c851;
+        color: white;
+        padding: 0.8rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 1rem;
+        display: inline-block;
+        font-weight: bold;
+    }
+
+    .frete {
+        margin-top: 1rem;
+    }
+
+        .frete input {
+            padding: 0.5rem;
+            width: 100px;
+            margin-right: 0.5rem;
+        }
+
+</style>
+    </head>
+}
+
+<div class="produto-detalhes-container">
+    <!-- Esquerda: Descrição -->
+    <div class="produto-descricao">
+        <p class="fs-4">@Model.TituloDescricao</p>
+        <p>@Model.Descricao</p>
+    </div>
+
+    <!-- Centro: Imagens -->
+    <div class="produto-imagens">
+        @if (Model.Imagens != null && Model.Imagens.Any())
+        {
+            <div class="carousel">
+                @foreach (var imagem in Model.Imagens)
+                {
+                    <img src="@imagem" alt="@Model.Nome" />
+                }
+            </div>
+        }
+    </div>
+
+    <!-- Direita: Informações e compra -->
+    <div class="produto-compra">
+        <p class="marca">Gymbros Suplemments</p>
+        <h1>@Model.Nome</h1>
+        <p class="preco">R$@Model.Preco.ToString("F2")</p>
+        <p class="parcelamento">ou R$@((Model.Preco * 1.02m / 6).ToString("F2")) em até 6x sem juros</p>
+
+        <button class="btn-comprar">Finalizar compra</button>
+
+        <div class="frete">
+            <label>Calcule o frete</label>
+            <input type="text" placeholder="CEP" />
+            <button>Calcular</button>
+        </div>
+    </div>
 </div>
+
+<partial name="\PartialsLayout\_Promocoes" />
+
+@section scripts{
+    <script src="~/js/shared/promocoes.js"></script>
+}

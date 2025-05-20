@@ -12,19 +12,22 @@ namespace BROS_ECommerce.Services.Services
                 Id = Guid.NewGuid(),
                 Nome = "Whey Protein",
                 Slug = "whey-protein",
-                Descricao = "Suplemento de proteína ideal para ganho de massa muscular.",
-                ImagemUrl = "/imagens/whey.jpg",
-                Preco = 149.99M
+                TituloDescricao = "WHEY PROTEIN GROWTH. PROTEÍNA DO SORO DO LEITE PURA.",
+                Descricao = "Whey protein Growth fornece proteínas para quem deseja hipertrofia e definição muscular.\r\n\r\nIdeal porque é um suplemento de alto valor biológico com grande concentração de proteínas e aminoácidos essenciais é também rico em Glutamina, BCAA (incluindo Leucina).",
+                Preco = 149.99M,
+                Imagens = new List<string> { "https://www.gsuplementos.com.br/upload/produto/layout/185/image01-interna.webp" }
             },
             new ProdutoViewModel
             {
                 Id = Guid.NewGuid(),
                 Nome = "Creatina",
                 Slug = "creatina",
+                TituloDescricao = "CREATINA MONOHIDRATADA PURO MICRONIZADA.",
                 Descricao = "Melhora o desempenho físico em exercícios repetidos de curta duração e alta intensidade.",
-                ImagemUrl = "/imagens/creatina.jpg",
-                Preco = 149.99M
+                Preco = 149.99M,
+                Imagens = new List<string> { "https://www.gsuplementos.com.br/upload/produto/layout/72/produto1-mono-250-v3.webp" }
             }
+
         };
 
         public List<ProdutoViewModel> ObterTodos()
