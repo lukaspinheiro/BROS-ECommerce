@@ -9,7 +9,6 @@
     .produto-detalhes-container {
         display: flex;
         gap: 2rem;
-        margin: 2rem;
         align-items: flex-start;
     }
 
@@ -27,19 +26,17 @@
             max-width: 100%;
             border-radius: 8px;
             margin-bottom: 1rem;
+            max-height: 30rem;
         }
 
     .produto-compra {
         flex: 1;
         max-width: 30%;
-        background: #f9f9f9;
-        padding: 1rem;
         border-radius: 8px;
     }
 
         .produto-compra .marca {
             font-size: 0.9rem;
-            color: #777;
         }
 
         .produto-compra .preco {
@@ -48,65 +45,116 @@
             color: red;
         }
 
-    .btn-comprar {
-        background-color: #00c851;
-        color: white;
-        padding: 0.8rem 1.2rem;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        margin-top: 1rem;
-        display: inline-block;
-        font-weight: bold;
-    }
-
     .frete {
         margin-top: 1rem;
+                display: inline;
     }
 
         .frete input {
             padding: 0.5rem;
-            width: 100px;
-            margin-right: 0.5rem;
         }
+        .produto-compra .btn-comprar{
+            margin: unset;
+            border: unset;
+        }
+
+            .scroll-btn-produto {
+                background-color: #343A40;
+                color: white;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                padding: 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                z-index: 10;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                transition: background 0.3s;
+            }
+
+                .scroll-btn-produto:hover {
+                    background-color: #e94a50;
+                }
+
+            .scroll-btn-produto.left {
+                    position: absolute;
+                    left: 0rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+
+                .scroll-btn-produto.right {
+                    position: absolute;
+                    right: 0rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
 
 </style>
     </head>
 }
 
-<div class="produto-detalhes-container">
-    <!-- Esquerda: Descrição -->
+<div class="produto-detalhes-container mt-5 align-items-center">
     <div class="produto-descricao">
         <p class="fs-4">@Model.TituloDescricao</p>
         <p>@Model.Descricao</p>
     </div>
 
-    <!-- Centro: Imagens -->
-    <div class="produto-imagens">
+    <div class="produto-imagens position-relative">
         @if (Model.Imagens != null && Model.Imagens.Any())
         {
-            <div class="carousel">
-                @foreach (var imagem in Model.Imagens)
-                {
-                    <img src="@imagem" alt="@Model.Nome" />
-                }
+            var primeiro = true;
+            <div id="carouselProduto" class="carousel slide" data-ride="carousel">
+
+                <div class="carousel-inner rounded-4">
+                    @foreach (var imagem in Model.Imagens)
+                    {
+                        <div class="carousel-item @(primeiro ? "active" : "")">
+                            <img src="@imagem" alt="@Model.Nome" />
+                        </div>
+                        primeiro = false;
+                    }
+                </div>
+
+                <button class="scroll-btn-produto left" data-target="#carouselProduto" data-slide="prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="scroll-btn-produto right" data-target="#carouselProduto" data-slide="next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <ol class="carousel-indicators">
+                    @for (int i = 0; i < Model.Imagens.Count; i++)
+                    {
+                        <li data-target="#carouselProduto" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+                    }
+                </ol>
             </div>
         }
     </div>
 
-    <!-- Direita: Informações e compra -->
     <div class="produto-compra">
-        <p class="marca">Gymbros Suplemments</p>
-        <h1>@Model.Nome</h1>
-        <p class="preco">R$@Model.Preco.ToString("F2")</p>
-        <p class="parcelamento">ou R$@((Model.Preco * 1.02m / 6).ToString("F2")) em até 6x sem juros</p>
-
-        <button class="btn-comprar">Finalizar compra</button>
-
-        <div class="frete">
-            <label>Calcule o frete</label>
-            <input type="text" placeholder="CEP" />
-            <button>Calcular</button>
+        <div class="text-end">
+            <p class="marca mb-0">Gymbros Suplemments</p>
+            <h3 class="fw-bolder mt-0 mb-lg-5">@Model.Nome</h3>
+            <p class="preco">R$@Model.Preco.ToString("F2")</p>
+            <p class="parcelamento">ou R$@((Model.Preco * 1.02m / 6).ToString("F2")) em até 6x sem juros</p>
+        </div>
+        <div class="frete row w-100">
+            
+            <p class="fw-bold px-0">Calcule o frete</p>
+            <form class="d-flex bg-light rounded-2 w-100 p-0">
+                <input class="flex-fill form-control border border-secondary" style="height: 2.5rem;" type="text" placeholder="CEP" />
+                <button class="bg-secondary-subtle border border-secondary">Calcular</button>
+            </form>
+            <button class="btn-comprar mt-5">
+                Comprar
+                <i class="fas fa-shopping-cart" style="margin-left: 5px;"></i>
+            </button>
         </div>
     </div>
 </div>
@@ -115,4 +163,16 @@
 
 @section scripts{
     <script src="~/js/shared/promocoes.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#carouselExampleIndicators').carousel({
+                interval: 5000,
+                pause: 'hover',
+                wrap: true
+            });
+        });
+    </script>
 }
