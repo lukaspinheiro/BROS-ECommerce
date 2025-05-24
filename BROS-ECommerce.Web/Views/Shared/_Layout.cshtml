@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BROS_ECommerce.Web</title>
     <script type="importmap"></script>
@@ -25,7 +23,7 @@
 
     </header>
 
-    <main role="main" class="pb-3">
+    <main role="main" class="pb-3 paddingX">
         @RenderBody()
     </main>
 
@@ -37,8 +35,6 @@
     </footer>
 
     <partial name="\PartialsLayout\_ReferenciasScript" />
-
-
     
     @await RenderSectionAsync("Scripts", required: false)
 </body>
