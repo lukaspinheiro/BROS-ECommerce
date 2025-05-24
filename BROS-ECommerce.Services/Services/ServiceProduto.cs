@@ -15,7 +15,7 @@ namespace BROS_ECommerce.Services.Services
                 TituloDescricao = "WHEY PROTEIN GROWTH. PROTEÍNA DO SORO DO LEITE PURA.",
                 Descricao = "Whey protein Growth fornece proteínas para quem deseja hipertrofia e definição muscular.\r\n\r\nIdeal porque é um suplemento de alto valor biológico com grande concentração de proteínas e aminoácidos essenciais é também rico em Glutamina, BCAA (incluindo Leucina).",
                 Preco = 149.99M,
-                Imagens = new List<string> { "https://www.gsuplementos.com.br/upload/produto/layout/185/image01-interna.webp", "https://www.gsuplementos.com.br/upload/produto/layout/72/produto1-mono-250-v3.webp" }
+                Imagens = new List<string> { "https://www.gsuplementos.com.br/upload/produto/layout/185/image01-interna.webp", "https://cdn.awsli.com.br/2500x2500/2690/2690062/produto/254626589/whey-isolado-growth-natural-tabela-ay38azpe7k.png" }
             },
             new ProdutoViewModel
             {
@@ -25,7 +25,7 @@ namespace BROS_ECommerce.Services.Services
                 TituloDescricao = "CREATINA MONOHIDRATADA PURO MICRONIZADA.",
                 Descricao = "Melhora o desempenho físico em exercícios repetidos de curta duração e alta intensidade.",
                 Preco = 149.99M,
-                Imagens = new List<string> { "https://www.gsuplementos.com.br/upload/produto/layout/72/produto1-mono-250-v3.webp", "https://www.gsuplementos.com.br/upload/produto/layout/185/image01-interna.webp" }
+                Imagens = new List<string> { "https://www.gsuplementos.com.br/upload/produto/layout/72/produto1-mono-250-v3.webp", "https://a-static.mlcdn.com.br/800x560/creatina-pura-250g-creapure-growth-supplements/suplementosaz/7987155342/447f6778c2727252091c79df2860f344.jpeg" }
             }
 
         };

@@ -94,6 +94,41 @@
                     transform: translateY(-50%);
                 }
 
+            .btn-finalizar {
+                position: relative;
+                background-color: #00C600;
+                color: white;
+                border: none;
+                padding: 1rem 2rem;
+                width: 100%;
+                max-width: 500px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                border-radius: 10px;
+                cursor: pointer;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.3s;
+            }
+
+                .btn-finalizar span {
+                    text-align: center;
+                }
+
+                .btn-finalizar i {
+                    position: absolute;
+                    right: 20px;
+                    font-size: 1.5rem;
+                }
+
+                .btn-finalizar:hover {
+                    background-color: #00b000;
+                }
+
+
+
 </style>
     </head>
 }
@@ -146,15 +181,23 @@
         </div>
         <div class="frete row w-100">
             
-            <p class="fw-bold px-0">Calcule o frete</p>
-            <form class="d-flex bg-light rounded-2 w-100 p-0">
-                <input class="flex-fill form-control border border-secondary" style="height: 2.5rem;" type="text" placeholder="CEP" />
-                <button class="bg-secondary-subtle border border-secondary">Calcular</button>
-            </form>
-            <button class="btn-comprar mt-5">
-                Comprar
-                <i class="fas fa-shopping-cart" style="margin-left: 5px;"></i>
+            <button class="btn-finalizar">
+                <span>Finalizar compra</span>
+                <i class="fas fa-cart-plus"></i>
             </button>
+            
+            <p class="d-flex justify-content-start fw-bold mt-5 mb-2">Calcule o frete</p>
+            <form class="d-flex justify-content-center align-items-center px-0 w-100">
+                <input class="form-control border border-2 rounded-3 py-2"
+                       type="text"
+                       placeholder="Digite seu CEP">
+
+                <button type="submit"
+                        class="btn btn-success fw-semibold rounded-3 px-4 py-2">
+                    <i class="fas fa-truck me-2"></i> Calcular
+                </button>
+            </form>
+
         </div>
     </div>
 </div>
