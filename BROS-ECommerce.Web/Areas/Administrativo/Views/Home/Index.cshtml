@@ -1,0 +1,79 @@
+
+@{
+    ViewData["Title"] = "Painel administrativo";
+}
+
+@section Head {
+
+    <link rel="stylesheet" type="text/css" href="/css/Home/home-adm.css" />
+
+}
+
+<div class="container">
+    <div class="card mt-5">
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-12 mt-3">
+                    <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i></a>
+                </div>
+
+                <div class="col-12 text-center">
+                    <h3 class="title"> @ViewData["Title"]</h3>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                    <a asp-area="Administrativo" asp-controller="" asp-action="">
+                        <div class="card card-scale" style="height: 15rem;">
+                            <div class="card-body">
+
+                                <i class="fa-solid fa-box fa-2x mt-5" aria-hidden="true"></i>
+                                <h4 class="fw-bold mt-4">Gerenciar Catálogo</h4>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                    <a asp-area="Administrativo" asp-controller="" asp-action="">
+                        <div class="card card-scale" style="height: 15rem;">
+                            <div class="card-body">
+
+                                <i class="fa-solid fa-boxes fa-2x mt-5" aria-hidden="true"></i>
+                                <h4 class="fw-bold mt-4">Gerenciar Estoque</h4>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                    <a asp-area="Administrativo" asp-controller="" asp-action="">
+                        <div class="card card-scale" style="height: 15rem;">
+                            <div class="card-body">
+
+                                <i class="fa-solid fa-users fa-2x mt-5" aria-hidden="true"></i>
+                                <h4 class="fw-bold mt-4">Gerenciar Usuários</h4>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                    <a asp-area="Administrativo" asp-controller="" asp-action="">
+                        <div class="card card-scale" style="height: 15rem;">
+                            <div class="card-body">
+
+                                <i class="fa-solid fa-layer-group fa-2x mt-5" aria-hidden="true"></i>
+                                <h4 class="fw-bold mt-4">Gerenciar Categorias</h4>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
