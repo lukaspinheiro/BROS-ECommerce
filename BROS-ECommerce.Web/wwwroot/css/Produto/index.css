@@ -1,0 +1,121 @@
+﻿.produto-detalhes-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.produto-descricao {
+    flex: 1;
+    max-width: 30%;
+}
+
+.produto-imagens {
+    flex: 1;
+    text-align: center;
+}
+
+    .produto-imagens img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        max-height: 30rem;
+    }
+
+.produto-compra {
+    flex: 1;
+    max-width: 30%;
+    border-radius: 8px;
+}
+
+    .produto-compra .marca {
+        font-size: 0.9rem;
+    }
+
+    .produto-compra .preco {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: red;
+    }
+
+.frete {
+    margin-top: 1rem;
+    display: inline;
+}
+
+    .frete input {
+        padding: 0.5rem;
+    }
+
+.produto-compra .btn-comprar {
+    margin: unset;
+    border: unset;
+}
+
+.scroll-btn-produto {
+    background-color: #343A40;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+}
+
+    .scroll-btn-produto:hover {
+        background-color: #e94a50;
+    }
+
+    .scroll-btn-produto.left {
+        position: absolute;
+        left: 0rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .scroll-btn-produto.right {
+        position: absolute;
+        right: 0rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+.btn-finalizar {
+    position: relative;
+    background-color: #00C600;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    width: 100%;
+    max-width: 500px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+    .btn-finalizar span {
+        text-align: center;
+    }
+
+    .btn-finalizar i {
+        position: absolute;
+        right: 20px;
+        font-size: 1.5rem;
+    }
+
+    .btn-finalizar:hover {
+        background-color: #00b000;
+    }

@@ -18,4 +18,8 @@
     <ProjectReference Include="..\BROS-ECommerce.Services\BROS-ECommerce.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Administrativo\Views\Shared\" />
+  </ItemGroup>
+
 </Project>
