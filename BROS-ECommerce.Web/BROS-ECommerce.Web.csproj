@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Administrativo\Views\Shared\" />
+    <Folder Include="Areas\Administrativo\Views\Shared\Script\" />
   </ItemGroup>
 
 </Project>
