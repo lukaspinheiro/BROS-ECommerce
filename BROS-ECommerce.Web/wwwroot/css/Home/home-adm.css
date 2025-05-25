@@ -1,0 +1,46 @@
+﻿* {
+    transition: all 0.3s ease;
+}
+
+.card-scale {
+    z-index: 0;
+    overflow: hidden;
+    position: relative;
+    background-color: white;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 1rem;
+    transform: perspective(1000px);
+}
+
+    .card-scale i, .card-scale h4 {
+        color: #FF4E4E;
+        transition: color 0.3s ease;
+    }
+
+    .card-scale::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: -20px;
+        background: #FF4E4E;
+        height: 32px;
+        width: 100%;
+        transform: scale(1);
+        transform-origin: 50% 50%;
+        border-radius: 50%;
+        transition: transform 1.0s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .card-scale:hover::before {
+        transform: scale(22);
+    }
+
+    .card-scale:hover {
+        transform: perspective(1000px) scale(1.03) translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    }
+
+        .card-scale:hover i, .card-scale:hover h4 {
+            color: rgba(255, 255, 255, 0.9);
+        }

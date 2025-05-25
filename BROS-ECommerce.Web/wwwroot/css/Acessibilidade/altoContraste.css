@@ -1,4 +1,8 @@
 ﻿
+.no-padding-right {
+    padding-right: unset !important;
+}
+
 .altoContraste {
     background-color: black !important;
 }
