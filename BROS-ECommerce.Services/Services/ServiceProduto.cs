@@ -1,6 +1,10 @@
 ﻿using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Produto;
 using BROS_ECommerce.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BROS_ECommerce.Services.Services
 {
@@ -43,8 +47,8 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task Adicionar(CadastrarProdutoViewModel ProdutoVM)
         {
-            var ultimaOrdem = await _repositoryProduto.ObterUltimaOrdemProdutoAsync();
-            var novaOrdem = (ultimaOrdem ?? 0) + 1;
+            //var ultimaOrdem = await _repositoryProduto.ObterUltimaOrdemProdutoAsync();
+            //var novaOrdem = (ultimaOrdem ?? 0) + 1;
 
             var produto = new Produto()
             {
@@ -54,7 +58,8 @@ namespace BROS_ECommerce.Services.Services
                 Descricao = ProdutoVM.Descricao,
                 Preco = ProdutoVM.Preco,
             };
-            await _repositoryProduto.AdicionarAsync(produto);
+            //await _repositoryProduto.AdicionarAsync(produto);
+            return ;
         }
 
     }

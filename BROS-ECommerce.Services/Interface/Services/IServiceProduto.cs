@@ -1,4 +1,6 @@
 ﻿using BROS_ECommerce.Services.ViewModel.Produto;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BROS_ECommerce.Services.Interface.Services
 {
