@@ -1,10 +1,17 @@
-﻿@{
+﻿@model BROS_ECommerce.Services.ViewModel.Produto.IndexProdutoViewModel
+
+@{
     ViewData["Title"] = "Gerenciar Produtos";
 }
 
 @section Head {
     <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
 }
+<div>
+    <p>testei</p>
+    <partial name="Partials/_Cadastrar" />
+
+</div>
 
 <div class="container">
     <div class="card mt-0">
@@ -27,6 +34,35 @@
     </div>
 </div>
 
+
+
+
+
 @section Scripts {
     <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script>
+        function verificarEspacos(input) {
+            var titulo = document.getElementById("Titulo");
+            var descricao = document.getElementById("Descricao");
+
+            if (/^\s*$/.test(descricao.value) || /^\s*$/.test(descricao.value)) {
+                document.getElementById('btn-disable').disabled = true;
+            } else {
+                document.getElementById('btn-disable').disabled = false;
+            }
+
+            var errorElement;
+            if (input.id === "Titulo") {
+                errorElement = document.getElementById("titulo-error");
+            } else if (input.id === "Descricao") {
+                errorElement = document.getElementById("descricao-error");
+            }
+
+            if (/^\s*$/.test(input.value)) {
+                errorElement.style.display = "block";
+            } else {
+                errorElement.style.display = "none";
+            }
+        }
+    </script>
 }

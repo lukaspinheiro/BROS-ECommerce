@@ -6,6 +6,7 @@ namespace BROS_ECommerce.Services.Interface.Services
     {
         List<ProdutoViewModel> ObterTodos();
         ProdutoViewModel? ObterPorSlug(string slug);
+        Task Adicionar(CadastrarProdutoViewModel produtoVM);
 
     }
 }
