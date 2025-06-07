@@ -1,20 +1,21 @@
-﻿using System;
+﻿using BROS_ECommerce.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BROS_ECommerce.Services.ViewModel.Produto
+namespace BROS_ECommerce.Domain.Entities
 {
-    public class ProdutoViewModel
+    public class Produto : IAggregateRoot
     {
+        public Produto() { }
+
         public Guid IdProduto { get; set; }
         public string Nome { get; set; }
         public string Slug { get; set; }
         public string TituloDescricao { get; set; }
         public string Descricao { get; set; }
         public decimal Preco { get; set; }
-        public List<string> Imagens { get; set; } = new();
     }
-
 }
