@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BROS_ECommerce.Domain.Interfaces.Repository;
 
 namespace BROS_ECommerce.Services.Services
 {
@@ -35,6 +36,14 @@ namespace BROS_ECommerce.Services.Services
 
         };
 
+        private readonly IRepositoryProduto _repositoryProduto;
+
+        public ProdutoService(IRepositoryProduto repositoryProduto)
+        {
+            _repositoryProduto = repositoryProduto;
+        }
+
+
         public List<ProdutoViewModel> ObterTodos()
         {
             return _produtos;
@@ -47,9 +56,6 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task Adicionar(CadastrarProdutoViewModel ProdutoVM)
         {
-            //var ultimaOrdem = await _repositoryProduto.ObterUltimaOrdemProdutoAsync();
-            //var novaOrdem = (ultimaOrdem ?? 0) + 1;
-
             var produto = new Produto()
             {
                 Nome = ProdutoVM.Nome,
@@ -58,7 +64,7 @@ namespace BROS_ECommerce.Services.Services
                 Descricao = ProdutoVM.Descricao,
                 Preco = ProdutoVM.Preco,
             };
-            //await _repositoryProduto.AdicionarAsync(produto);
+            await _repositoryProduto.AdicionarAsync(produto);
             return ;
         }
 
