@@ -1,5 +1,11 @@
 ﻿using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Produto;
+using BROS_ECommerce.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BROS_ECommerce.Domain.Interfaces.Repository;
 
 namespace BROS_ECommerce.Services.Services
 {
@@ -9,7 +15,7 @@ namespace BROS_ECommerce.Services.Services
         {
             new ProdutoViewModel
             {
-                Id = Guid.NewGuid(),
+                IdProduto = Guid.NewGuid(),
                 Nome = "(TOP) Whey Protein Concentrado (1KG) - Growth Supplements",
                 Slug = "whey-protein",
                 TituloDescricao = "WHEY PROTEIN GROWTH. PROTEÍNA DO SORO DO LEITE PURA.",
@@ -19,7 +25,7 @@ namespace BROS_ECommerce.Services.Services
             },
             new ProdutoViewModel
             {
-                Id = Guid.NewGuid(),
+                IdProduto = Guid.NewGuid(),
                 Nome = "Creatina Monohidratada 250g - Growth Supplements",
                 Slug = "creatina",
                 TituloDescricao = "CREATINA MONOHIDRATADA PURO MICRONIZADA.",
@@ -30,6 +36,14 @@ namespace BROS_ECommerce.Services.Services
 
         };
 
+        private readonly IRepositoryProduto _repositoryProduto;
+
+        public ProdutoService(IRepositoryProduto repositoryProduto)
+        {
+            _repositoryProduto = repositoryProduto;
+        }
+
+
         public List<ProdutoViewModel> ObterTodos()
         {
             return _produtos;
@@ -39,6 +53,21 @@ namespace BROS_ECommerce.Services.Services
         {
             return _produtos.FirstOrDefault(p => p.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase));
         }
+
+        public async Task Adicionar(CadastrarProdutoViewModel ProdutoVM)
+        {
+            var produto = new Produto()
+            {
+                Nome = ProdutoVM.Nome,
+                Slug = ProdutoVM.Slug,
+                TituloDescricao = ProdutoVM.TituloDescricao,
+                Descricao = ProdutoVM.Descricao,
+                Preco = ProdutoVM.Preco,
+            };
+            await _repositoryProduto.AdicionarAsync(produto);
+            return ;
+        }
+
     }
 
 }
