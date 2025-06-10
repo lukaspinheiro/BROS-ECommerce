@@ -3,8 +3,10 @@
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="modal-cadastrar-produto">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <form id="form-cadastrar-produto" asp-area="Administrativo" asp-controller="Produto" asp-action="CadastrarProduto" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="produto-id-edicao" name="id" />
 
-            <form asp-area="Administrativo" asp-controller="Produto" asp-action="CadastrarProduto" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
                 <div class="modal-header">
                     <h5 class="modal-title">Cadastrar Produto</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -15,61 +17,70 @@
                 <div style="overflow-x:auto;">
                     <div class="modal-body">
                         <div class="form-group">
-                            @* <div class="form-group">
-                                <input asp-for="@Model.cadastrarProdutoViewModel.Arquivo" type="file" id="input-arquivo" accept=".pdf" onchange="$('#input-textArquivo').val($(this).val().replace(/C:\\fakepath\\/i, ''));" required />
-                                <div class="input-group" onclick="$('#input-arquivo').trigger('click')">
-                                    <input type="text" class="form-control" id="input-textArquivo" readonly style="z-index:0" />
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default">
-                                            <i class="material-icons">attach_file</i>
-                                            <span class="d-none d-sm-inline-block">Adicionar Arquivo</span>
-                                        </button>
-                                    </span>
-                                </div>
-                                <span asp-validation-for="@Model.adicionarAuditoriaFlorestalViewModel.Arquivo" class="text-danger"></span>
-                            </div> *@
                             <div class="form-group">
                                 <label asp-for="@Model.cadastrarProdutoViewModel.Nome" class="control-label"></label>
                                 <input asp-for="@Model.cadastrarProdutoViewModel.Nome" type="text" id="Nome" class="form-control" autocomplete="off" required maxlength="50" onkeyup="verificarEspacos(this)" style="text-transform: unset;">
                                 <span asp-validation-for="@Model.cadastrarProdutoViewModel.Nome" class="text-danger"></span>
-                                <span id="titulo-error" class="text-danger small" style="display: none;">Informe um Nome válido, sem espaços em branco e de até 50 caracteres.</span>
+                                <span id="nome-error" class="text-danger small" style="display: none;">Informe um Nome válido, sem espaços em branco e de até 50 caracteres.</span>
                             </div>
+
                             <div class="form-group">
                                 <label asp-for="@Model.cadastrarProdutoViewModel.Slug" class="control-label"></label>
                                 <input asp-for="@Model.cadastrarProdutoViewModel.Slug" type="text" id="Slug" class="form-control" autocomplete="off" required maxlength="30" onkeyup="verificarEspacos(this)" style="text-transform: unset;">
                                 <span asp-validation-for="@Model.cadastrarProdutoViewModel.Slug" class="text-danger"></span>
-                                <span id="titulo-error" class="text-danger small" style="display: none;">Informe um Caminho URL válido, sem espaços em branco e de até 30 caracteres.</span>
+                                <span id="slug-error" class="text-danger small" style="display: none;">Informe um Caminho URL válido, sem espaços em branco e de até 30 caracteres.</span>
                             </div>
+
                             <div class="form-group">
                                 <label asp-for="@Model.cadastrarProdutoViewModel.TituloDescricao" class="control-label"></label>
                                 <input asp-for="@Model.cadastrarProdutoViewModel.TituloDescricao" type="text" id="TituloDescricao" class="form-control" autocomplete="off" required maxlength="50" onkeyup="verificarEspacos(this)" style="text-transform: unset;">
                                 <span asp-validation-for="@Model.cadastrarProdutoViewModel.TituloDescricao" class="text-danger"></span>
                                 <span id="titulo-error" class="text-danger small" style="display: none;">Informe um título de descrição válido, sem espaços em branco e de até 50 caracteres.</span>
                             </div>
+
                             <div class="form-group">
                                 <label asp-for="@Model.cadastrarProdutoViewModel.Descricao" class="control-label"></label>
                                 <input asp-for="@Model.cadastrarProdutoViewModel.Descricao" type="text" id="Descricao" class="form-control" autocomplete="off" required maxlength="300" onkeyup="verificarEspacos(this)" style="text-transform: unset;">
                                 <span asp-validation-for="@Model.cadastrarProdutoViewModel.Descricao" class="text-danger"></span>
                                 <span id="descricao-error" class="text-danger small" style="display: none;">Informe uma descrição válida, sem espaços em branco e de até 300 caracteres.</span>
                             </div>
+
                             <div class="form-group">
                                 <label asp-for="@Model.cadastrarProdutoViewModel.Preco" class="control-label"></label>
-                                <input asp-for="@Model.cadastrarProdutoViewModel.Preco" type="text" id="Preco" class="form-control" autocomplete="off" required onkeyup="verificarEspacos(this)" style="text-transform: unset;">
+                                <input asp-for="@Model.cadastrarProdutoViewModel.Preco" type="number" step="0.01" id="Preco" class="form-control" autocomplete="off" required onkeyup="verificarEspacos(this)" style="text-transform: unset;">
                                 <span asp-validation-for="@Model.cadastrarProdutoViewModel.Preco" class="text-danger"></span>
-                                <span id="descricao-error" class="text-danger small" style="display: none;">Informe um valor válido.</span>
+                                <span id="preco-error" class="text-danger small" style="display: none;">Informe um valor válido.</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button id="btn-disable" disabled="true" type="submit" class="btn btn-success">Adicionar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fecharModal()">Cancelar</button>
+                    <button id="btn-disable" disabled="true" type="submit" class="btn btn-success">ADICIONAR</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
+
+<script>
+    function fecharModal() {
+        $('#modal-cadastrar-produto').modal('hide');
+        limparFormulario();
+    }
+
+    function limparFormulario() {
+        document.getElementById('form-cadastrar-produto').reset();
+        document.getElementById('produto-id-edicao').value = '';
+        document.querySelector('#modal-cadastrar-produto .modal-title').textContent = 'Cadastrar Produto';
+        document.querySelector('#modal-cadastrar-produto .btn-success').textContent = 'ADICIONAR';
+        document.getElementById('form-cadastrar-produto').action = '/Administrativo/Produto/CadastrarProduto';
+
+        
+        verificarEspacos();
+        produtoEditandoId = null;
+    }
+</script>
 
 <script src="~/js/shared/desabilitar-botao-ao-realizar-submit.js"></script>

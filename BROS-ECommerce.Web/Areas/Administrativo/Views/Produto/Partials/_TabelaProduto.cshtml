@@ -1,38 +1,118 @@
-﻿<table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Produtos">
-    <thead>
-        <tr>
-            <th>Imagem</th>
-            <th>Nome</th>
-            <th>Título da Descrição</th>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th style="width: 15%;">ação</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-        </tr>
-        <tr>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-        </tr>
-        <tr>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-        </tr>
-    </tbody>
-</table>
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Produto.TabelaProdutoViewModel>
+
+@if (Model != null && Model.Any())
+{
+    <table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Produtos">
+        <thead>
+            <tr>
+                <th>Imagem</th>
+                <th>Nome</th>
+                <th>Título da Descrição</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th style="width: 15%;">Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var produto in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas fa-image text-muted"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>@produto.Nome</strong>
+                        <br>
+                        <small class="text-muted">Slug: @produto.Slug</small>
+                    </td>
+                    <td>@produto.TituloDescricao</td>
+                    <td>
+                        <span class="d-inline-block text-truncate" style="max-width: 200px;" title="@produto.Descricao">
+                            @produto.Descricao
+                        </span>
+                    </td>
+                    <td>
+                        <span class="font-weight-bold text-success">
+                            R$ @produto.Preco.ToString("N2")
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button"
+                                    class="btn btn-outline-info btn-sm btn-ver-detalhes"
+                                    title="Ver Detalhes"
+                                    data-id="@produto.IdProduto"
+                                    data-nome="@produto.Nome"
+                                    data-slug="@produto.Slug"
+                                    data-titulo="@produto.TituloDescricao"
+                                    data-descricao="@produto.Descricao"
+                                    data-preco="@produto.Preco">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button type="button"
+                                    class="btn btn-outline-warning btn-sm btn-editar"
+                                    title="Editar"
+                                    data-id="@produto.IdProduto"
+                                    data-nome="@produto.Nome"
+                                    data-slug="@produto.Slug"
+                                    data-titulo="@produto.TituloDescricao"
+                                    data-descricao="@produto.Descricao"
+                                    data-preco="@produto.Preco">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm btn-excluir"
+                                    title="Excluir"
+                                    data-id="@produto.IdProduto"
+                                    data-nome="@produto.Nome">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <small class="text-muted">
+                <i class="fas fa-info-circle"></i>
+                Total de produtos: <strong>@Model.Count()</strong>
+            </small>
+        </div>
+    </div>
+}
+else
+{
+    
+    <div class="table-responsive">
+        <table class="table table-light table-sm">
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Título da Descrição</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="6" class="text-center py-4">
+                        <div class="text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            <strong>Nenhum produto encontrado</strong>
+                            <br>
+                            <small>Adicione produtos para começar a gerenciar seu catálogo.</small>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
