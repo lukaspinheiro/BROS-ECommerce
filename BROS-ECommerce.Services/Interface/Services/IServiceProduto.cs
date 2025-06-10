@@ -6,9 +6,18 @@ namespace BROS_ECommerce.Services.Interface.Services
 {
     public interface IServiceProduto
     {
+        
         List<ProdutoViewModel> ObterTodos();
         ProdutoViewModel? ObterPorSlug(string slug);
-        Task Adicionar(CadastrarProdutoViewModel produtoVM);
 
+        
+        Task<List<ProdutoViewModel>> ObterTodosAsync();
+        Task<List<TabelaProdutoViewModel>> ObterTabelaProdutosAsync();
+        Task<ProdutoViewModel?> ObterPorIdAsync(Guid id);
+        Task<ProdutoViewModel?> ObterPorSlugAsync(string slug);
+        Task Adicionar(CadastrarProdutoViewModel produtoVM);
+        Task AtualizarAsync(ProdutoViewModel produtoVM);
+        Task ExcluirAsync(Guid id);
+        Task PopularDadosIniciais();
     }
 }

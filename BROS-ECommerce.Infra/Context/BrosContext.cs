@@ -21,8 +21,8 @@ namespace BROS_ECommerce.Infra.Context
             _configuration = configuration;
         }
 
-        public DbSet<Produto> Produto { get; set; }
-
+        
+        public DbSet<Produto> Produtos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

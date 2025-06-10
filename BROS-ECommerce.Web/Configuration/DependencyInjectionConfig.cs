@@ -12,8 +12,9 @@ namespace BROS_ECommerce.Web.Configuration
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             #region Database
+            
             services.AddDbContext<BrosContext>(options =>
-                options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             #endregion
 
             #region Repositórios

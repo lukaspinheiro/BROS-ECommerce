@@ -1,10 +1,16 @@
 using BROS_ECommerce.Web.Configuration;
 using BROS_ECommerce.Infra.Context;
 using Microsoft.EntityFrameworkCore;
+using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.Services;
+using BROS_ECommerce.Domain.Interfaces.Repository;
+using BROS_ECommerce.Infra.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization();
 builder.Services.RegisterServices(builder.Configuration);
 
 var app = builder.Build();

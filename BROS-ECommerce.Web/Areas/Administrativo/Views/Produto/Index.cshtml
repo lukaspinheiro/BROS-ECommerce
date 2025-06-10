@@ -1,14 +1,30 @@
 ﻿@model BROS_ECommerce.Services.ViewModel.Produto.IndexProdutoViewModel
-
 @{
     ViewData["Title"] = "Gerenciar Produtos";
 }
-
 @section Head {
     <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
 }
 
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["Sucesso"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["Erro"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
 <div class="container">
     <div class="card mt-0">
@@ -16,14 +32,17 @@
             <div class="row">
                 <div class="col-12 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
                     <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i></a>
-                    <a class="btn btn-success pull-right text-white" data-bs-toggle="modal" data-bs-target="#modal-cadastrar-produto"> <i class="fa fa-plus"></i>Cadastrar</a>
+                    <div>
+                        <a class="btn btn-success pull-right text-white" data-toggle="modal" data-target="#modal-cadastrar-produto" onclick="abrirModalCadastro()">
+                            <i class="fa fa-plus"></i> Cadastrar
+                        </a>
+                    </div>
                 </div>
-
                 <div class="col-12">
                     <h3 class="title text-center"> @ViewData["Title"]</h3>
-                    
+
                     <div class="col-12" id="tabela-partial">
-                        <partial name="Partials\_TabelaProduto" @* model="Model.Tabela" *@ />
+                        <partial name="Partials\_TabelaProduto" model="Model.Tabela" />
                     </div>
                 </div>
             </div>
@@ -31,36 +50,217 @@
     </div>
 </div>
 
+
 <partial name="Partials/_Cadastrar" />
 
 
+<div class="modal fade" id="modal-detalhes-produto" tabindex="-1" role="dialog" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalhesLabel">Detalhes do Produto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <strong>Nome:</strong> <span id="detalhe-nome"></span>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <strong>Slug:</strong> <span id="detalhe-slug"></span>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <strong>Título da Descrição:</strong> <span id="detalhe-titulo"></span>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <strong>Descrição:</strong> <span id="detalhe-descricao"></span>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <strong>Preço:</strong> <span id="detalhe-preco" class="text-success font-weight-bold"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fecharModalDetalhes()">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+<div class="modal fade" id="modal-confirmar-exclusao" tabindex="-1" role="dialog" aria-labelledby="modalExclusaoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExclusaoLabel">Confirmar Exclusão</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                <p>Tem certeza que deseja excluir este produto?</p>
+                <p class="font-weight-bold" id="produto-excluir-nome"></p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btn-confirmar-exclusao">Sim, Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="~/lib/DataTables/datatables.min.js"></script>
     <script>
+        
+        var produtoEditandoId = null;
+
         function verificarEspacos(input) {
-            var titulo = document.getElementById("Titulo");
+            var titulo = document.getElementById("TituloDescricao");
             var descricao = document.getElementById("Descricao");
-
-            if (/^\s*$/.test(descricao.value) || /^\s*$/.test(descricao.value)) {
-                document.getElementById('btn-disable').disabled = true;
-            } else {
-                document.getElementById('btn-disable').disabled = false;
-            }
-
-            var errorElement;
-            if (input.id === "Titulo") {
-                errorElement = document.getElementById("titulo-error");
-            } else if (input.id === "Descricao") {
-                errorElement = document.getElementById("descricao-error");
-            }
-
-            if (/^\s*$/.test(input.value)) {
-                errorElement.style.display = "block";
-            } else {
-                errorElement.style.display = "none";
+            if (titulo && descricao) {
+                if (/^\s*$/.test(descricao.value) || /^\s*$/.test(titulo.value)) {
+                    document.getElementById('btn-disable').disabled = true;
+                } else {
+                    document.getElementById('btn-disable').disabled = false;
+                }
             }
         }
+
+        
+        function verDetalhes(id, nome, slug, titulo, descricao, preco) {
+            document.getElementById('detalhe-nome').textContent = nome;
+            document.getElementById('detalhe-slug').textContent = slug;
+            document.getElementById('detalhe-titulo').textContent = titulo;
+            document.getElementById('detalhe-descricao').textContent = descricao;
+            document.getElementById('detalhe-preco').textContent = 'R$ ' + parseFloat(preco).toFixed(2);
+
+            $('#modal-detalhes-produto').modal('show');
+        }
+
+        
+        function editarProduto(id, nome, slug, titulo, descricao, preco) {
+            produtoEditandoId = id;
+
+            
+            document.getElementById('Nome').value = nome;
+            document.getElementById('Slug').value = slug;
+            document.getElementById('TituloDescricao').value = titulo;
+            document.getElementById('Descricao').value = descricao;
+            document.getElementById('Preco').value = preco;
+            document.getElementById('produto-id-edicao').value = id;
+
+            
+            document.querySelector('#modal-cadastrar-produto .modal-title').textContent = 'Editar Produto';
+            document.querySelector('#modal-cadastrar-produto .btn-success').textContent = 'ATUALIZAR';
+
+            
+            document.getElementById('form-cadastrar-produto').action = '/Administrativo/Produto/EditarProduto';
+
+            
+            document.getElementById('btn-disable').disabled = false;
+
+            
+            $('#modal-cadastrar-produto').modal('show');
+        }
+
+        
+        function confirmarExclusao(id, nome) {
+            document.getElementById('produto-excluir-nome').textContent = nome;
+            document.getElementById('btn-confirmar-exclusao').setAttribute('data-id', id);
+
+            $('#modal-confirmar-exclusao').modal('show');
+        }
+
+        
+        function fecharModalDetalhes() {
+            $('#modal-detalhes-produto').modal('hide');
+        }
+
+        
+        function abrirModalCadastro() {
+            
+            limparFormulario();
+            
+            document.querySelector('#modal-cadastrar-produto .modal-title').textContent = 'Cadastrar Produto';
+            document.querySelector('#modal-cadastrar-produto .btn-success').textContent = 'ADICIONAR';
+            document.getElementById('form-cadastrar-produto').action = '/Administrativo/Produto/CadastrarProduto';
+            document.getElementById('produto-id-edicao').value = '';
+            
+            $('#modal-cadastrar-produto').modal('show');
+        }
+
+        
+        $(document).ready(function() {
+            
+            $('.btn-success[data-target="#modal-cadastrar-produto"]').click(function(e) {
+                e.preventDefault();
+                abrirModalCadastro();
+            });
+
+            
+            $('#btn-confirmar-exclusao').click(function() {
+                var id = $(this).data('id');
+
+                $.ajax({
+                    url: '/Administrativo/Produto/Excluir/' + id,
+                    type: 'POST',
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function(response) {
+                        $('#modal-confirmar-exclusao').modal('hide');
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert('Erro ao excluir produto: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('Erro ao excluir produto');
+                    }
+                });
+            });
+
+            
+            $(document).on('click', '.btn-ver-detalhes', function() {
+                var dados = $(this).data();
+                verDetalhes(dados.id, dados.nome, dados.slug, dados.titulo, dados.descricao, dados.preco);
+            });
+
+            $(document).on('click', '.btn-editar', function() {
+                var dados = $(this).data();
+                editarProduto(dados.id, dados.nome, dados.slug, dados.titulo, dados.descricao, dados.preco);
+            });
+
+            $(document).on('click', '.btn-excluir', function() {
+                var dados = $(this).data();
+                confirmarExclusao(dados.id, dados.nome);
+            });
+
+            
+            $('#modal-cadastrar-produto').on('hidden.bs.modal', function () {
+                limparFormulario();
+            });
+
+            
+            if ($.fn.DataTable && $('#tabela').length > 0) {
+                
+                var temDados = $('#tabela tbody tr').length > 0 && !$('#tabela tbody tr td[colspan]').length;
+
+                if (temDados) {
+                    $('#tabela').DataTable({
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json"
+                        },
+                        "pageLength": 10,
+                        "responsive": true
+                    });
+                }
+            }
+        });
     </script>
 }

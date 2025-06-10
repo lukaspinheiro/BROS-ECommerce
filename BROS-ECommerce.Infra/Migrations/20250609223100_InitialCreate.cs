@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BROS_ECommerce.Infra.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSQLite : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace BROS_ECommerce.Infra.Migrations
                 name: "Produtos",
                 columns: table => new
                 {
-                    IdProduto = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IdProduto = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Slug = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
                     TituloDescricao = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
