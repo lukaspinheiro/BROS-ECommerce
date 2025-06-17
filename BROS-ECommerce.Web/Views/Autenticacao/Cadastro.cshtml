@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Cadastro";
+    Layout = "_LoginLayout";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/Autenticacao/login.css" />
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-form">
+            <h1 class="login-title">Cadastro</h1>
+
+            <form method="post" asp-controller="Autenticacao" asp-action="Cadastro">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope input-icon"></i>
+                        <input type="email" name="email" id="email" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cpf">CPF</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-id-card input-icon"></i>
+                        <input type="text" name="cpf" id="cpf" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nome">Nome completo</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user input-icon"></i>
+                        <input type="text" name="nome" id="nome" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nascimento">Data de nascimento</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-calendar-days input-icon"></i>
+                        <input type="date" name="nascimento" id="nascimento" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" name="senha" id="senha" class="form-control" required />
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Gênero</label>
+                    <div class="checkbox-wrapper">
+                        <input type="radio" id="masculino" name="genero" value="Masculino" required />
+                        <label for="masculino">Masculino</label>
+                        &nbsp;&nbsp;
+                        <input type="radio" id="feminino" name="genero" value="Feminino" />
+                        <label for="feminino">Feminino</label>
+                        &nbsp;&nbsp;
+                        <input type="radio" id="outro" name="genero" value="Outro" />
+                        <label for="outro">Outro</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">Cadastrar</button>
+            </form>
+
+            <div class="register-link">
+                Já tem uma conta? <a asp-action="Login">Faça Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePassword() {
+        const senhaInput = document.getElementById('senha');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (senhaInput.type === 'password') {
+            senhaInput.type = 'text';
+            eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            senhaInput.type = 'password';
+            eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+</script>
