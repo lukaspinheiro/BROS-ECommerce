@@ -14,4 +14,17 @@ public class AutenticacaoController : Controller
         
         return RedirectToAction("Index", "Home");
     }
+    [HttpGet]
+    public IActionResult Cadastro()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Cadastro(string email, string cpf, string nome, string nascimento, string senha, string genero)
+    {
+        
+        return RedirectToAction("Login");
+    }
+
 }
