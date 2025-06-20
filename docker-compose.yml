@@ -4,25 +4,40 @@ services:
     build:
       context: .
       dockerfile: BROS-ECommerce.Web/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING_DEV}
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - bros-network
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver-bros
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=Bros123!
-      - MSSQL_PID=Express
+      - SA_PASSWORD=${SA_PASSWORD}
+      - MSSQL_PID=${MSSQL_PID}
     ports:
-      - "1433:1433"
+      - "${SQL_SERVER_PORT}:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
+    networks:
+      - bros-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Bros123! -Q 'SELECT 1'"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${SA_PASSWORD} -Q 'SELECT 1' || exit 1"]
+      interval: ${SQL_HEALTHCHECK_INTERVAL}
+      timeout: ${SQL_HEALTHCHECK_TIMEOUT}
+      retries: ${SQL_HEALTHCHECK_RETRIES}
+      start_period: 60s
 
 volumes:
   sqlserver_data:
+    driver: local
+
+networks:
+  bros-network:
+    driver: bridge
