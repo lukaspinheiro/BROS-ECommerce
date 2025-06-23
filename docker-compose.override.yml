@@ -4,9 +4,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_HTTP_PORTS=${WEB_HTTP_PORT}
       - ASPNETCORE_HTTPS_PORTS=${WEB_HTTPS_PORT}
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=${CERT_PATH}
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
-      - ConnectionStrings__DefaultConnection=${CONNECTION_STRING_DEV}
     ports:
       - "${WEB_HTTP_PORT}:${WEB_HTTP_PORT}"
       - "${WEB_HTTPS_PORT}:${WEB_HTTPS_PORT}"
