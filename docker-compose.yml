@@ -1,6 +1,7 @@
 services:
   bros-ecommerce.web:
     image: ${DOCKER_REGISTRY-}brosecommerceweb
+    container_name: bros-ecommerce.web
     build:
       context: .
       dockerfile: BROS-ECommerce.Web/Dockerfile
@@ -8,8 +9,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ConnectionStrings__DefaultConnection=${CONNECTION_STRING_DEV}
     depends_on:
-      sqlserver:
-        condition: service_healthy
+      - sqlserver  
     networks:
       - bros-network
 
@@ -27,12 +27,7 @@ services:
     networks:
       - bros-network
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${SA_PASSWORD} -Q 'SELECT 1' || exit 1"]
-      interval: ${SQL_HEALTHCHECK_INTERVAL}
-      timeout: ${SQL_HEALTHCHECK_TIMEOUT}
-      retries: ${SQL_HEALTHCHECK_RETRIES}
-      start_period: 60s
+    
 
 volumes:
   sqlserver_data:
