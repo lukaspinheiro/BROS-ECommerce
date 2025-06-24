@@ -68,6 +68,122 @@ namespace BROS_ECommerce.Infra.Migrations
 
                     b.ToTable("Produtos", (string)null);
                 });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("IdUser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Genero")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("Nascimento")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("IdUser");
+
+                    b.HasIndex("Ativo")
+                        .HasDatabaseName("IX_Users_Ativo");
+
+                    b.HasIndex("Cpf")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_Cpf");
+
+                    b.HasIndex("DataCriacao")
+                        .HasDatabaseName("IX_Users_DataCriacao");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_Email");
+
+                    b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            IdUser = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Ativo = true,
+                            Cpf = "12345678901",
+                            DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin@bros.com",
+                            Genero = "Masculino",
+                            Nascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = "Administrador Sistema",
+                            Senha = "AQAAAAEAACcQAAAAEJ8D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D"
+                        },
+                        new
+                        {
+                            IdUser = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Ativo = true,
+                            Cpf = "98765432100",
+                            DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "joao.silva@gmail.com",
+                            Genero = "Masculino",
+                            Nascimento = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = "João Silva Santos",
+                            Senha = "AQAAAAEAACcQAAAAEJ8D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D"
+                        },
+                        new
+                        {
+                            IdUser = new Guid("33333333-3333-3333-3333-333333333333"),
+                            Ativo = true,
+                            Cpf = "45678912300",
+                            DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "maria.oliveira@hotmail.com",
+                            Genero = "Feminino",
+                            Nascimento = new DateTime(1998, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = "Maria Oliveira Costa",
+                            Senha = "AQAAAAEAACcQAAAAEJ8D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D"
+                        },
+                        new
+                        {
+                            IdUser = new Guid("44444444-4444-4444-4444-444444444444"),
+                            Ativo = true,
+                            Cpf = "78912345600",
+                            DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "alex.santos@outlook.com",
+                            Genero = "Outro",
+                            Nascimento = new DateTime(2000, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = "Alex Santos Lima",
+                            Senha = "AQAAAAEAACcQAAAAEJ8D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D"
+                        });
+                });
 #pragma warning restore 612, 618
         }
     }
