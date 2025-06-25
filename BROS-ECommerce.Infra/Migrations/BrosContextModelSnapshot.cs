@@ -145,7 +145,7 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Masculino",
                             Nascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Administrador Sistema",
-                            Senha = "AQAAAAEAACcQAAAAEJ8D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D"
+                            Senha = "rQZK5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE="
                         },
                         new
                         {
@@ -157,7 +157,7 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Masculino",
                             Nascimento = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "João Silva Santos",
-                            Senha = "AQAAAAEAACcQAAAAEJ8D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D"
+                            Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF="
                         },
                         new
                         {
@@ -169,7 +169,7 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Feminino",
                             Nascimento = new DateTime(1998, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Maria Oliveira Costa",
-                            Senha = "AQAAAAEAACcQAAAAEJ8D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D"
+                            Senha = "tSZM7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG="
                         },
                         new
                         {
@@ -181,7 +181,7 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Outro",
                             Nascimento = new DateTime(2000, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Alex Santos Lima",
-                            Senha = "AQAAAAEAACcQAAAAEJ8D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D8Q9D"
+                            Senha = "uTZN8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH="
                         });
                 });
 #pragma warning restore 612, 618
