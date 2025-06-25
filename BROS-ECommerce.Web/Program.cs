@@ -1,18 +1,28 @@
+﻿
 using BROS_ECommerce.Web.Configuration;
 using BROS_ECommerce.Infra.Context;
 using Microsoft.EntityFrameworkCore;
-using BROS_ECommerce.Services.Interface.Services;
-using BROS_ECommerce.Services.Services;
-using BROS_ECommerce.Domain.Interfaces.Repository;
-using BROS_ECommerce.Infra.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddControllersWithViews();
 builder.Services.RegisterServices(builder.Configuration);
 
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = "BROS.Session";
+});
+
+
+builder.Services.AddDistributedMemoryCache();
+
 var app = builder.Build();
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -20,16 +30,18 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
 }
 
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+
+app.UseSession();
 
 app.UseAuthorization();
 

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model BROS_ECommerce.Web.ViewModels.UserRegisterViewModel
+
+@{
     ViewData["Title"] = "Cadastro";
     Layout = "_LoginLayout";
 }
@@ -6,49 +8,64 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link rel="stylesheet" href="~/css/Autenticacao/login.css" />
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" style="background-color: #f8d7da; color: #721c24; padding: 10px; margin: 10px 0; border: 1px solid #f5c6cb; border-radius: 4px;">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" style="background-color: #d4edda; color: #155724; padding: 10px; margin: 10px 0; border: 1px solid #c3e6cb; border-radius: 4px;">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <div class="login-container">
     <div class="login-card">
         <div class="login-form">
             <h1 class="login-title">Cadastro</h1>
 
-            <form method="post" asp-controller="Autenticacao" asp-action="Cadastro">
+            <form method="post" asp-controller="Autenticacao" asp-action="Cadastro" id="cadastroForm">
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="Email">Email</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-envelope input-icon"></i>
-                        <input type="email" name="email" id="email" class="form-control" required />
+                        <input type="email" asp-for="Email" class="form-control" required />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="cpf">CPF</label>
+                    <label for="Cpf">CPF</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-id-card input-icon"></i>
-                        <input type="text" name="cpf" id="cpf" class="form-control" required />
+                        <input type="text" asp-for="Cpf" class="form-control" required />
                     </div>
+                    <small style="color: #666;">Digite apenas números (ex: 12345678909)</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="nome">Nome completo</label>
+                    <label for="Nome">Nome completo</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-user input-icon"></i>
-                        <input type="text" name="nome" id="nome" class="form-control" required />
+                        <input type="text" asp-for="Nome" class="form-control" required />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="nascimento">Data de nascimento</label>
+                    <label for="Nascimento">Data de nascimento</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-calendar-days input-icon"></i>
-                        <input type="date" name="nascimento" id="nascimento" class="form-control" required />
+                        <input type="date" asp-for="Nascimento" class="form-control" required />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="senha">Senha</label>
+                    <label for="Senha">Senha</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-lock input-icon"></i>
-                        <input type="password" name="senha" id="senha" class="form-control" required />
+                        <input type="password" asp-for="Senha" class="form-control" required />
                         <button type="button" class="password-toggle" onclick="togglePassword()">
                             <i id="eyeIcon" class="fa-solid fa-eye"></i>
                         </button>
@@ -58,18 +75,18 @@
                 <div class="form-group">
                     <label>Gênero</label>
                     <div class="checkbox-wrapper">
-                        <input type="radio" id="masculino" name="genero" value="Masculino" required />
+                        <input type="radio" asp-for="Genero" value="Masculino" id="masculino" required />
                         <label for="masculino">Masculino</label>
                         &nbsp;&nbsp;
-                        <input type="radio" id="feminino" name="genero" value="Feminino" />
+                        <input type="radio" asp-for="Genero" value="Feminino" id="feminino" />
                         <label for="feminino">Feminino</label>
                         &nbsp;&nbsp;
-                        <input type="radio" id="outro" name="genero" value="Outro" />
+                        <input type="radio" asp-for="Genero" value="Outro" id="outro" />
                         <label for="outro">Outro</label>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-login">Cadastrar</button>
+                <button type="submit" class="btn-login" id="btnCadastrar">Cadastrar</button>
             </form>
 
             <div class="register-link">
@@ -81,7 +98,7 @@
 
 <script>
     function togglePassword() {
-        const senhaInput = document.getElementById('senha');
+        const senhaInput = document.querySelector('input[name="Senha"]');
         const eyeIcon = document.getElementById('eyeIcon');
 
         if (senhaInput.type === 'password') {
@@ -92,4 +109,24 @@
             eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
         }
     }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('cadastroForm');
+        const btn = document.getElementById('btnCadastrar');
+
+        form.addEventListener('submit', function(e) {
+            console.log('=== FORM SUBMIT INICIADO ===');
+
+
+            btn.disabled = true;
+            btn.textContent = 'Cadastrando...';
+
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = 'Cadastrar';
+            }, 3000);
+        });
+    });
 </script>
