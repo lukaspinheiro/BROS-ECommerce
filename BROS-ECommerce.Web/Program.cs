@@ -1,13 +1,28 @@
-﻿
-using BROS_ECommerce.Web.Configuration;
+﻿using BROS_ECommerce.Web.Configuration;
 using BROS_ECommerce.Infra.Context;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authentication.Cookies; 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllersWithViews();
 builder.Services.RegisterServices(builder.Configuration);
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Autenticacao/Login";
+        options.LogoutPath = "/Autenticacao/Logout";
+        options.AccessDeniedPath = "/Autenticacao/Login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
+        options.SlidingExpiration = true;
+        options.Cookie.Name = "BROS.Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
+
+builder.Services.AddAuthorization();  
 
 
 builder.Services.AddSession(options =>
@@ -40,10 +55,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-
 app.UseSession();
-
-app.UseAuthorization();
+app.UseAuthentication(); 
+app.UseAuthorization();  
 
 app.MapStaticAssets();
 
