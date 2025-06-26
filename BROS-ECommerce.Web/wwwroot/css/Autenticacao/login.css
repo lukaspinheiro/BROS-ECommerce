@@ -10,7 +10,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 200px); 
+    min-height: calc(100vh - 200px);
 }
 
 .login-card {
@@ -27,11 +27,9 @@
     box-sizing: border-box;
 }
 
-    
     .login-card .login-form {
         flex: 1;
     }
-
 
 .login-title {
     color: #FF4E4E;
@@ -42,12 +40,59 @@
     text-align: center;
 }
 
+.alert {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    animation: slideInDown 0.3s ease-out;
+}
+
+    .alert i {
+        margin-right: 10px;
+        font-size: 1.1rem;
+    }
+
+.alert-error {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+    .alert-error i {
+        color: #dc2626;
+    }
+
+.alert-success {
+    background-color: #d1fae5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+}
+
+    .alert-success i {
+        color: #059669;
+    }
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 .form-group {
     margin-bottom: 20px;
     text-align: left;
 }
-
 
 .input-wrapper {
     position: relative;
@@ -66,7 +111,7 @@
 
 .form-control {
     width: 100%;
-    padding: 15px 15px 15px 45px; 
+    padding: 15px 15px 15px 45px;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
     font-size: 1rem;
@@ -97,7 +142,6 @@
         outline: 2px solid #FF4E4E;
         outline-offset: 2px;
     }
-
 
 .checkbox-wrapper {
     display: flex;
@@ -132,9 +176,8 @@
         }
 
 .login-card .input-wrapper .form-control {
-    padding-left: 3rem !important; /* ou 45px, 50px, o que fizer sentido para você */
+    padding-left: 3rem !important;
 }
-
 
 .btn-login {
     width: 100%;
@@ -159,7 +202,6 @@
         transform: translateY(0);
     }
 
-
 .register-link {
     margin-top: 25px;
     font-size: 0.9rem;
@@ -176,7 +218,6 @@
         .register-link a:hover {
             text-decoration: underline;
         }
-
 
 @media (max-width: 768px) {
     .login-card {
