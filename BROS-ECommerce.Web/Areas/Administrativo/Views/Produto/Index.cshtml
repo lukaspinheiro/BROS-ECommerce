@@ -4,6 +4,22 @@
 }
 @section Head {
     <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
+    <style>
+        /* Garante que a seta de ordenação fique à direita */
+        table.dataTable thead th.sorting:after,
+        table.dataTable thead th.sorting_asc:after,
+        table.dataTable thead th.sorting_desc:after {
+            float: right !important;
+            margin-left: 5px;
+        }
+
+        /* (opcional) Remove alinhamento automático à direita das colunas numéricas detectadas */
+        table.dataTable td.dt-type-numeric {
+            text-align: left !important;
+        }
+    </style>
+
+
 }
 
 @if (TempData["Sucesso"] != null)
@@ -253,11 +269,15 @@
 
                 if (temDados) {
                     $('#tabela').DataTable({
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json"
+                        language: {
+                            url: "//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json"
                         },
-                        "pageLength": 10,
-                        "responsive": true
+                        pageLength: 10,
+                        responsive: true,
+                        columnDefs: [
+                            { className: 'text-start', targets: '_all' },
+                            { type: 'string', targets: '_all' }
+                        ]
                     });
                 }
             }
