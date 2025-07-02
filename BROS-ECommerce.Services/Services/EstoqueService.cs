@@ -110,21 +110,18 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task PopularEstoqueInicialAsync()
         {
-            var totalEstoque = await _repositoryEstoque.ContarTotalAsync();
+            var produtos = await _repositoryProduto.ObterTodosAsync();
 
-            if (totalEstoque == 0)
+            foreach (var produto in produtos)
             {
-                var produtos = await _repositoryProduto.ObterTodosAsync();
+                var jaExisteEstoque = await _repositoryEstoque.ExistePorIdProdutoAsync(produto.IdProduto);
 
-                foreach (var produto in produtos)
+                if (!jaExisteEstoque)
                 {
-                    var jaExisteEstoque = await _repositoryEstoque.ExistePorIdProdutoAsync(produto.IdProduto);
+                    var estoque = new Estoque(produto.IdProduto, 1);
+                    await _repositoryEstoque.AdicionarAsync(estoque);
 
-                    if (!jaExisteEstoque)
-                    {
-                        var estoque = new Estoque(produto.IdProduto, 1);
-                        await _repositoryEstoque.AdicionarAsync(estoque);
-                    }
+                    Console.WriteLine($"Estoque criado para produto: {produto.Nome} (Quantidade: 1)");
                 }
             }
         }

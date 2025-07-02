@@ -32,7 +32,13 @@ namespace BROS_ECommerce.Web.Configuration
             #endregion
 
             #region Serviços
-            services.AddScoped<IServiceProduto, ProdutoService>();
+            services.AddScoped<IServiceProduto>(provider =>
+            {
+                var repositoryProduto = provider.GetRequiredService<IRepositoryProduto>();
+                var repositoryEstoque = provider.GetRequiredService<IRepositoryEstoque>();
+                return new ProdutoService(repositoryProduto, repositoryEstoque);
+            });
+
             services.AddScoped<IServiceUser, UserService>();
             services.AddScoped<IServiceEstoque, EstoqueService>();
             #endregion
