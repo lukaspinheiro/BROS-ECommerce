@@ -1,13 +1,13 @@
 ﻿using BROS_ECommerce.Web.Configuration;
 using BROS_ECommerce.Infra.Context;
+using BROS_ECommerce.Services.Interface.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Cookies; 
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Authentication.Cookies;
 
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.RegisterServices(builder.Configuration);
-
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -22,8 +22,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.IsEssential = true;
     });
 
-builder.Services.AddAuthorization();  
-
+builder.Services.AddAuthorization();
 
 builder.Services.AddSession(options =>
 {
@@ -33,18 +32,19 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = "BROS.Session";
 });
 
-
 builder.Services.AddDistributedMemoryCache();
 
 var app = builder.Build();
 
-
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<BrosContext>();
-    context.Database.Migrate();
-}
+    var estoqueService = scope.ServiceProvider.GetRequiredService<IServiceEstoque>();
 
+    context.Database.Migrate();
+
+    await estoqueService.PopularEstoqueInicialAsync();
+}
 
 if (!app.Environment.IsDevelopment())
 {
@@ -56,8 +56,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseSession();
-app.UseAuthentication(); 
-app.UseAuthorization();  
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapStaticAssets();
 

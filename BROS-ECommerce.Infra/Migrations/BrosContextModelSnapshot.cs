@@ -22,168 +22,218 @@ namespace BROS_ECommerce.Infra.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Estoque", b =>
+                {
+                    b.Property<Guid>("IdEstoque")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdEstoque");
+
+                    b.Property<Guid>("IdProduto")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdProduto");
+
+                    b.Property<int>("Quantidade")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("Quantidade");
+
+                    b.Property<DateTime>("UltimaAtualizacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("UltimaAtualizacao")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.HasKey("IdEstoque");
+
+                    b.HasIndex("IdProduto")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Estoque_IdProduto");
+
+                    b.HasIndex("Quantidade")
+                        .HasDatabaseName("IX_Estoque_Quantidade");
+
+                    b.HasIndex("UltimaAtualizacao")
+                        .HasDatabaseName("IX_Estoque_UltimaAtualizacao");
+
+                    b.ToTable("Estoque", (string)null);
+                });
+
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Produto", b =>
-            {
-                b.Property<Guid>("IdProduto")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("uniqueidentifier")
-                    .HasColumnName("IdProduto");
+                {
+                    b.Property<Guid>("IdProduto")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdProduto");
 
-                b.Property<string>("Descricao")
-                    .IsRequired()
-                    .HasMaxLength(300)
-                    .HasColumnType("varchar(300)")
-                    .HasColumnName("Descricao");
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)")
+                        .HasColumnName("Descricao");
 
-                b.Property<string>("Nome")
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnType("varchar(50)")
-                    .HasColumnName("Nome");
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Nome");
 
-                b.Property<decimal>("Preco")
-                    .HasColumnType("decimal(18,2)")
-                    .HasColumnName("Preco");
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Preco");
 
-                b.Property<string>("Slug")
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .HasColumnType("varchar(30)")
-                    .HasColumnName("Slug");
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("Slug");
 
-                b.Property<string>("TituloDescricao")
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnType("varchar(50)")
-                    .HasColumnName("TituloDescricao");
+                    b.Property<string>("TituloDescricao")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("TituloDescricao");
 
-                b.HasKey("IdProduto");
+                    b.HasKey("IdProduto");
 
-                b.HasIndex("Nome")
-                    .HasDatabaseName("IX_Produtos_Nome");
+                    b.HasIndex("Nome")
+                        .HasDatabaseName("IX_Produtos_Nome");
 
-                b.HasIndex("Slug")
-                    .IsUnique()
-                    .HasDatabaseName("IX_Produtos_Slug");
+                    b.HasIndex("Slug")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Produtos_Slug");
 
-                b.ToTable("Produtos", (string)null);
-            });
+                    b.ToTable("Produtos", (string)null);
+                });
 
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.User", b =>
-            {
-                b.Property<Guid>("IdUser")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("uniqueidentifier");
+                {
+                    b.Property<Guid>("IdUser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                b.Property<bool>("Ativo")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("bit")
-                    .HasDefaultValue(true);
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
-                b.Property<string>("Cpf")
-                    .IsRequired()
-                    .HasMaxLength(14)
-                    .HasColumnType("nvarchar(14)");
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)");
 
-                b.Property<DateTime?>("DataAtualizacao")
-                    .HasColumnType("datetime2");
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime2");
 
-                b.Property<DateTime>("DataCriacao")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("datetime2")
-                    .HasDefaultValueSql("GETUTCDATE()");
+                    b.Property<DateTime>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
-                b.Property<string>("Email")
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .HasColumnType("nvarchar(255)");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                b.Property<string>("Genero")
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .HasColumnType("nvarchar(20)");
+                    b.Property<string>("Genero")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                b.Property<DateTime>("Nascimento")
-                    .HasColumnType("date");
+                    b.Property<DateTime>("Nascimento")
+                        .HasColumnType("date");
 
-                b.Property<string>("Nome")
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .HasColumnType("nvarchar(200)");
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                b.Property<string>("Senha")
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasColumnType("nvarchar(500)");
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                b.HasKey("IdUser");
+                    b.HasKey("IdUser");
 
-                b.HasIndex("Ativo")
-                    .HasDatabaseName("IX_Users_Ativo");
+                    b.HasIndex("Ativo")
+                        .HasDatabaseName("IX_Users_Ativo");
 
-                b.HasIndex("Cpf")
-                    .IsUnique()
-                    .HasDatabaseName("IX_Users_Cpf");
+                    b.HasIndex("Cpf")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_Cpf");
 
-                b.HasIndex("DataCriacao")
-                    .HasDatabaseName("IX_Users_DataCriacao");
+                    b.HasIndex("DataCriacao")
+                        .HasDatabaseName("IX_Users_DataCriacao");
 
-                b.HasIndex("Email")
-                    .IsUnique()
-                    .HasDatabaseName("IX_Users_Email");
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_Email");
 
-                b.ToTable("Users", (string)null);
+                    b.ToTable("Users", (string)null);
 
-                b.HasData(
-                    new
-                    {
-                        IdUser = new Guid("11111111-1111-1111-1111-111111111111"),
-                        Ativo = true,
-                        Cpf = "12345678901",
-                        DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                        Email = "admin@bros.com",
-                        Genero = "Masculino",
-                        Nascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        Nome = "Administrador Sistema",
-                        Senha = "rQZK5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE="
-                    },
-                    new
-                    {
-                        IdUser = new Guid("22222222-2222-2222-2222-222222222222"),
-                        Ativo = true,
-                        Cpf = "98765432100",
-                        DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                        Email = "joao.silva@gmail.com",
-                        Genero = "Masculino",
-                        Nascimento = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        Nome = "João Silva Santos",
-                        Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF="
-                    },
-                    new
-                    {
-                        IdUser = new Guid("33333333-3333-3333-3333-333333333333"),
-                        Ativo = true,
-                        Cpf = "45678912300",
-                        DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                        Email = "maria.oliveira@hotmail.com",
-                        Genero = "Feminino",
-                        Nascimento = new DateTime(1998, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        Nome = "Maria Oliveira Costa",
-                        Senha = "tSZM7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG="
-                    },
-                    new
-                    {
-                        IdUser = new Guid("44444444-4444-4444-4444-444444444444"),
-                        Ativo = true,
-                        Cpf = "78912345600",
-                        DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                        Email = "alex.santos@outlook.com",
-                        Genero = "Outro",
-                        Nascimento = new DateTime(2000, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        Nome = "Alex Santos Lima",
-                        Senha = "uTZN8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH="
-                    });
-            });
+                    b.HasData(
+                        new
+                        {
+                            IdUser = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Ativo = true,
+                            Cpf = "12345678901",
+                            DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "admin@bros.com",
+                            Genero = "Masculino",
+                            Nascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = "Administrador Sistema",
+                            Senha = "rQZK5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE="
+                        },
+                        new
+                        {
+                            IdUser = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Ativo = true,
+                            Cpf = "98765432100",
+                            DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "joao.silva@gmail.com",
+                            Genero = "Masculino",
+                            Nascimento = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = "João Silva Santos",
+                            Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF="
+                        },
+                        new
+                        {
+                            IdUser = new Guid("33333333-3333-3333-3333-333333333333"),
+                            Ativo = true,
+                            Cpf = "45678912300",
+                            DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "maria.oliveira@hotmail.com",
+                            Genero = "Feminino",
+                            Nascimento = new DateTime(1998, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = "Maria Oliveira Costa",
+                            Senha = "tSZM7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG="
+                        },
+                        new
+                        {
+                            IdUser = new Guid("44444444-4444-4444-4444-444444444444"),
+                            Ativo = true,
+                            Cpf = "78912345600",
+                            DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "alex.santos@outlook.com",
+                            Genero = "Outro",
+                            Nascimento = new DateTime(2000, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Nome = "Alex Santos Lima",
+                            Senha = "uTZN8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH="
+                        });
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Estoque", b =>
+                {
+                    b.HasOne("BROS_ECommerce.Domain.Entities.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Estoque_Produto");
+
+                    b.Navigation("Produto");
+                });
 #pragma warning restore 612, 618
         }
     }
