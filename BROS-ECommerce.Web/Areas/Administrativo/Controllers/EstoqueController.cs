@@ -17,18 +17,34 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             _serviceEstoque = serviceEstoque;
             _serviceProduto = serviceProduto;
         }
+
         [HttpGet("index")]
         public async Task<IActionResult> Index()
         {
             try
             {
-                var produtosTabela = await _serviceEstoque.ObterTabelaEstoqueAsync();
-                var produtos = await _serviceProduto.ObterTodosAsync(); 
+                // 1. Carrega os dados do estoque (entidade)
+                var estoques = await _serviceEstoque.ObterTodosAsync();
 
-                var filtro = new FiltroEstoqueViewModel();
-                var viewModel = new IndexEstoqueViewModel(filtro, produtosTabela.ToList())
+                // 2. Mapeia para a ViewModel esperada pela view
+                var produtosTabela = estoques.Select(e => new TabelaEstoqueViewModel
                 {
-                    Produtos = produtos.ToList()
+                    IdEstoque = e.IdEstoque,
+                    IdProduto = e.IdProduto,
+                    Nome = e.Produto?.Nome ?? "[Produto não encontrado]",
+                    Quantidade = e.Quantidade,
+                    UltimaAtualizacao = e.UltimaAtualizacao
+                }).ToList();
+
+
+                // 3. Carrega os produtos para o <select>
+                var produtos = await _serviceProduto.ObterTodosAsync();
+
+                // 4. Monta o viewmodel completo
+                var filtro = new FiltroEstoqueViewModel();
+                var viewModel = new IndexEstoqueViewModel(filtro, produtosTabela)
+                {
+                    Produtos = produtos
                 };
 
                 return View(viewModel);
@@ -38,8 +54,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                 ViewBag.Erro = "Erro ao carregar produtos: " + ex.Message;
 
                 var filtro = new FiltroEstoqueViewModel();
-                var tabelaVazia = new List<TabelaEstoqueViewModel>();
-                var viewModel = new IndexEstoqueViewModel(filtro, tabelaVazia)
+                var viewModel = new IndexEstoqueViewModel(filtro, new List<TabelaEstoqueViewModel>())
                 {
                     Produtos = new List<ProdutoViewModel>()
                 };
@@ -47,6 +62,5 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                 return View(viewModel);
             }
         }
-
     }
 }

@@ -5,10 +5,10 @@
     <table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Produtos">
         <thead>
             <tr>
-                <th class="text-start">Imagem</th>
+                <th class="text-start" style="width: 10%;">Imagem</th>
                 <th class="text-start">Nome</th>
-                <th class="text-start">Última Atualização</th>
-                <th class="text-start">Quantidade</th>
+                <th class="text-start" style="width: 10%;">Quantidade</th>
+                <th class="text-start" style="width: 15%;">Última Atualização</th>
                 <th style="width: 15%;">Ação</th>
             </tr>
         </thead>
@@ -22,22 +22,22 @@
                         </div>
                     </td>
                     <td><strong>@item.Nome</strong></td>
-                    <td>@item.UltimaAtualizacao.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@item.Quantidade</td>
+                    <td>@item.UltimaAtualizacao.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>
-                        <div class="btn-group btn-group-sm" role="group">
+                        <div class="btn-group btn-group-sm gap-2" role="group">
                             <button type="button"
-                                    class="btn btn-outline-warning btn-sm btn-alterar"
+                                    class="btn btn-secondary btn-sm btn-alterar"
                                     title="Alterar"
                                     data-id-estoque="@item.IdEstoque"
                                     data-id-produto="@item.IdProduto"
                                     data-nome="@item.Nome"
                                     data-atualizacao="@item.UltimaAtualizacao"
                                     data-quantidade="@item.Quantidade">
-                                <i class="fa-solid fa-boxes-stacked"></i>Alterar
+                                <i class="fa-solid fa-boxes-stacked"></i> Alterar
                             </button>
                             <button type="button"
-                                    class="btn btn-outline-warning btn-sm btn-movimentacoes"
+                                    class="btn btn-success btn-sm btn-movimentacoes"
                                     title="Movimentacoes">
                                 <i class="fa-solid fa-truck-arrow-right"></i>Movimentações
                             </button>
@@ -66,8 +66,8 @@ else
                 <tr>
                     <th>Imagem</th>
                     <th>Nome</th>
-                    <th>Última Atualização</th>
                     <th>Quantidade</th>
+                    <th>Última Atualização</th>
                     <th>Ação</th>
                 </tr>
             </thead>
