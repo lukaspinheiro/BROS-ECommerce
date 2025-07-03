@@ -1,4 +1,5 @@
 ﻿using BROS_ECommerce.Services.ViewModel.Produto;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace BROS_ECommerce.Services.ViewModel.Estoque;
 
@@ -20,5 +21,6 @@ public class IndexEstoqueViewModel
     public FiltroEstoqueViewModel Filtro { get; set; } = new FiltroEstoqueViewModel();
     public ICollection<TabelaEstoqueViewModel> Tabela { get; set; } = new List<TabelaEstoqueViewModel>();
     public CadastrarEstoqueViewModel cadastrarEstoqueViewModel { get; set; } = new CadastrarEstoqueViewModel();
+    [ValidateNever]
     public List<ProdutoViewModel> Produtos { get; set; } 
 }

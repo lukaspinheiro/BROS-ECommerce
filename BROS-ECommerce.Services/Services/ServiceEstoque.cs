@@ -1,6 +1,7 @@
 ﻿using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
+using BROS_ECommerce.Services.ViewModel.Estoque;
 
 namespace BROS_ECommerce.Services.Services
 {
@@ -124,6 +125,18 @@ namespace BROS_ECommerce.Services.Services
                     Console.WriteLine($"Estoque criado para produto: {produto.Nome} (Quantidade: 1)");
                 }
             }
+        }
+
+        public async Task AdicionarProdutoNoEstoqueAsync(CadastrarEstoqueViewModel cadastrarEstoqueViewModel)
+        {
+            var estoque = new Estoque()
+            {
+                IdEstoque = cadastrarEstoqueViewModel.IdEstoque,
+                IdProduto = cadastrarEstoqueViewModel.IdProduto,
+                Quantidade = cadastrarEstoqueViewModel.Quantidade,
+                UltimaAtualizacao = cadastrarEstoqueViewModel.UltimaAtualizacao
+            };
+            await _repositoryEstoque.AdicionarAsync(estoque);
         }
     }
 }

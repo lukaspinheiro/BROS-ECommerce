@@ -3,7 +3,7 @@
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="modal-cadastrar-produto-no-estoque">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="form-cadastrar-produto-no-estoque" asp-area="Administrativo" asp-controller="Estoque" asp-action="CadastrarNoEstoque" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
+            <form id="form-cadastrar-produto-no-estoque" asp-area="Administrativo" asp-controller="Estoque" asp-action="CadastrarProdutoNoEstoque" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="produto-estoque-id-edicao" name="id" />
 
@@ -14,24 +14,26 @@
                     </button>
                 </div>
 
-                <div class="form-group">
-                    <label for="ProdutoId">Produto</label>
-                    <select class="form-control custom-select-with-image" id="ProdutoId" name="ProdutoId" required>
-                        <option value="">Selecione um produto</option>
-                        @foreach (var produto in @Model.Produtos)
-                        {
-                            <option value="@produto.IdProduto"
-                                    @* data-image-url="@produto.UrlImagem"*@>
-                                @produto.Nome
-                            </option>
-                        }
-                    </select>
-                </div>
 
 
                 <div style="overflow-x:auto;">
                     <div class="modal-body">
                         <div class="form-group">
+                            
+                            <div class="form-group">
+                                <label for="ProdutoId">Produto</label>
+                                <select asp-for="cadastrarEstoqueViewModel.IdProduto" class="form-control custom-select-with-image" required>
+                                    <option value="">Selecione um produto</option>
+                                    @foreach (var produto in Model.Produtos)
+                                    {
+                                        <option value="@produto.IdProduto"
+                                                @* data-image-url="@produto.UrlImagem"*@>
+                                            @produto.Nome
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+
                             <div class="form-group">
                                 <label asp-for="@Model.cadastrarEstoqueViewModel.Quantidade" class="control-label"></label>
                                 <input asp-for="@Model.cadastrarEstoqueViewModel.Quantidade" type="text" id="Quantidade" class="form-control" autocomplete="off" required style="text-transform: unset;">

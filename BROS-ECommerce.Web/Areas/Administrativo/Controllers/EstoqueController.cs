@@ -1,4 +1,5 @@
-﻿using BROS_ECommerce.Services.Interface.Services;
+﻿using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Estoque;
 using BROS_ECommerce.Services.ViewModel.Produto;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +24,8 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         {
             try
             {
-                // 1. Carrega os dados do estoque (entidade)
                 var estoques = await _serviceEstoque.ObterTodosAsync();
 
-                // 2. Mapeia para a ViewModel esperada pela view
                 var produtosTabela = estoques.Select(e => new TabelaEstoqueViewModel
                 {
                     IdEstoque = e.IdEstoque,
@@ -36,11 +35,8 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                     UltimaAtualizacao = e.UltimaAtualizacao
                 }).ToList();
 
-
-                // 3. Carrega os produtos para o <select>
                 var produtos = await _serviceProduto.ObterTodosAsync();
 
-                // 4. Monta o viewmodel completo
                 var filtro = new FiltroEstoqueViewModel();
                 var viewModel = new IndexEstoqueViewModel(filtro, produtosTabela)
                 {
@@ -61,6 +57,36 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 
                 return View(viewModel);
             }
+        }
+
+        [HttpPost("CadastrarProdutoNoEstoque")]
+        public async Task<IActionResult> CadastrarNoEstoque(IndexEstoqueViewModel indexEstoqueViewModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var produtoNoEstoque = new CadastrarEstoqueViewModel
+                    {
+                        IdEstoque = Guid.NewGuid(),
+                        IdProduto = indexEstoqueViewModel.cadastrarEstoqueViewModel.IdProduto,
+                        Quantidade = indexEstoqueViewModel.cadastrarEstoqueViewModel.Quantidade,
+                        UltimaAtualizacao = DateTime.Now
+                    };
+
+                    await _serviceEstoque.AdicionarProdutoNoEstoqueAsync(produtoNoEstoque);
+                    TempData["Sucesso"] = "Produto adicionado no estoque com sucesso!";
+                }
+                else
+                {
+                    TempData["Erro"] = "Por favor, preencha todos os campos obrigatórios.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao adicionar produto ao estoque: " + ex.Message;
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

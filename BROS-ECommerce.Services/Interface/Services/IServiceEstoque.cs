@@ -1,4 +1,5 @@
 ﻿using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Services.ViewModel.Estoque;
 
 namespace BROS_ECommerce.Services.Interface.Services
 {
@@ -20,5 +21,6 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task<bool> VerificarDisponibilidadeAsync(Guid idProduto, int quantidadeSolicitada);
         Task<bool> ExisteEstoqueParaProdutoAsync(Guid idProduto);
         Task PopularEstoqueInicialAsync();
+        Task AdicionarProdutoNoEstoqueAsync(CadastrarEstoqueViewModel cadastrarEstoqueViewModel);
     }
 }
