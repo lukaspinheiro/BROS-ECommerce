@@ -4,6 +4,20 @@
 }
 @section Head {
     <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
+    <style>
+        .custom-select-with-image option {
+            padding-left: 30px;
+            background-repeat: no-repeat;
+            background-size: 20px 20px;
+            background-position: 5px center;
+        }
+
+            /* JS irá aplicar esse estilo após o carregamento */
+            .custom-select-with-image option.with-image {
+                padding-left: 35px !important;
+            }
+    </style>
+
 }
 
 @* @if (TempData["Sucesso"] != null)
@@ -56,5 +70,16 @@
 @section Scripts {
     <script src="~/lib/DataTables/datatables.min.js"></script>
     <script type="module" src="~/js/Administrativo/Estoque/estoque.main.js"></script>
-
+    @* <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const select = document.getElementById('ProdutoId');
+            Array.from(select.options).forEach(option => {
+                const imageUrl = option.getAttribute('data-image-url');
+                if (imageUrl) {
+                    option.classList.add('with-image');
+                    option.style.backgroundImage = `url('${imageUrl}')`;
+                }
+            });
+        });
+    </script> *@
 }

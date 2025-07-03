@@ -20,6 +20,8 @@ namespace BROS_ECommerce.Infra.Context
         
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Estoque> Estoques { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

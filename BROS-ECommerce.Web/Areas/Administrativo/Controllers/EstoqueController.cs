@@ -10,10 +10,12 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
     public class EstoqueController : Controller
     {
         private readonly IServiceEstoque _serviceEstoque;
+        private readonly IServiceProduto _serviceProduto;
 
-        public EstoqueController(IServiceEstoque serviceEstoque)
+        public EstoqueController(IServiceEstoque serviceEstoque, IServiceProduto serviceProduto)
         {
             _serviceEstoque = serviceEstoque;
+            _serviceProduto = serviceProduto;
         }
         [HttpGet("index")]
         public async Task<IActionResult> Index()
@@ -21,20 +23,30 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             try
             {
                 var produtosTabela = await _serviceEstoque.ObterTabelaEstoqueAsync();
+                var produtos = await _serviceProduto.ObterTodosAsync(); 
+
                 var filtro = new FiltroEstoqueViewModel();
-                var viewModel = new IndexEstoqueViewModel(filtro, produtosTabela.ToList());
+                var viewModel = new IndexEstoqueViewModel(filtro, produtosTabela.ToList())
+                {
+                    Produtos = produtos.ToList()
+                };
 
                 return View(viewModel);
             }
             catch (Exception ex)
             {
-
                 ViewBag.Erro = "Erro ao carregar produtos: " + ex.Message;
+
                 var filtro = new FiltroEstoqueViewModel();
                 var tabelaVazia = new List<TabelaEstoqueViewModel>();
-                var viewModel = new IndexEstoqueViewModel(filtro, tabelaVazia);
+                var viewModel = new IndexEstoqueViewModel(filtro, tabelaVazia)
+                {
+                    Produtos = new List<ProdutoViewModel>()
+                };
+
                 return View(viewModel);
             }
         }
+
     }
 }

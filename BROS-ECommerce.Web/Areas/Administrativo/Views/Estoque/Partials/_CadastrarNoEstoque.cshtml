@@ -14,6 +14,21 @@
                     </button>
                 </div>
 
+                <div class="form-group">
+                    <label for="ProdutoId">Produto</label>
+                    <select class="form-control custom-select-with-image" id="ProdutoId" name="ProdutoId" required>
+                        <option value="">Selecione um produto</option>
+                        @foreach (var produto in @Model.Produtos)
+                        {
+                            <option value="@produto.IdProduto"
+                                    @* data-image-url="@produto.UrlImagem"*@>
+                                @produto.Nome
+                            </option>
+                        }
+                    </select>
+                </div>
+
+
                 <div style="overflow-x:auto;">
                     <div class="modal-body">
                         <div class="form-group">

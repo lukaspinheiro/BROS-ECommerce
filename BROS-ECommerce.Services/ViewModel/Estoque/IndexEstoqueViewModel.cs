@@ -1,4 +1,6 @@
-﻿namespace BROS_ECommerce.Services.ViewModel.Estoque;
+﻿using BROS_ECommerce.Services.ViewModel.Produto;
+
+namespace BROS_ECommerce.Services.ViewModel.Estoque;
 
 public class IndexEstoqueViewModel
 {
@@ -18,4 +20,5 @@ public class IndexEstoqueViewModel
     public FiltroEstoqueViewModel Filtro { get; set; } = new FiltroEstoqueViewModel();
     public ICollection<TabelaEstoqueViewModel> Tabela { get; set; } = new List<TabelaEstoqueViewModel>();
     public CadastrarEstoqueViewModel cadastrarEstoqueViewModel { get; set; } = new CadastrarEstoqueViewModel();
+    public List<ProdutoViewModel> Produtos { get; set; } 
 }
