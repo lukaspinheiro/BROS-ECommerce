@@ -21,8 +21,6 @@ namespace BROS_ECommerce.Web.Configuration
 
             #region Identity/Authentication
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
-            services.AddScoped<BROS_ECommerce.Web.Services.IAuthenticationService, BROS_ECommerce.Web.Services.AuthenticationService>();
             #endregion
 
             #region Repositórios
@@ -41,6 +39,7 @@ namespace BROS_ECommerce.Web.Configuration
 
             services.AddScoped<IServiceUser, UserService>();
             services.AddScoped<IServiceEstoque, EstoqueService>();
+            services.AddScoped<JwtService>();
             #endregion
         }
     }
