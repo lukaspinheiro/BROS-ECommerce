@@ -12,10 +12,12 @@ namespace BROS_ECommerce.Services.Services
     public class ProdutoService : IServiceProduto
     {
         private readonly IRepositoryProduto _repositoryProduto;
+        private readonly IRepositoryEstoque _repositoryEstoque;
 
-        public ProdutoService(IRepositoryProduto repositoryProduto)
+        public ProdutoService(IRepositoryProduto repositoryProduto, IRepositoryEstoque repositoryEstoque)
         {
             _repositoryProduto = repositoryProduto;
+            _repositoryEstoque = repositoryEstoque;
         }
 
         public async Task<List<TabelaProdutoViewModel>> ObterTabelaProdutosAsync()
@@ -51,7 +53,6 @@ namespace BROS_ECommerce.Services.Services
 
         public List<ProdutoViewModel> ObterTodos()
         {
-            
             var produtos = _repositoryProduto.ObterTodosAsync().Result;
 
             return produtos.Select(p => new ProdutoViewModel
@@ -109,7 +110,6 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task Adicionar(CadastrarProdutoViewModel produtoVM)
         {
-            
             var slugExiste = await _repositoryProduto.SlugExisteAsync(produtoVM.Slug);
             if (slugExiste)
             {
@@ -127,6 +127,16 @@ namespace BROS_ECommerce.Services.Services
             };
 
             await _repositoryProduto.AdicionarAsync(produto);
+
+            try
+            {
+                var estoque = new Estoque(produto.IdProduto, 1); 
+                await _repositoryEstoque.AdicionarAsync(estoque);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao criar estoque para produto {produto.Nome}: {ex.Message}");
+            }
         }
 
         public async Task AtualizarAsync(ProdutoViewModel produtoVM)
@@ -138,7 +148,6 @@ namespace BROS_ECommerce.Services.Services
                 throw new InvalidOperationException("Produto não encontrado");
             }
 
-            
             var slugExiste = await _repositoryProduto.SlugExisteAsync(produtoVM.Slug, produtoVM.IdProduto);
             if (slugExiste)
             {
@@ -156,6 +165,15 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task ExcluirAsync(Guid id)
         {
+            try
+            {
+                await _repositoryEstoque.ExcluirPorIdProdutoAsync(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao excluir estoque do produto {id}: {ex.Message}");
+            }
+
             await _repositoryProduto.ExcluirAsync(id);
         }
 
@@ -199,6 +217,9 @@ namespace BROS_ECommerce.Services.Services
                 foreach (var produto in produtosIniciais)
                 {
                     await _repositoryProduto.AdicionarAsync(produto);
+
+                    var estoque = new Estoque(produto.IdProduto, 1);
+                    await _repositoryEstoque.AdicionarAsync(estoque);
                 }
             }
         }

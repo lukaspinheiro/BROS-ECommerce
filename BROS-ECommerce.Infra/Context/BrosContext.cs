@@ -1,5 +1,4 @@
-﻿
-using BROS_ECommerce.Domain.Entities;
+﻿using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Crud;
 using BROS_ECommerce.Infra.EntityConfig;
 using Microsoft.EntityFrameworkCore;
@@ -17,20 +16,18 @@ namespace BROS_ECommerce.Infra.Context
             _configuration = configuration;
         }
 
-        
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Estoque> Estoques { get; set; }
-
+        public DbSet<Estoque> Estoque { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
             modelBuilder.ApplyConfiguration(new ProdutoMap());
             modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new EstoqueMap());
 
-            
             SeedUsers(modelBuilder);
+            SeedEstoque(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -47,10 +44,8 @@ namespace BROS_ECommerce.Infra.Context
             return await base.SaveChangesAsync() > 0;
         }
 
-        
         private void SeedUsers(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -59,7 +54,7 @@ namespace BROS_ECommerce.Infra.Context
                     Cpf = "12345678901",
                     Nome = "Administrador Sistema",
                     Nascimento = new DateTime(1990, 1, 1),
-                    Senha = "rQZK5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE=", 
+                    Senha = "rQZK5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE=",
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true
@@ -71,7 +66,7 @@ namespace BROS_ECommerce.Infra.Context
                     Cpf = "98765432100",
                     Nome = "João Silva Santos",
                     Nascimento = new DateTime(1995, 5, 15),
-                    Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=", 
+                    Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=",
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true
@@ -83,7 +78,7 @@ namespace BROS_ECommerce.Infra.Context
                     Cpf = "45678912300",
                     Nome = "Maria Oliveira Costa",
                     Nascimento = new DateTime(1998, 8, 22),
-                    Senha = "tSZM7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG=", 
+                    Senha = "tSZM7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG=",
                     Genero = "Feminino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true
@@ -95,12 +90,18 @@ namespace BROS_ECommerce.Infra.Context
                     Cpf = "78912345600",
                     Nome = "Alex Santos Lima",
                     Nascimento = new DateTime(2000, 12, 10),
-                    Senha = "uTZN8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH=", 
+                    Senha = "uTZN8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH=",
                     Genero = "Outro",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true
                 }
             );
+        }
+
+        
+        private void SeedEstoque(ModelBuilder modelBuilder)
+        {
+            
         }
     }
 }

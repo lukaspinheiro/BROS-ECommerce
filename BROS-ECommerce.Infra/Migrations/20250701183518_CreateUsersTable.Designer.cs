@@ -4,6 +4,7 @@ using BROS_ECommerce.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BROS_ECommerce.Infra.Migrations
 {
     [DbContext(typeof(BrosContext))]
-    partial class BrosContextModelSnapshot : ModelSnapshot
+    [Migration("20250701183518_CreateUsersTable")]
+    partial class CreateUsersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,44 +24,6 @@ namespace BROS_ECommerce.Infra.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Estoque", b =>
-                {
-                    b.Property<Guid>("IdEstoque")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("IdEstoque");
-
-                    b.Property<Guid>("IdProduto")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("IdProduto");
-
-                    b.Property<int>("Quantidade")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0)
-                        .HasColumnName("Quantidade");
-
-                    b.Property<DateTime>("UltimaAtualizacao")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("UltimaAtualizacao")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.HasKey("IdEstoque");
-
-                    b.HasIndex("IdProduto")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Estoque_IdProduto");
-
-                    b.HasIndex("Quantidade")
-                        .HasDatabaseName("IX_Estoque_Quantidade");
-
-                    b.HasIndex("UltimaAtualizacao")
-                        .HasDatabaseName("IX_Estoque_UltimaAtualizacao");
-
-                    b.ToTable("Estoque", (string)null);
-                });
 
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Produto", b =>
                 {
@@ -221,18 +186,6 @@ namespace BROS_ECommerce.Infra.Migrations
                             Nome = "Alex Santos Lima",
                             Senha = "uTZN8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH="
                         });
-                });
-
-            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Estoque", b =>
-                {
-                    b.HasOne("BROS_ECommerce.Domain.Entities.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("IdProduto")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_Estoque_Produto");
-
-                    b.Navigation("Produto");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,15 +1,24 @@
-﻿using BROS_ECommerce.Services.ViewModel.Estoque;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BROS_ECommerce.Domain.Entities;
 
 namespace BROS_ECommerce.Services.Interface.Services
 {
     public interface IServiceEstoque
     {
-        Task<List<TabelaEstoqueViewModel>> ObterTabelaEstoqueAsync();
+        Task<List<Estoque>> ObterTodosAsync();
+        Task<Estoque?> ObterPorIdAsync(Guid id);
+        Task<Estoque?> ObterPorIdProdutoAsync(Guid idProduto);
+        Task<List<Estoque>> ObterEstoquesBaixosAsync(int quantidadeMinima = 5);
+        Task<List<Estoque>> ObterEstoquesComProdutosAsync();
 
+        Task CriarEstoqueParaProdutoAsync(Guid idProduto, int quantidadeInicial = 1);
+        Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade);
+        Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar);
+        Task RemoverQuantidadeAsync(Guid idProduto, int quantidadeRemover);
+        Task ExcluirAsync(Guid id);
+        Task ExcluirPorIdProdutoAsync(Guid idProduto);
+
+        Task<bool> VerificarDisponibilidadeAsync(Guid idProduto, int quantidadeSolicitada);
+        Task<bool> ExisteEstoqueParaProdutoAsync(Guid idProduto);
+        Task PopularEstoqueInicialAsync();
     }
 }

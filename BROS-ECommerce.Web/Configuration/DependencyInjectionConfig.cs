@@ -1,5 +1,4 @@
-﻿
-using BROS_ECommerce.Services.Interface.Services;
+﻿using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.Services;
 using BROS_ECommerce.Infra.Context;
 using BROS_ECommerce.Domain.Interfaces.Repository;
@@ -22,7 +21,7 @@ namespace BROS_ECommerce.Web.Configuration
 
             #region Identity/Authentication
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            
+
             services.AddScoped<BROS_ECommerce.Web.Services.IAuthenticationService, BROS_ECommerce.Web.Services.AuthenticationService>();
             #endregion
 
@@ -33,7 +32,13 @@ namespace BROS_ECommerce.Web.Configuration
             #endregion
 
             #region Serviços
-            services.AddScoped<IServiceProduto, ProdutoService>();
+            services.AddScoped<IServiceProduto>(provider =>
+            {
+                var repositoryProduto = provider.GetRequiredService<IRepositoryProduto>();
+                var repositoryEstoque = provider.GetRequiredService<IRepositoryEstoque>();
+                return new ProdutoService(repositoryProduto, repositoryEstoque);
+            });
+
             services.AddScoped<IServiceUser, UserService>();
             services.AddScoped<IServiceEstoque, ServiceEstoque>();
             #endregion
