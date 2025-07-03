@@ -1,0 +1,60 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Estoque.IndexEstoqueViewModel
+@{
+    ViewData["Title"] = "Gerenciar Estoque";
+}
+@section Head {
+    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
+}
+
+@* @if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["Sucesso"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["Erro"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+} *@
+
+<div class="container">
+    <div class="card mt-0">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                    <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i></a>
+                    <div>
+                        <a class="btn btn-success pull-right text-white" data-toggle="modal" data-target="#modal-cadastrar-produto-no-estoque" id="btn-abrir-modal">
+                            <i class="fa fa-plus"></i> Adicionar Produto
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <h3 class="title text-center"> @ViewData["Title"]</h3>
+
+                    <div class="col-12" id="tabela-partial">
+                        <partial name="Partials\_TabelaEstoque" model="Model.Tabela" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="Partials/_CadastrarNoEstoque" />
+
+
+@section Scripts {
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script type="module" src="~/js/Administrativo/Estoque/estoque.main.js"></script>
+
+}

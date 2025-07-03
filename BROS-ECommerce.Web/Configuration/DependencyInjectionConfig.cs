@@ -29,11 +29,13 @@ namespace BROS_ECommerce.Web.Configuration
             #region Repositórios
             services.AddScoped<IRepositoryProduto, ProdutoRepository>();
             services.AddScoped<IRepositoryUser, UserRepository>();
+            services.AddScoped<IRepositoryEstoque, EstoqueRepository>();
             #endregion
 
             #region Serviços
             services.AddScoped<IServiceProduto, ProdutoService>();
             services.AddScoped<IServiceUser, UserService>();
+            services.AddScoped<IServiceEstoque, ServiceEstoque>();
             #endregion
         }
     }

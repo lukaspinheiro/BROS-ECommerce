@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BROS_ECommerce.Services.ViewModel.Produto;
 
@@ -11,10 +6,8 @@ public class CadastrarProdutoViewModel
 {
     public CadastrarProdutoViewModel()
     {
-
     }
     public Guid IdProduto { get; set; }
-
 
     [Required, Display(Name = "Nome"), MaxLength(50, ErrorMessage = "O Nome ultrapassa 50 caracteres.")]
     [RegularExpression(@"^(?!\s*$).+", ErrorMessage = "Este campo não pode ser nulo.")]
