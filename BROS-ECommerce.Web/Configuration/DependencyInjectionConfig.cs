@@ -37,7 +37,7 @@ namespace BROS_ECommerce.Web.Configuration
                 return new ProdutoService(repositoryProduto, repositoryEstoque);
             });
 
-            services.AddScoped<IServiceUser, UserService>();
+            services.AddScoped<IServiceUser, ServiceUser>();
             services.AddScoped<IServiceEstoque, EstoqueService>();
             services.AddScoped<JwtService>();
             #endregion

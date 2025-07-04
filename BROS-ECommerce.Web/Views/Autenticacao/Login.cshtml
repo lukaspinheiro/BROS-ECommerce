@@ -14,6 +14,33 @@
 		<div class="login-form">
 			<h1 class="login-title">Identificação</h1>
 
+			<!-- Mensagens de TempData -->
+			@{
+				var successMessage = TempData["SuccessMessage"] as string;
+				TempData["SuccessMessage"] = null; // limpa explicitamente
+			}
+
+			@if (!string.IsNullOrEmpty(successMessage))
+			{
+				<div class="alert alert-success" id="temp-success-msg">
+					<i class="fas fa-check-circle"></i> @successMessage
+				</div>
+			}
+
+			@{
+				var errorMessage = TempData["ErrorMessage"] as string;
+				TempData["SuccessMessage"] = null; // limpa explicitamente
+			}
+
+			@if (!string.IsNullOrEmpty(errorMessage))
+			{
+				<div class="alert alert-success" id="temp-success-msg">
+					<i class="fas fa-check-circle"></i> @errorMessage
+				</div>
+			}
+
+
+			<!-- Alerta dinâmico via JS -->
 			<div id="login-alert" class="alert alert-error" style="display:none;">
 				<i class="fas fa-exclamation-circle"></i>
 				<span id="alert-message"></span>
@@ -54,9 +81,9 @@
 					<label for="lembrarSenha">Lembrar senha</label>
 				</div>
 				<div class="forgot-password">
-					<a href="#"
-					   onclick="alert('Funcionalidade em desenvolvimento')">Esqueceu sua senha?</a>
+					<a asp-controller="Autenticacao" asp-action="EsqueciSenha">Esqueceu sua senha?</a>
 				</div>
+
 				<button type="submit" class="btn-login" id="btnLogin">Entrar</button>
 			</form>
 			<div class="register-link">
@@ -111,12 +138,12 @@
 
 			const data = await response.json();
 
-				if (response.ok && data.token) {
-					localStorage.setItem("bros_token", data.token);
-					localStorage.setItem("bros_user_name", data.nome); // ESSENCIAL!
-					localStorage.setItem("bros_user_email", data.email);
-					window.location.href = "/Home/Index";
-				} else {
+			if (response.ok && data.token) {
+				localStorage.setItem("bros_token", data.token);
+				localStorage.setItem("bros_user_name", data.nome);
+				localStorage.setItem("bros_user_email", data.email);
+				window.location.href = "/Home/Index";
+			} else {
 				showAlert(data.message || "Email ou senha inválidos.");
 			}
 		} catch (error) {
@@ -140,4 +167,22 @@
 			setTimeout(() => alertBox.remove(), 300);
 		}, 5000);
 	}
+
+	// Auto-hide TempData messages
+	setTimeout(() => {
+		const successMsg = document.getElementById('temp-success-msg');
+		const errorMsg = document.getElementById('temp-error-msg');
+
+		if (successMsg) {
+			successMsg.style.opacity = '0';
+			successMsg.style.transform = 'translateY(-10px)';
+			setTimeout(() => successMsg.remove(), 300);
+		}
+
+		if (errorMsg) {
+			errorMsg.style.opacity = '0';
+			errorMsg.style.transform = 'translateY(-10px)';
+			setTimeout(() => errorMsg.remove(), 300);
+		}
+	}, 5000);
 </script>

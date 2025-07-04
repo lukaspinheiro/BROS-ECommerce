@@ -7,11 +7,12 @@ using System.Text;
 
 namespace BROS_ECommerce.Services.Services
 {
-    public class UserService : IServiceUser
+    public class ServiceUser : IServiceUser
+
     {
         private readonly IRepositoryUser _userRepository;
 
-        public UserService(IRepositoryUser userRepository)
+        public ServiceUser(IRepositoryUser userRepository)
         {
             _userRepository = userRepository;
         }
@@ -108,6 +109,23 @@ namespace BROS_ECommerce.Services.Services
             }
             return null;
         }
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _userRepository.GetByEmailAsync(email);
+        }
+
+        public async Task<bool> ResetarSenhaAsync(Guid id, string novaSenha)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return false;
+
+            user.Senha = HashPassword(novaSenha);
+            await _userRepository.UpdateAsync(user);
+            return true;
+        }
+
+
 
         public async Task<bool> IsEmailAvailableAsync(string email)
         {
