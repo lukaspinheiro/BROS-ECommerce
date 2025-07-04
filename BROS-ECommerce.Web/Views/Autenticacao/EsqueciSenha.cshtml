@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Esqueci Minha Senha";
+    Layout = "_LoginLayout";
+}
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-pIVf+XfNQZ1tSXVylpQl1N+gZ6+Xz8b8qBQ5/GGtNkp3yYFs6FvU4HjH42WzC7xGqvU8dKgK7zFZyYw4g2Nk2Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="~/css/Autenticacao/Login.css" />
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-form">
+            <h1 class="login-title">Recuperar Senha</h1>
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]</div>
+            }
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success"><i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]</div>
+            }
+
+            <form method="post">
+                <div class="form-group">
+                    <label for="email">Informe seu Email</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope input-icon"></i>
+                        <input type="email" name="email" class="form-control" required />
+                    </div>
+                </div>
+                <button type="submit" class="btn-login">Enviar</button>
+            </form>
+
+            <div class="register-link mt-3">
+                <a asp-controller="Autenticacao" asp-action="Login">Voltar ao login</a>
+            </div>
+        </div>
+    </div>
+</div>

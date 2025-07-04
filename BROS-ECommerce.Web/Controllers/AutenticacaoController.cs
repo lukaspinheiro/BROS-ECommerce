@@ -26,6 +26,8 @@ namespace BROS_ECommerce.Web.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            TempData.Keep("SuccessMessage");
+            TempData.Keep("ErrorMessage");
             return View(new UserLoginViewModel());
         }
 
@@ -59,11 +61,9 @@ namespace BROS_ECommerce.Web.Controllers
                         email = user.Email
                     });
                 }
-                else
-                {
-                    _logger.LogWarning("Credenciais inválidas para: {Email}", model.Usuario);
-                    return Unauthorized(new { message = "Email ou senha inválidos." });
-                }
+
+                _logger.LogWarning("Credenciais inválidas para: {Email}", model.Usuario);
+                return Unauthorized(new { message = "Email ou senha inválidos." });
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace BROS_ECommerce.Web.Controllers
                     return View(model);
                 }
 
-                var user = await _userService.CreateUserAsync(
+                await _userService.CreateUserAsync(
                     email: model.Email,
                     cpf: model.Cpf,
                     nome: model.Nome,
@@ -135,6 +135,70 @@ namespace BROS_ECommerce.Web.Controllers
         {
             _logger.LogInformation("Logout realizado (frontend deve remover o token)");
             return Ok(new { message = "Logout realizado com sucesso." });
+        }
+
+        [HttpGet]
+        public IActionResult EsqueciSenha()
+        {
+            TempData.Keep("ErrorMessage");
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EsqueciSenha(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                TempData["ErrorMessage"] = "Informe seu email.";
+                return View();
+            }
+
+            var user = await _userService.GetByEmailAsync(email);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Email não encontrado.";
+                return View();
+            }
+
+            TempData["TokenRedefinicaoSenha"] = user.IdUser.ToString();
+            return RedirectToAction("RedefinirSenha");
+        }
+
+        [HttpGet]
+        public IActionResult RedefinirSenha()
+        {
+            if (TempData["TokenRedefinicaoSenha"] == null)
+                return RedirectToAction("Login");
+
+            ViewBag.Token = TempData["TokenRedefinicaoSenha"];
+            TempData.Keep("TokenRedefinicaoSenha");
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RedefinirSenha(string senha, string confirmacao)
+        {
+            if (TempData["TokenRedefinicaoSenha"] == null)
+                return RedirectToAction("Login");
+
+            if (string.IsNullOrWhiteSpace(senha) || senha != confirmacao)
+            {
+                TempData["ErrorMessage"] = "As senhas não coincidem.";
+                TempData.Keep("TokenRedefinicaoSenha");
+                return View();
+            }
+
+            if (!Guid.TryParse(TempData["TokenRedefinicaoSenha"]?.ToString(), out var id))
+            {
+                TempData["ErrorMessage"] = "Token inválido. Tente novamente.";
+                return RedirectToAction("Login");
+            }
+
+            await _userService.ResetarSenhaAsync(id, senha);
+
+            TempData["SuccessMessage"] = "Senha redefinida com sucesso!";
+            TempData.Remove("TokenRedefinicaoSenha");
+            return RedirectToAction("Login");
         }
     }
 }
