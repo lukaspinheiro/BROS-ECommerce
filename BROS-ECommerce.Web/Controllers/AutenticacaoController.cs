@@ -30,16 +30,15 @@ namespace BROS_ECommerce.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(UserLoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] UserLoginViewModel model)
         {
             _logger.LogInformation("=== TENTATIVA DE LOGIN ===");
-            _logger.LogInformation($"Email: {model.Usuario}");
+            _logger.LogInformation("Email: {Email}", model.Usuario);
 
-            if (!ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(model.Usuario) || string.IsNullOrWhiteSpace(model.Senha))
             {
-                _logger.LogWarning("ModelState inválido no login");
-                model.Senha = string.Empty;
-                return View(model);
+                _logger.LogWarning("Email ou senha vazios");
+                return BadRequest(new { message = "Email e senha são obrigatórios." });
             }
 
             try
@@ -48,7 +47,7 @@ namespace BROS_ECommerce.Web.Controllers
 
                 if (user != null)
                 {
-                    _logger.LogInformation($"Usuário autenticado com sucesso: {user.Email} (ID: {user.IdUser})");
+                    _logger.LogInformation("Usuário autenticado com sucesso: {Email} (ID: {Id})", user.Email, user.IdUser);
 
                     var token = _jwtService.GenerateToken(user);
 
@@ -62,18 +61,14 @@ namespace BROS_ECommerce.Web.Controllers
                 }
                 else
                 {
-                    _logger.LogWarning($"Credenciais inválidas para: {model.Usuario}");
-                    TempData["ErrorMessage"] = "Email ou senha inválidos.";
-                    model.Senha = string.Empty;
-                    return View(model);
+                    _logger.LogWarning("Credenciais inválidas para: {Email}", model.Usuario);
+                    return Unauthorized(new { message = "Email ou senha inválidos." });
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro durante tentativa de login");
-                TempData["ErrorMessage"] = "Erro interno. Tente novamente mais tarde.";
-                model.Senha = string.Empty;
-                return View(model);
+                return StatusCode(500, new { message = "Erro interno. Tente novamente mais tarde." });
             }
         }
 
@@ -87,7 +82,7 @@ namespace BROS_ECommerce.Web.Controllers
         public async Task<IActionResult> Cadastro(UserRegisterViewModel model)
         {
             _logger.LogInformation("=== INICIANDO CADASTRO ===");
-            _logger.LogInformation($"Email: {model.Email}");
+            _logger.LogInformation("Email: {Email}", model.Email);
 
             try
             {
@@ -138,7 +133,6 @@ namespace BROS_ECommerce.Web.Controllers
         [Authorize]
         public IActionResult Logout()
         {
-            // Apenas simbólico. O frontend deve remover o token manualmente.
             _logger.LogInformation("Logout realizado (frontend deve remover o token)");
             return Ok(new { message = "Logout realizado com sucesso." });
         }
