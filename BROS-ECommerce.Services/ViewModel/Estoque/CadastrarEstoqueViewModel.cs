@@ -20,6 +20,7 @@ namespace BROS_ECommerce.Services.ViewModel.Estoque
         [Required(ErrorMessage = "A quantidade é obrigatória.")]
         [Range(0, int.MaxValue, ErrorMessage = "A quantidade deve ser um número igual ou maior que 0.")]
         public int Quantidade { get; set; }
+        public string Nome { get; set; }
 
     }
 }

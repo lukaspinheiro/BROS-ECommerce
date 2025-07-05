@@ -88,5 +88,24 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+
+        [HttpPost("AlterarQuantidadeEstoque")]
+        public async Task<IActionResult> AlterarQuantidadeEstoque(Guid idProduto, int novaQuantidade)
+        {
+            try
+            {
+                await _serviceEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade);
+                TempData["Sucesso"] = "Quantidade atualizada com sucesso!";
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao atualizar quantidade: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 }

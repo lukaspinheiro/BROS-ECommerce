@@ -10,8 +10,26 @@ export function abrirModalCadastro() {
 
     $('#modal-cadastrar-produto-no-estoque').modal('show');
 }
+export function abrirModalAlterarQuantidade({ idProduto, nome, quantidade, ultimaAtualizacao }) {
+    const modal = document.getElementById('modal-alterar-quantidade-estoque');
+    if (!modal) return;
+
+    document.getElementById('id-produto-alterar').value = idProduto;
+    document.getElementById('quantidade-alterar').value = quantidade;
+    document.getElementById('nome-produto-alterar').value = nome;
+    document.getElementById('data-atualizacao-alterar').value = ultimaAtualizacao;
+
+    $('#modal-alterar-quantidade-estoque').modal('show');
+}
+
 
 export function fecharModalCadastrar() {
     $('#modal-cadastrar-produto-no-estoque').modal('hide');
     limparFormulario();
+}
+export function fecharModalAlterarQuantidade() {
+    $('#modal-alterar-quantidade-estoque').modal('hide');
+
+    const form = document.getElementById('form-alterar-quantidade-estoque');
+    form.reset();
 }
