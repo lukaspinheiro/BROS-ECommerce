@@ -1,4 +1,5 @@
 ﻿using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Services.Helpers;
 using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Estoque;
 using BROS_ECommerce.Services.ViewModel.Produto;
@@ -64,20 +65,32 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         {
             try
             {
-                var produtoNoEstoque = new CadastrarEstoqueViewModel
-                {
-                    IdEstoque = Guid.NewGuid(),
-                    IdProduto = indexEstoqueViewModel.cadastrarEstoqueViewModel.IdProduto,
-                    Quantidade = indexEstoqueViewModel.cadastrarEstoqueViewModel.Quantidade,
-                    UltimaAtualizacao = DateTime.Now
-                };
+                var idProduto = indexEstoqueViewModel.cadastrarEstoqueViewModel.IdProduto;
+                var novaQuantidade = indexEstoqueViewModel.cadastrarEstoqueViewModel.Quantidade;
 
-                await _serviceEstoque.AdicionarProdutoNoEstoqueAsync(produtoNoEstoque);
-                TempData["Sucesso"] = "Produto adicionado no estoque com sucesso!";
+                var produtoExistente = await _serviceEstoque.ObterPorIdProdutoAsync(indexEstoqueViewModel.cadastrarEstoqueViewModel.IdProduto);
+
+                if (produtoExistente != null)
+                {
+                    await _serviceEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade);
+                    TempData["Sucesso"] = "Produto já existente: quantidade atualizada com sucesso!";
+                }
+                else
+                {
+                    var produtoNoEstoque = new CadastrarEstoqueViewModel
+                    {
+                        IdEstoque = Guid.NewGuid(),
+                        IdProduto = indexEstoqueViewModel.cadastrarEstoqueViewModel.IdProduto,
+                        Quantidade = indexEstoqueViewModel.cadastrarEstoqueViewModel.Quantidade,
+                        UltimaAtualizacao = TimeHelper.AgoraPortoVelho()
+                    };
+                    await _serviceEstoque.AdicionarProdutoNoEstoqueAsync(produtoNoEstoque);
+                    TempData["Sucesso"] = "Produto adicionado no estoque com sucesso!";
+                }
             }
             catch (Exception ex)
             {
-                TempData["Erro"] = "Erro ao adicionar produto ao estoque: " + ex.Message;
+                TempData["Erro"] = "Erro ao adicionar/atualizar produto ao estoque: " + ex.Message;
             }
             return RedirectToAction(nameof(Index));
         }
