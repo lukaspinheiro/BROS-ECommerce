@@ -11,8 +11,6 @@
             background-size: 20px 20px;
             background-position: 5px center;
         }
-
-            /* JS irá aplicar esse estilo após o carregamento */
             .custom-select-with-image option.with-image {
                 padding-left: 35px !important;
             }
@@ -46,7 +44,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
-                    <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i></a>
+                    <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i></a>
                     <div>
                         <a class="btn btn-success pull-right text-white" data-toggle="modal" data-target="#modal-cadastrar-produto-no-estoque" id="btn-abrir-modal">
                             <i class="fa fa-plus"></i> Adicionar Produto

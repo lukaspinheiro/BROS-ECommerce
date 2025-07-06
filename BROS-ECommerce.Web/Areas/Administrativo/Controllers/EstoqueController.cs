@@ -60,27 +60,20 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         }
 
         [HttpPost("CadastrarProdutoNoEstoque")]
-        public async Task<IActionResult> CadastrarNoEstoque(IndexEstoqueViewModel indexEstoqueViewModel)
+        public async Task<IActionResult> CadastrarProdutoNoEstoque(IndexEstoqueViewModel indexEstoqueViewModel)
         {
             try
             {
-                if (ModelState.IsValid)
+                var produtoNoEstoque = new CadastrarEstoqueViewModel
                 {
-                    var produtoNoEstoque = new CadastrarEstoqueViewModel
-                    {
-                        IdEstoque = Guid.NewGuid(),
-                        IdProduto = indexEstoqueViewModel.cadastrarEstoqueViewModel.IdProduto,
-                        Quantidade = indexEstoqueViewModel.cadastrarEstoqueViewModel.Quantidade,
-                        UltimaAtualizacao = DateTime.Now
-                    };
+                    IdEstoque = Guid.NewGuid(),
+                    IdProduto = indexEstoqueViewModel.cadastrarEstoqueViewModel.IdProduto,
+                    Quantidade = indexEstoqueViewModel.cadastrarEstoqueViewModel.Quantidade,
+                    UltimaAtualizacao = DateTime.Now
+                };
 
-                    await _serviceEstoque.AdicionarProdutoNoEstoqueAsync(produtoNoEstoque);
-                    TempData["Sucesso"] = "Produto adicionado no estoque com sucesso!";
-                }
-                else
-                {
-                    TempData["Erro"] = "Por favor, preencha todos os campos obrigatórios.";
-                }
+                await _serviceEstoque.AdicionarProdutoNoEstoqueAsync(produtoNoEstoque);
+                TempData["Sucesso"] = "Produto adicionado no estoque com sucesso!";
             }
             catch (Exception ex)
             {

@@ -5,7 +5,8 @@
         <div class="modal-content">
             <form id="form-cadastrar-produto-no-estoque" asp-area="Administrativo" asp-controller="Estoque" asp-action="CadastrarProdutoNoEstoque" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
                 @Html.AntiForgeryToken()
-                <input type="hidden" id="produto-estoque-id-edicao" name="id" />
+                <input type="hidden" asp-for="@Model.cadastrarEstoqueViewModel.IdProduto" name="idProduto" id="produto-estoque-id-edicao" />
+
 
                 <div class="modal-header">
                     <h5 class="modal-title">Adicionar Produto Ao Estoque</h5>
@@ -36,7 +37,7 @@
 
                             <div class="form-group">
                                 <label asp-for="@Model.cadastrarEstoqueViewModel.Quantidade" class="control-label"></label>
-                                <input asp-for="@Model.cadastrarEstoqueViewModel.Quantidade" type="text" id="Quantidade" class="form-control" autocomplete="off" required style="text-transform: unset;">
+                                <input asp-for="@Model.cadastrarEstoqueViewModel.Quantidade" type="number" id="Quantidade" class="form-control" autocomplete="off" required style="text-transform: unset;">
                                 <span asp-validation-for="@Model.cadastrarEstoqueViewModel.Quantidade" class="text-danger"></span>
                                 <span id="nome-error" class="text-danger small" style="display: none;">Informe uma quantidade, sem espaços em branco.</span>
                             </div>

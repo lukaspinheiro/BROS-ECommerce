@@ -3,7 +3,7 @@ import { limparFormulario } from './estoque.formulario.js';
 export function abrirModalCadastro() {
     limparFormulario();
 
-    document.querySelector('#modal-cadastrar-produto-no-estoque .modal-title').textContent = 'Cadastrar Produto';
+    document.querySelector('#modal-cadastrar-produto-no-estoque .modal-title').textContent = 'Adicionar Produto Ao Estoque';
     document.querySelector('#modal-cadastrar-produto-no-estoque .btn-success').textContent = 'ADICIONAR';
     document.getElementById('form-cadastrar-produto-no-estoque').action = '/Administrativo/Estoque/CadastrarProdutoNoEstoque';
     document.getElementById('produto-estoque-id-edicao').value = '';
@@ -17,11 +17,26 @@ export function abrirModalAlterarQuantidade({ idProduto, nome, quantidade, ultim
     document.getElementById('id-produto-alterar').value = idProduto;
     document.getElementById('quantidade-alterar').value = quantidade;
     document.getElementById('nome-produto-alterar').value = nome;
-    document.getElementById('data-atualizacao-alterar').value = ultimaAtualizacao;
+
+    const dataFormatada = formatarData(ultimaAtualizacao);
+    document.getElementById('data-atualizacao-alterar').value = dataFormatada;
 
     $('#modal-alterar-quantidade-estoque').modal('show');
 }
 
+
+function formatarData(dataISO) {
+    const data = new Date(dataISO);
+
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+
+    const hora = String(data.getHours()).padStart(2, '0');
+    const minuto = String(data.getMinutes()).padStart(2, '0');
+
+    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+}
 
 export function fecharModalCadastrar() {
     $('#modal-cadastrar-produto-no-estoque').modal('hide');
