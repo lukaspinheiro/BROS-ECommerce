@@ -2,11 +2,7 @@
 using BROS_ECommerce.Domain.Interfaces.Repository;
 using BROS_ECommerce.Infra.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace BROS_ECommerce.Infra.Repository
 {
@@ -22,7 +18,6 @@ namespace BROS_ECommerce.Infra.Repository
 
         public async Task AtualizarAsync(Estoque estoque)
         {
-            estoque.UltimaAtualizacao = DateTime.UtcNow;
             _dbSet.Update(estoque);
             await _context.SaveChangesAsync();
         }
@@ -109,12 +104,13 @@ namespace BROS_ECommerce.Infra.Repository
                 .ToListAsync();
         }
 
-        public async Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade)
+        public async Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade, DateTime UltimaAtualizacao)
         {
             var estoque = await ObterPorIdProdutoAsync(idProduto);
             if (estoque != null)
             {
                 estoque.AtualizarQuantidade(novaQuantidade);
+                estoque.UltimaAtualizacao = UltimaAtualizacao;
                 await AtualizarAsync(estoque);
             }
         }

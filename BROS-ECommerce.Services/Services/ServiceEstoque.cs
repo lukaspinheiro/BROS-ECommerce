@@ -59,14 +59,14 @@ namespace BROS_ECommerce.Services.Services
             await _repositoryEstoque.AdicionarAsync(estoque);
         }
 
-        public async Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade)
+        public async Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade, DateTime UltimaAtualizacao)
         {
             if (novaQuantidade < 0)
             {
                 throw new ArgumentException("A quantidade não pode ser negativa");
             }
 
-            await _repositoryEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade);
+            await _repositoryEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade, UltimaAtualizacao);
         }
 
         public async Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar)

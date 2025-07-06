@@ -14,7 +14,7 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
         Task ExcluirPorIdProdutoAsync(Guid idProduto);
         Task<int> ContarTotalAsync();
         Task<List<Estoque>> ObterEstoquesComProdutosAsync();
-        Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade);
+        Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade, DateTime UltimaAtualizacao);
         Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar);
         Task RemoverQuantidadeAsync(Guid idProduto, int quantidadeRemover);
         Task<bool> VerificarDisponibilidadeAsync(Guid idProduto, int quantidadeSolicitada);

@@ -72,7 +72,8 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 
                 if (produtoExistente != null)
                 {
-                    await _serviceEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade);
+                    var ultimaAtualizacao = TimeHelper.AgoraPortoVelho();
+                    await _serviceEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade, ultimaAtualizacao);
                     TempData["Sucesso"] = "Produto já existente: quantidade atualizada com sucesso!";
                 }
                 else
@@ -101,7 +102,8 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         {
             try
             {
-                await _serviceEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade);
+                var ultimaAtualizacao = TimeHelper.AgoraPortoVelho();
+                await _serviceEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade, ultimaAtualizacao);
                 TempData["Sucesso"] = "Quantidade atualizada com sucesso!";
             }
             catch (Exception ex)
