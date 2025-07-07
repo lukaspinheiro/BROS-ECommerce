@@ -53,7 +53,6 @@ using (var scope = app.Services.CreateScope())
     var estoqueService = scope.ServiceProvider.GetRequiredService<IServiceEstoque>();
 
     context.Database.Migrate();
-    await estoqueService.PopularEstoqueInicialAsync();
 }
 
 // Middlewares padrão

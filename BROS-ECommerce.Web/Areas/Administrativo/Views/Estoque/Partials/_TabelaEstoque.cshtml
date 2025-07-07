@@ -1,0 +1,89 @@
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Estoque.TabelaEstoqueViewModel>
+
+@if (Model != null && Model.Any())
+{
+    <table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Produtos">
+        <thead>
+            <tr>
+                <th class="text-start" style="width: 10%;">Imagem</th>
+                <th class="text-start">Nome</th>
+                <th class="text-start" style="width: 10%;">Quantidade</th>
+                <th class="text-start" style="width: 15%;">Última Atualização</th>
+                <th style="width: 15%;">Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas fa-image text-muted"></i>
+                        </div>
+                    </td>
+                    <td><strong>@item.Nome</strong></td>
+                    <td>@item.Quantidade</td>
+                    <td>@item.UltimaAtualizacao.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <div class="btn-group btn-group-sm gap-2" role="group">
+                            <button type="button"
+                                    class="btn btn-secondary btn-sm btn-alterar"
+                                    title="Alterar"
+                                    data-id-estoque="@item.IdEstoque"
+                                    data-id-produto="@item.IdProduto"
+                                    data-nome="@item.Nome"
+                                    data-atualizacao="@item.UltimaAtualizacao"
+                                    data-quantidade="@item.Quantidade">
+                                <i class="fa-solid fa-boxes-stacked"></i> Alterar
+                            </button>
+                            <button type="button"
+                                    class="btn btn-success btn-sm btn-movimentacoes"
+                                    title="Movimentacoes">
+                                <i class="fa-solid fa-truck-arrow-right"></i>Movimentações
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+@*     <div class="row mt-3">
+        <div class="col-12">
+            <small class="text-muted">
+                <i class="fas fa-info-circle"></i>
+                Total de produtos: <strong>@Model.Count()</strong>
+            </small>
+        </div>
+    </div> *@
+}
+else
+{
+
+    <div class="table-responsive">
+        <table class="table table-light table-sm">
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Quantidade</th>
+                    <th>Última Atualização</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5" class="text-center py-4">
+                        <div class="text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            <strong>Nenhum item encontrado</strong>
+                            <br>
+                            <small>Adicione produtos para começar a gerenciar seu estoque.</small>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}

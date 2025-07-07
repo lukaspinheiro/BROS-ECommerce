@@ -128,15 +128,15 @@ namespace BROS_ECommerce.Services.Services
 
             await _repositoryProduto.AdicionarAsync(produto);
 
-            try
-            {
-                var estoque = new Estoque(produto.IdProduto, 1); 
-                await _repositoryEstoque.AdicionarAsync(estoque);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao criar estoque para produto {produto.Nome}: {ex.Message}");
-            }
+            //try
+            //{
+            //    var estoque = new Estoque(produto.IdProduto, 1); 
+            //    await _repositoryEstoque.AdicionarAsync(estoque);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"Erro ao criar estoque para produto {produto.Nome}: {ex.Message}");
+            //}
         }
 
         public async Task AtualizarAsync(ProdutoViewModel produtoVM)

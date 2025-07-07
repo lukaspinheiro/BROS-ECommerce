@@ -1,15 +1,16 @@
 ﻿using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
+using BROS_ECommerce.Services.ViewModel.Estoque;
 
 namespace BROS_ECommerce.Services.Services
 {
-    public class EstoqueService : IServiceEstoque
+    public class ServiceEstoque : IServiceEstoque
     {
         private readonly IRepositoryEstoque _repositoryEstoque;
         private readonly IRepositoryProduto _repositoryProduto;
 
-        public EstoqueService(IRepositoryEstoque repositoryEstoque, IRepositoryProduto repositoryProduto)
+        public ServiceEstoque(IRepositoryEstoque repositoryEstoque, IRepositoryProduto repositoryProduto)
         {
             _repositoryEstoque = repositoryEstoque;
             _repositoryProduto = repositoryProduto;
@@ -58,14 +59,14 @@ namespace BROS_ECommerce.Services.Services
             await _repositoryEstoque.AdicionarAsync(estoque);
         }
 
-        public async Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade)
+        public async Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade, DateTime UltimaAtualizacao)
         {
             if (novaQuantidade < 0)
             {
                 throw new ArgumentException("A quantidade não pode ser negativa");
             }
 
-            await _repositoryEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade);
+            await _repositoryEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade, UltimaAtualizacao);
         }
 
         public async Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar)
@@ -110,20 +111,32 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task PopularEstoqueInicialAsync()
         {
-            var produtos = await _repositoryProduto.ObterTodosAsync();
+            //var produtos = await _repositoryProduto.ObterTodosAsync();
 
-            foreach (var produto in produtos)
+            //foreach (var produto in produtos)
+            //{
+            //    var jaExisteEstoque = await _repositoryEstoque.ExistePorIdProdutoAsync(produto.IdProduto);
+
+            //    if (!jaExisteEstoque)
+            //    {
+            //        var estoque = new Estoque(produto.IdProduto, 1);
+            //        await _repositoryEstoque.AdicionarAsync(estoque);
+
+            //        Console.WriteLine($"Estoque criado para produto: {produto.Nome} (Quantidade: 1)");
+            //    }
+            //}
+        }
+
+        public async Task AdicionarProdutoNoEstoqueAsync(CadastrarEstoqueViewModel cadastrarEstoqueViewModel)
+        {
+            var estoque = new Estoque()
             {
-                var jaExisteEstoque = await _repositoryEstoque.ExistePorIdProdutoAsync(produto.IdProduto);
-
-                if (!jaExisteEstoque)
-                {
-                    var estoque = new Estoque(produto.IdProduto, 1);
-                    await _repositoryEstoque.AdicionarAsync(estoque);
-
-                    Console.WriteLine($"Estoque criado para produto: {produto.Nome} (Quantidade: 1)");
-                }
-            }
+                IdEstoque = cadastrarEstoqueViewModel.IdEstoque,
+                IdProduto = cadastrarEstoqueViewModel.IdProduto,
+                Quantidade = cadastrarEstoqueViewModel.Quantidade,
+                UltimaAtualizacao = cadastrarEstoqueViewModel.UltimaAtualizacao
+            };
+            await _repositoryEstoque.AdicionarAsync(estoque);
         }
     }
 }

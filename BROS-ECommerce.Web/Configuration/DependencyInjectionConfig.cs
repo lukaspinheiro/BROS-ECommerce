@@ -38,7 +38,7 @@ namespace BROS_ECommerce.Web.Configuration
             });
 
             services.AddScoped<IServiceUser, ServiceUser>();
-            services.AddScoped<IServiceEstoque, EstoqueService>();
+            services.AddScoped<IServiceEstoque, ServiceEstoque>();
             services.AddScoped<JwtService>();
             #endregion
         }

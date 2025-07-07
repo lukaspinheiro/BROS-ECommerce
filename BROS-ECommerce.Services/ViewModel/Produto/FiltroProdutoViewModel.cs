@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BROS_ECommerce.Services.ViewModel.Produto
+﻿namespace BROS_ECommerce.Services.ViewModel.Produto
 {
     public class FiltroProdutoViewModel
     {
