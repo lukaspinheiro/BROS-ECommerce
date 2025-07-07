@@ -6,6 +6,7 @@
                 <a class="fw-bold fst-italic text-white" style="font-size: 1.5rem; font-weight: 900 !important;" href="/">GymBros</a>
                 <a class="fw-bold fst-italic text-white" style="margin-top: -5px;" href="/">Supplements</a>
             </div>
+
             <div class="col-5" style="padding-left: 0.50rem !important; padding-right: unset !important; max-width: 37%;">
                 <form class="d-flex bg-light rounded-2 overflow-hidden w-100" style="height: 50px;">
                     <input class="form-control border-0" type="search" placeholder="Buscar..." aria-label="Buscar" style="height: 100%;">
@@ -14,50 +15,15 @@
                     </button>
                 </form>
             </div>
+
             <div class="col justify-content-end">
                 <div class="d-flex align-items-center justify-content-between gap-4" style="padding-left: 20%;margin-right: -1.5rem;">
                     <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="nav-link hvr-bob">
                         Administrativo
                     </a>
 
-                    
-                    @if (User.Identity!.IsAuthenticated)
-                    {
-                        @* USUÁRIO LOGADO *@
-                        <div class="dropdown">
-                            <a href="#" class="d-flex align-items-center gap-3 text-white text-decoration-none dropdown-toggle"
-                               id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="text-start">
-                                    <span class="d-block">Olá, @User.Identity.Name</span>
-                                    <span style="font-size: 0.8rem; opacity: 0.8;">Minha Conta</span>
-                                </div>
-                                <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-user me-2"></i>Meu Perfil</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-shopping-bag me-2"></i>Meus Pedidos</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="post" asp-controller="Autenticacao" asp-action="Logout" class="d-inline">
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="fa fa-sign-out-alt me-2"></i>Sair
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    }
-                    else
-                    {
-                        @* USUÁRIO NÃO LOGADO *@
-                        <a asp-controller="Autenticacao" asp-action="Login" class="d-flex align-items-center gap-3 text-white text-decoration-none">
-                            <div class="text-start">
-                                <span class="d-block">Cadastre-se</span>
-                                <span>ou Faça Login</span>
-                            </div>
-                            <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
-                        </a>
-                    }
+                    <!-- Aqui renderiza com JavaScript o nome do usuário ou o botão de login -->
+                    <div id="auth-area"></div>
 
                     <i class="fa-solid fa-heart fa-2xl" style="color: #ffffff;"></i>
                     <i class="fa-solid fa-cart-shopping fa-2xl" style="color: #ffffff;"></i>
@@ -66,3 +32,53 @@
         </div>
     </div>
 </nav>
+
+<script>
+    const userName = localStorage.getItem("bros_user_name");
+    const token = localStorage.getItem("bros_token");
+    const authArea = document.getElementById("auth-area");
+
+    if (authArea) {
+        if (token && userName) {
+            authArea.innerHTML = `
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center gap-3 text-white text-decoration-none dropdown-toggle"
+                       id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="text-start">
+                            <span class="d-block">Olá, ${userName}</span>
+                            <span style="font-size: 0.8rem; opacity: 0.8;">Minha Conta</span>
+                        </div>
+                        <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fa fa-user me-2"></i>Meu Perfil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fa fa-shopping-bag me-2"></i>Meus Pedidos</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <button onclick="logout()" class="dropdown-item">
+                                <i class="fa fa-sign-out-alt me-2"></i>Sair
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            `;
+        } else {
+            authArea.innerHTML = `
+                <a href="/Autenticacao/Login" class="d-flex align-items-center gap-3 text-white text-decoration-none">
+                    <div class="text-start">
+                        <span class="d-block">Cadastre-se</span>
+                        <span>ou Faça Login</span>
+                    </div>
+                    <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
+                </a>
+            `;
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem("bros_token");
+        localStorage.removeItem("bros_user_name");
+        localStorage.removeItem("bros_user_email");
+        window.location.href = "/Autenticacao/Login";
+    }
+</script>

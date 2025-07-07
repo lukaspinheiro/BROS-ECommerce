@@ -16,5 +16,9 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task<bool> IsCpfAvailableAsync(string cpf);
         string HashPassword(string password);
         bool VerifyPassword(string password, string hash);
+        Task<User?> GetByEmailAsync(string email);
+        Task<bool> ResetarSenhaAsync(Guid id, string novaSenha);
+
+
     }
 }
