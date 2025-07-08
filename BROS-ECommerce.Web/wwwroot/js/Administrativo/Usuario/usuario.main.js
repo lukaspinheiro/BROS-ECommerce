@@ -9,7 +9,7 @@ import {
 import { verificarEspacos, limparFormulario } from './usuario.formulario.js';
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("usuario.main.js carregado ✅");
+    
 
     inicializarTabela();
 
