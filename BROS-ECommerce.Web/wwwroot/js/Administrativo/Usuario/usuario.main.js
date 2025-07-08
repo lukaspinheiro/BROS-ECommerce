@@ -9,35 +9,45 @@ import {
 import { verificarEspacos, limparFormulario } from './usuario.formulario.js';
 
 document.addEventListener("DOMContentLoaded", function () {
+    console.log("usuario.main.js carregado ✅");
+
     inicializarTabela();
 
-    document.getElementById("btnCadastrarUsuario").addEventListener("click", function (e) {
-        e.preventDefault();
-        abrirModalCadastro();
-    });
-
-    document.getElementById("btn-confirmar-exclusao").addEventListener("click", function () {
-        const id = this.dataset.id;
-        $.ajax({
-            url: '/Administrativo/Usuario/Excluir/' + id,
-            type: 'POST',
-            headers: {
-                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-            },
-            success: function (response) {
-                $('#modal-confirmar-exclusao').modal('hide');
-                if (response.success) {
-                    location.reload();
-                } else {
-                    alert('Erro ao excluir usuário: ' + response.message);
-                }
-            },
-            error: function () {
-                alert('Erro ao excluir usuário');
-            }
+    const btnCadastrar = document.getElementById("btnCadastrarUsuario");
+    if (btnCadastrar) {
+        btnCadastrar.addEventListener("click", function (e) {
+            e.preventDefault();
+            abrirModalCadastro();
         });
-    });
+    }
 
+    const btnConfirmarExclusao = document.getElementById("btn-confirmar-exclusao");
+    if (btnConfirmarExclusao) {
+        btnConfirmarExclusao.addEventListener("click", function () {
+            const id = this.dataset.id;
+
+            $.ajax({
+                url: '/Administrativo/Usuario/Excluir/' + id,
+                type: 'POST',
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    $('#modal-confirmar-exclusao').modal('hide');
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Erro ao excluir usuário: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Erro ao excluir usuário');
+                }
+            });
+        });
+    }
+
+    // Delegação para cliques em editar e excluir
     document.addEventListener("click", function (e) {
         const btnEditar = e.target.closest('.btn-editar-usuario');
         if (btnEditar) {
@@ -58,11 +68,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    document.querySelectorAll('.btn-excluir-usuario').forEach(btn => {
-        btn.addEventListener("click", () => confirmarExclusao(btn.dataset.id, btn.dataset.nome));
-    });
-
-    document.getElementById("modal-cadastrar-usuario").addEventListener("hidden.bs.modal", limparFormulario);
+    const modalCadastrar = document.getElementById("modal-cadastrar-usuario");
+    if (modalCadastrar) {
+        modalCadastrar.addEventListener("hidden.bs.modal", limparFormulario);
+    }
 
     const camposParaVerificar = document.querySelectorAll('#form-cadastrar-usuario input, #form-cadastrar-usuario select');
     camposParaVerificar.forEach(campo => {
