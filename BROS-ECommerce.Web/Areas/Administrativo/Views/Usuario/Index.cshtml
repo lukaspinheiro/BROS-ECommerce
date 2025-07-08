@@ -1,0 +1,62 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Usuario.IndexUsuarioViewModel
+
+@{
+    ViewData["Title"] = "Gerenciar Usuários";
+}
+
+@section Head {
+    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/Administrativo/Usuario/usuario.css" />
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["Sucesso"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["Erro"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="container">
+    <div class="card mt-0">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mt-3 d-flex justify-content-between align-items-center">
+                    <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left">
+                        <i class="fa-solid fa-arrow-left fa-xl text-danger"></i>
+                    </a>
+                </div>
+
+                <div class="col-12">
+                    <h3 class="title text-center">@ViewData["Title"]</h3>
+
+                    <div class="col-12" id="tabela-usuarios-partial">
+                        <partial name="Partials/_TabelaUsuarios" model="Model.Tabela" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modais -->
+<partial name="Partials/_Cadastrar" model="Model.CadastrarUsuario" />
+<partial name="Partials/_ModalExclusao" />
+@* Removido: <partial name="Partials/_Editar" /> pois o modal de cadastro já trata ambos *@
+
+@section Scripts {
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script type="module" src="~/js/Administrativo/Usuario/usuario.main.js"></script>
+}
