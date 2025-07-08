@@ -21,5 +21,14 @@ namespace BROS_ECommerce.Web.Controllers
 
             return View(produto);
         }
+
+        [HttpGet]
+        [Route("buscar")]
+        public async Task<IActionResult> Buscar(string busca)
+        {
+            var produtos = await _serviceProduto.BuscarPorTermoAsync(busca);
+            ViewBag.TermoBusca = busca;
+            return View("Filtrar", produtos);
+        }
     }
 }

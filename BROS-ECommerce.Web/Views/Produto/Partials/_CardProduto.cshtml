@@ -1,0 +1,14 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Produto.ProdutoViewModel;
+
+<div class="card h-100 d-flex flex-column justify-content-between">
+    <div class="d-flex justify-content-center align-items-center imagem-produto">
+        <img src="https://www.gsuplementos.com.br/upload/produto/layout/185/image01-interna.webp">
+    </div>
+    <div class="desconto extra-bold">10% OFF no Pix</div>
+    <div class="NomeProduto fw-bolder text-start">@Model.Nome</div>
+    <div class="precos">
+        @* <del>De R$ 138,80</del> *@
+        <strong>POR @Model.Preco.ToString("C", new System.Globalization.CultureInfo("pt-BR"))</strong>
+    </div>
+    <a asp-action="Detalhes" asp-route-slug="@Model.Slug" class="btn-comprar">COMPRAR</a>
+</div>

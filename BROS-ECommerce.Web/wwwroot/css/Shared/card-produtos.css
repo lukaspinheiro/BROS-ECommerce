@@ -1,0 +1,97 @@
+﻿.grid-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, max-content));
+    gap: 2rem;
+    justify-content: space-between;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.card {
+    width: 100%;
+    max-width: 320px;
+    flex: 1 1 auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: unset;
+    margin-bottom: unset;
+    transition: transform 0.2s ease;
+    font-size: 1rem;
+}
+
+    .card:hover {
+        transform: scale(1.03);
+    }
+
+        .card:hover .btn-comprar {
+            background-color: #377139;
+        }
+
+    .card img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+.imagem-produto {
+    height: clamp(120px, 13.4vw, 230px);
+    width: auto;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.desconto {
+    background-color: #00ff00;
+    color: #32373b;
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+.NomeProduto {
+    margin-left: 1.0rem;
+    margin-right: 1.0rem;
+    font-size: 14px;
+    color: #333;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.precos {
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: 1.0rem;
+    margin-right: 1.0rem;
+}
+
+    .precos del {
+        color: #888;
+    }
+
+    .precos strong {
+        color: #3B973F;
+        font-size: clamp(14px, 1.0vw, 20px);
+        font-weight: 900 !important;
+    }
+
+
+.btn-comprar {
+    background-color: #38b24d;
+    color: white;
+    font-weight: bold;
+    padding: 10px 0;
+    display: block;
+    text-decoration: none;
+    margin: 1.0rem;
+    font-size: clamp(14px, 1.0vw, 20px);
+    font-weight: 900 !important;
+}
+
+    .btn-comprar:hover {
+        background-color: #377139;
+        color: white;
+    }

@@ -1,11 +1,7 @@
-﻿using BROS_ECommerce.Services.Interface.Services;
-using BROS_ECommerce.Services.ViewModel.Produto;
-using BROS_ECommerce.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
+using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.ViewModel.Produto;
 
 namespace BROS_ECommerce.Services.Services
 {
@@ -176,6 +172,24 @@ namespace BROS_ECommerce.Services.Services
 
             await _repositoryProduto.ExcluirAsync(id);
         }
+
+        public async Task<IEnumerable<ProdutoViewModel>> BuscarPorTermoAsync(string termo)
+        {
+            var produtos = await _repositoryProduto.BuscarPorNomeAsync(termo);
+
+            return produtos.Select(p => new ProdutoViewModel
+            {
+                IdProduto = p.IdProduto,
+                Nome = p.Nome,
+                Slug = p.Slug,
+                TituloDescricao = p.TituloDescricao,
+                Descricao = p.Descricao,
+                Preco = p.Preco
+            });
+        }
+
+
+
 
         public async Task PopularDadosIniciais()
         {

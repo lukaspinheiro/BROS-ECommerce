@@ -8,8 +8,8 @@
             </div>
 
             <div class="col-5" style="padding-left: 0.50rem !important; padding-right: unset !important; max-width: 37%;">
-                <form class="d-flex bg-light rounded-2 overflow-hidden w-100" style="height: 50px;">
-                    <input class="form-control border-0" type="search" placeholder="Buscar..." aria-label="Buscar" style="height: 100%;">
+                <form asp-controller="Produto" asp-action="Buscar" method="get" class="d-flex bg-light rounded-2 overflow-hidden w-100" style="height: 50px;">
+                    <input class="form-control border-0" name="busca" type="search" placeholder="Buscar..." aria-label="Buscar" style="height: 100%;" required>
                     <button class="btn btn-light bg-light d-flex align-items-center justify-content-center px-3" type="submit" style="height: 100%;">
                         <i class="fa-solid fa-magnifying-glass fa-2xl" style="color: #4a4a4a;"></i>
                     </button>
