@@ -13,6 +13,9 @@
     @RenderSection("Head", required: false)
     @RenderSection("styles", required: false)
 
+    @Html.AntiForgeryToken()
+
+
 </head>
 <body>
     <header>

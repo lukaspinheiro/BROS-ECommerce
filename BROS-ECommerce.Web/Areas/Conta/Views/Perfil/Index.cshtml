@@ -1,0 +1,56 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Usuario.PerfilUsuarioViewModel
+@{
+    ViewData["Title"] = "Meu Perfil";
+    Layout = "_LoginLayout";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="~/css/Perfil/perfil.css" />
+
+<div class="perfil-container">
+    <div class="perfil-card">
+        <div class="perfil-header">
+            <div class="perfil-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1 class="perfil-nome">@Model.Nome</h1>
+            <p class="perfil-email">@Model.Email</p>
+        </div>
+
+        <div class="perfil-content">
+            <h2 class="dados-titulo">Dados Pessoais</h2>
+
+            <div class="dados-grid">
+                <div class="dado-item">
+                    <i class="fas fa-user dado-icon"></i>
+                    <div class="dado-label">Nome Completo</div>
+                    <p class="dado-valor">@Model.Nome</p>
+                </div>
+
+                <div class="dado-item">
+                    <i class="fas fa-envelope dado-icon"></i>
+                    <div class="dado-label">E-mail</div>
+                    <p class="dado-valor">@Model.Email</p>
+                </div>
+
+                <div class="dado-item">
+                    <i class="fas fa-id-card dado-icon"></i>
+                    <div class="dado-label">CPF</div>
+                    <p class="dado-valor">@Model.Cpf</p>
+                </div>
+
+                <div class="dado-item">
+                    <i class="fas fa-calendar-alt dado-icon"></i>
+                    <div class="dado-label">Data de Nascimento</div>
+                    <p class="dado-valor">@Model.Nascimento.ToString("dd/MM/yyyy")</p>
+                </div>
+
+                <div class="dado-item">
+                    <i class="fas fa-venus-mars dado-icon"></i>
+                    <div class="dado-label">Gênero</div>
+                    <p class="dado-valor">@Model.Genero</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

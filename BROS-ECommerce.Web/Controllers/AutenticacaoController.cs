@@ -53,10 +53,18 @@ namespace BROS_ECommerce.Web.Controllers
 
                     var token = _jwtService.GenerateToken(user);
 
-                    return Json(new
+                    // 🔐 Grava token JWT em cookie seguro
+                    Response.Cookies.Append("BrosToken", token, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = false,
+                        SameSite = SameSiteMode.Lax,
+                        Expires = DateTimeOffset.UtcNow.AddHours(2)
+                    });
+
+                    return Ok(new
                     {
                         success = true,
-                        token,
                         nome = user.Nome,
                         email = user.Email
                     });
@@ -71,6 +79,7 @@ namespace BROS_ECommerce.Web.Controllers
                 return StatusCode(500, new { message = "Erro interno. Tente novamente mais tarde." });
             }
         }
+
 
         [HttpGet]
         public IActionResult Cadastro()
@@ -130,12 +139,18 @@ namespace BROS_ECommerce.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            _logger.LogInformation("Logout realizado (frontend deve remover o token)");
-            return Ok(new { message = "Logout realizado com sucesso." });
+            Response.Cookies.Delete("BrosToken");
+
+            
+            TempData.Clear();
+
+            return RedirectToAction("Login", "Autenticacao");
         }
+
+
 
         [HttpGet]
         public IActionResult EsqueciSenha()
