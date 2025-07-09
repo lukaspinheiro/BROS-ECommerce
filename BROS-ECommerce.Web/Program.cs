@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.RegisterServices(builder.Configuration);
 
-// Configuração do JWT
+// Autenticação JWT + leitura do cookie BrosToken
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -28,11 +28,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
             )
         };
+
+        // 👇 Faz o token ser lido do cookie "BrosToken"
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var token = context.Request.Cookies["BrosToken"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Token = token;
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
 
-// Cache e sessão (opcional, pode manter se usado para outra coisa)
+// Sessão (se ainda for usada)
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -65,9 +79,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseSession(); // Se não usar, pode remover
-
-app.UseAuthentication(); // Autenticação via JWT
+app.UseSession(); // Se estiver usando TempData ou outras features baseadas em sessão
+app.UseAuthentication(); // JWT
 app.UseAuthorization();
 
 // Rotas

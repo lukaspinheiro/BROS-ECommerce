@@ -133,15 +133,13 @@
 				headers: {
 					"Content-Type": "application/json"
 				},
-				body: JSON.stringify({ usuario, senha, lembrarSenha })
+				body: JSON.stringify({ usuario, senha, lembrarSenha }),
+				credentials: "include"
 			});
 
 			const data = await response.json();
 
-			if (response.ok && data.token) {
-				localStorage.setItem("bros_token", data.token);
-				localStorage.setItem("bros_user_name", data.nome);
-				localStorage.setItem("bros_user_email", data.email);
+			if (response.ok && data.success) {
 				window.location.href = "/Home/Index";
 			} else {
 				showAlert(data.message || "Email ou senha inválidos.");

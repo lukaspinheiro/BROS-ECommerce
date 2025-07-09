@@ -1,4 +1,6 @@
 ﻿using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Services.ViewModel.Usuario;
+using System.Security.Claims;
 
 namespace BROS_ECommerce.Services.Interface.Services
 {
@@ -18,6 +20,7 @@ namespace BROS_ECommerce.Services.Interface.Services
         bool VerifyPassword(string password, string hash);
         Task<User?> GetByEmailAsync(string email);
         Task<bool> ResetarSenhaAsync(Guid id, string novaSenha);
+        Task<PerfilUsuarioViewModel?> ObterUsuarioLogadoAsync(ClaimsPrincipal user);
 
 
     }

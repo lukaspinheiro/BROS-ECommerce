@@ -2,6 +2,8 @@
 using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
 using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.ViewModel.Usuario;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -113,6 +115,28 @@ namespace BROS_ECommerce.Services.Services
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _userRepository.GetByEmailAsync(email);
+        }
+
+        public async Task<PerfilUsuarioViewModel?> ObterUsuarioLogadoAsync(ClaimsPrincipal user)
+        {
+            var email = user?.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(email))
+                return null;
+
+            var usuario = await _userRepository.GetByEmailAsync(email);
+
+            if (usuario == null || !usuario.Ativo)
+                return null;
+
+            return new PerfilUsuarioViewModel
+            {
+                Nome = usuario.Nome,
+                Email = usuario.Email,
+                Cpf = usuario.Cpf,
+                Nascimento = usuario.Nascimento,
+                Genero = usuario.Genero
+            };
         }
 
         public async Task<bool> ResetarSenhaAsync(Guid id, string novaSenha)

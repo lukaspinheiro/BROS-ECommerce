@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BROS_ECommerce.Domain.Entities; // ou DTO se preferir
+using BROS_ECommerce.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,8 +21,9 @@ namespace BROS_ECommerce.Web.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.IdUser.ToString()),
-                new Claim(ClaimTypes.Name, user.Nome),
+                new Claim(ClaimTypes.Name, user.Email), // usado como User.Identity.Name
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim("nome", user.Nome), // 👈 necessário para mostrar o nome na navbar
                 new Claim("cpf", user.Cpf),
                 new Claim("genero", user.Genero),
                 new Claim("dataNascimento", user.Nascimento.ToString("yyyy-MM-dd")),
