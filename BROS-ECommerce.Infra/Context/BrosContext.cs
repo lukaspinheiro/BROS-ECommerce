@@ -19,12 +19,16 @@ namespace BROS_ECommerce.Infra.Context
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Estoque> Estoque { get; set; }
+        public DbSet<Imagem> Imagens { get; set; }
+        public DbSet<ProdutoImagem> ProdutoImagens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProdutoMap());
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new EstoqueMap());
+            modelBuilder.ApplyConfiguration(new ImagemMap());
+            modelBuilder.ApplyConfiguration(new ProdutoImagemMap());
 
             SeedUsers(modelBuilder);
             SeedEstoque(modelBuilder);
@@ -70,38 +74,12 @@ namespace BROS_ECommerce.Infra.Context
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true
-                },
-                new User
-                {
-                    IdUser = new Guid("33333333-3333-3333-3333-333333333333"),
-                    Email = "maria.oliveira@hotmail.com",
-                    Cpf = "45678912300",
-                    Nome = "Maria Oliveira Costa",
-                    Nascimento = new DateTime(1998, 8, 22),
-                    Senha = "tSZM7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG1M7xPbZIG=",
-                    Genero = "Feminino",
-                    DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                    Ativo = true
-                },
-                new User
-                {
-                    IdUser = new Guid("44444444-4444-4444-4444-444444444444"),
-                    Email = "alex.santos@outlook.com",
-                    Cpf = "78912345600",
-                    Nome = "Alex Santos Lima",
-                    Nascimento = new DateTime(2000, 12, 10),
-                    Senha = "uTZN8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH2N8yQcZJH=",
-                    Genero = "Outro",
-                    DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                    Ativo = true
                 }
             );
         }
 
-        
         private void SeedEstoque(ModelBuilder modelBuilder)
         {
-            
         }
     }
 }

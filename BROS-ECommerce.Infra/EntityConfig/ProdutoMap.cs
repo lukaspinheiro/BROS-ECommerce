@@ -44,12 +44,19 @@ namespace BROS_ECommerce.Infra.EntityConfig
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
+            
             builder.HasIndex(p => p.Slug)
                 .IsUnique()
                 .HasDatabaseName("IX_Produtos_Slug");
 
             builder.HasIndex(p => p.Nome)
                 .HasDatabaseName("IX_Produtos_Nome");
+
+            
+            builder.HasMany(p => p.ProdutoImagens)
+                .WithOne(pi => pi.Produto)
+                .HasForeignKey(pi => pi.IdProduto)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

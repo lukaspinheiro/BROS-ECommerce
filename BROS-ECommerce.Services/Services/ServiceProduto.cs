@@ -18,7 +18,7 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task<List<TabelaProdutoViewModel>> ObterTabelaProdutosAsync()
         {
-            var produtos = await _repositoryProduto.ObterTodosAsync();
+            var produtos = await _repositoryProduto.ObterTodosComImagensAsync();
 
             return produtos.Select(p => new TabelaProdutoViewModel
             {
@@ -27,13 +27,23 @@ namespace BROS_ECommerce.Services.Services
                 Slug = p.Slug,
                 TituloDescricao = p.TituloDescricao,
                 Descricao = p.Descricao,
-                Preco = p.Preco
+                Preco = p.Preco,
+                ImagemPrincipal = p.ProdutoImagens
+                    .Where(pi => pi.Principal && pi.Imagem.Ativo)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .FirstOrDefault(),
+                Imagens = p.ProdutoImagens
+                    .Where(pi => pi.Imagem.Ativo)
+                    .OrderByDescending(pi => pi.Principal)
+                    .ThenBy(pi => pi.Ordem)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .ToList()
             }).ToList();
         }
 
         public async Task<List<ProdutoViewModel>> ObterTodosAsync()
         {
-            var produtos = await _repositoryProduto.ObterTodosAsync();
+            var produtos = await _repositoryProduto.ObterTodosComImagensAsync();
 
             return produtos.Select(p => new ProdutoViewModel
             {
@@ -43,13 +53,18 @@ namespace BROS_ECommerce.Services.Services
                 TituloDescricao = p.TituloDescricao,
                 Descricao = p.Descricao,
                 Preco = p.Preco,
-                Imagens = new List<string>()
+                Imagens = p.ProdutoImagens
+                    .Where(pi => pi.Imagem.Ativo)
+                    .OrderByDescending(pi => pi.Principal)
+                    .ThenBy(pi => pi.Ordem)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .ToList()
             }).ToList();
         }
 
         public List<ProdutoViewModel> ObterTodos()
         {
-            var produtos = _repositoryProduto.ObterTodosAsync().Result;
+            var produtos = _repositoryProduto.ObterTodosComImagensAsync().Result;
 
             return produtos.Select(p => new ProdutoViewModel
             {
@@ -59,13 +74,18 @@ namespace BROS_ECommerce.Services.Services
                 TituloDescricao = p.TituloDescricao,
                 Descricao = p.Descricao,
                 Preco = p.Preco,
-                Imagens = new List<string>()
+                Imagens = p.ProdutoImagens
+                    .Where(pi => pi.Imagem.Ativo)
+                    .OrderByDescending(pi => pi.Principal)
+                    .ThenBy(pi => pi.Ordem)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .ToList()
             }).ToList();
         }
 
         public async Task<ProdutoViewModel?> ObterPorSlugAsync(string slug)
         {
-            var produto = await _repositoryProduto.ObterPorSlugAsync(slug);
+            var produto = await _repositoryProduto.ObterPorSlugComImagensAsync(slug);
 
             if (produto == null) return null;
 
@@ -77,7 +97,12 @@ namespace BROS_ECommerce.Services.Services
                 TituloDescricao = produto.TituloDescricao,
                 Descricao = produto.Descricao,
                 Preco = produto.Preco,
-                Imagens = new List<string>()
+                Imagens = produto.ProdutoImagens
+                    .Where(pi => pi.Imagem.Ativo)
+                    .OrderByDescending(pi => pi.Principal)
+                    .ThenBy(pi => pi.Ordem)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .ToList()
             };
         }
 
@@ -88,7 +113,7 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task<ProdutoViewModel?> ObterPorIdAsync(Guid id)
         {
-            var produto = await _repositoryProduto.ObterPorIdAsync(id);
+            var produto = await _repositoryProduto.ObterPorIdComImagensAsync(id);
 
             if (produto == null) return null;
 
@@ -100,7 +125,12 @@ namespace BROS_ECommerce.Services.Services
                 TituloDescricao = produto.TituloDescricao,
                 Descricao = produto.Descricao,
                 Preco = produto.Preco,
-                Imagens = new List<string>()
+                Imagens = produto.ProdutoImagens
+                    .Where(pi => pi.Imagem.Ativo)
+                    .OrderByDescending(pi => pi.Principal)
+                    .ThenBy(pi => pi.Ordem)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .ToList()
             };
         }
 
@@ -123,16 +153,6 @@ namespace BROS_ECommerce.Services.Services
             };
 
             await _repositoryProduto.AdicionarAsync(produto);
-
-            //try
-            //{
-            //    var estoque = new Estoque(produto.IdProduto, 1); 
-            //    await _repositoryEstoque.AdicionarAsync(estoque);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine($"Erro ao criar estoque para produto {produto.Nome}: {ex.Message}");
-            //}
         }
 
         public async Task AtualizarAsync(ProdutoViewModel produtoVM)
@@ -163,18 +183,23 @@ namespace BROS_ECommerce.Services.Services
         {
             try
             {
+                
                 await _repositoryEstoque.ExcluirPorIdProdutoAsync(id);
+
+                
+                await _repositoryProduto.ExcluirAsync(id);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao excluir estoque do produto {id}: {ex.Message}");
+                throw new InvalidOperationException($"Erro ao excluir produto: {ex.Message}");
             }
-
-            await _repositoryProduto.ExcluirAsync(id);
         }
 
         public async Task<IEnumerable<ProdutoViewModel>> BuscarPorTermoAsync(string termo)
         {
+            if (string.IsNullOrWhiteSpace(termo))
+                return new List<ProdutoViewModel>();
+
             var produtos = await _repositoryProduto.BuscarPorNomeAsync(termo);
 
             return produtos.Select(p => new ProdutoViewModel
@@ -184,56 +209,47 @@ namespace BROS_ECommerce.Services.Services
                 Slug = p.Slug,
                 TituloDescricao = p.TituloDescricao,
                 Descricao = p.Descricao,
-                Preco = p.Preco
+                Preco = p.Preco,
+                Imagens = p.ProdutoImagens
+                    .Where(pi => pi.Imagem.Ativo)
+                    .OrderByDescending(pi => pi.Principal)
+                    .ThenBy(pi => pi.Ordem)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .ToList()
             });
         }
 
-
-
-
         public async Task PopularDadosIniciais()
         {
-            var totalProdutos = await _repositoryProduto.ContarTotalAsync();
+            var produtos = await _repositoryProduto.ObterTodosAsync();
 
-            if (totalProdutos == 0)
+            if (!produtos.Any())
             {
                 var produtosIniciais = new List<Produto>
                 {
                     new Produto
                     {
                         IdProduto = Guid.NewGuid(),
-                        Nome = "(TOP) Whey Protein Concentrado (1KG) - Growth Supplements",
-                        Slug = "whey-protein-growth-1kg",
-                        TituloDescricao = "WHEY PROTEIN GROWTH. PROTEÍNA DO SORO DO LEITE PURA.",
-                        Descricao = "Whey protein Growth fornece proteínas para quem deseja hipertrofia e definição muscular. Rico em aminoácidos essenciais.",
-                        Preco = 149.99M
+                        Nome = "Whey Protein",
+                        Slug = "whey-protein",
+                        TituloDescricao = "Suplemento de Proteína",
+                        Descricao = "Whey Protein concentrado para ganho de massa muscular",
+                        Preco = 89.90m
                     },
                     new Produto
                     {
                         IdProduto = Guid.NewGuid(),
-                        Nome = "Creatina Monohidratada 250g - Growth Supplements",
-                        Slug = "creatina-monohidratada-250g",
-                        TituloDescricao = "CREATINA MONOHIDRATADA PURO MICRONIZADA.",
-                        Descricao = "Melhora o desempenho físico em exercícios repetidos de curta duração e alta intensidade.",
-                        Preco = 89.99M
-                    },
-                    new Produto
-                    {
-                        IdProduto = Guid.NewGuid(),
-                        Nome = "BCAA 2400 - 60 Cápsulas",
-                        Slug = "bcaa-2400-60-capsulas",
-                        TituloDescricao = "BCAA DE ALTA QUALIDADE PARA RECUPERAÇÃO MUSCULAR.",
-                        Descricao = "Aminoácidos de cadeia ramificada para recuperação e crescimento muscular.",
-                        Preco = 79.99M
+                        Nome = "Creatina",
+                        Slug = "creatina",
+                        TituloDescricao = "Suplemento de Creatina",
+                        Descricao = "Creatina monohidratada para aumento da força",
+                        Preco = 45.90m
                     }
                 };
 
                 foreach (var produto in produtosIniciais)
                 {
                     await _repositoryProduto.AdicionarAsync(produto);
-
-                    var estoque = new Estoque(produto.IdProduto, 1);
-                    await _repositoryEstoque.AdicionarAsync(estoque);
                 }
             }
         }
