@@ -13,6 +13,32 @@ namespace BROS_ECommerce.Infra.Repository
     public class ProdutoRepository : RepositoryBase<Produto>, IRepositoryProduto
     {
         public ProdutoRepository(BrosContext context) : base(context) { }
+     
+        public async Task<List<Produto>> ObterTodosComImagensAsync()
+        {
+            return await _dbSet
+                .Include(p => p.ProdutoImagens)
+                .ThenInclude(pi => pi.Imagem)
+                .ToListAsync();
+        }
+
+        
+        public async Task<Produto?> ObterPorSlugComImagensAsync(string slug)
+        {
+            return await _dbSet
+                .Include(p => p.ProdutoImagens)
+                .ThenInclude(pi => pi.Imagem)
+                .FirstOrDefaultAsync(p => p.Slug == slug);
+        }
+
+        
+        public async Task<Produto?> ObterPorIdComImagensAsync(Guid id)
+        {
+            return await _dbSet
+                .Include(p => p.ProdutoImagens)
+                .ThenInclude(pi => pi.Imagem)
+                .FirstOrDefaultAsync(p => p.IdProduto == id);
+        }
 
         public bool Any(Guid id)
         {
@@ -31,12 +57,12 @@ namespace BROS_ECommerce.Infra.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Produto?> BuscarPorIdAsync(Guid id, bool somenteLeitura = false)
+        public async Task<Produto> BuscarPorIdAsync(Guid id, bool somenteLeitura = false)
         {
             if (somenteLeitura)
-                return await _dbSet.AsNoTracking().FirstOrDefaultAsync(b => b.IdProduto == id);
+                return await _dbSet.AsNoTracking().FirstOrDefaultAsync(b => b.IdProduto == id) ?? new Produto();
             else
-                return await _dbSet.FirstOrDefaultAsync(b => b.IdProduto == id);
+                return await _dbSet.FirstOrDefaultAsync(b => b.IdProduto == id) ?? new Produto();
         }
 
         public async Task<List<Produto>> EncontrarAsync(Expression<Func<Produto, bool>> expressao)

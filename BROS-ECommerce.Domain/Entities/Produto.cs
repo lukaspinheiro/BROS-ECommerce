@@ -1,9 +1,4 @@
 ﻿using BROS_ECommerce.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BROS_ECommerce.Domain.Entities
 {
@@ -12,10 +7,13 @@ namespace BROS_ECommerce.Domain.Entities
         public Produto() { }
 
         public Guid IdProduto { get; set; }
-        public string Nome { get; set; }
-        public string Slug { get; set; }
-        public string TituloDescricao { get; set; }
-        public string Descricao { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string Slug { get; set; } = string.Empty;
+        public string TituloDescricao { get; set; } = string.Empty;
+        public string Descricao { get; set; } = string.Empty;
         public decimal Preco { get; set; }
+
+        // Relacionamentos
+        public virtual ICollection<ProdutoImagem> ProdutoImagens { get; set; } = new List<ProdutoImagem>();
     }
 }

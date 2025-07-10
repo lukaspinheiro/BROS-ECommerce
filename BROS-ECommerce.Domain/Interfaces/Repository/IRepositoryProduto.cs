@@ -7,7 +7,9 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
     {
         bool Any(Guid id);
 
-        
+        Task<List<Produto>> ObterTodosComImagensAsync();
+        Task<Produto?> ObterPorSlugComImagensAsync(string slug);
+        Task<Produto?> ObterPorIdComImagensAsync(Guid id);
         Task<List<Produto>> ObterTodosAsync();
         Task<Produto?> ObterPorIdAsync(Guid id);
         Task<Produto?> ObterPorSlugAsync(string slug);
