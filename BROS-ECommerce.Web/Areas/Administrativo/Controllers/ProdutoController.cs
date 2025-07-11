@@ -71,13 +71,32 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         }
 
         [HttpPost("AtualizarProduto")]
-        public async Task<IActionResult> AtualizarProduto(ProdutoViewModel produtoViewModel)
+        public async Task<IActionResult> AtualizarProduto(IndexProdutoViewModel indexProdutoViewModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await _serviceProduto.AtualizarAsync(produtoViewModel);
+                    
+                    var idString = Request.Form["id"].ToString();
+                    if (!Guid.TryParse(idString, out var id))
+                    {
+                        TempData["Erro"] = "ID do produto inválido.";
+                        return RedirectToAction("Index");
+                    }
+
+                    var produtoParaAtualizar = new ProdutoViewModel
+                    {
+                        IdProduto = id,
+                        Nome = indexProdutoViewModel.cadastrarProdutoViewModel.Nome,
+                        Slug = indexProdutoViewModel.cadastrarProdutoViewModel.Slug,
+                        TituloDescricao = indexProdutoViewModel.cadastrarProdutoViewModel.TituloDescricao,
+                        Descricao = indexProdutoViewModel.cadastrarProdutoViewModel.Descricao,
+                        Preco = indexProdutoViewModel.cadastrarProdutoViewModel.Preco,
+                        Imagens = new List<string>() 
+                    };
+
+                    await _serviceProduto.AtualizarAsync(produtoParaAtualizar);
                     TempData["Sucesso"] = "Produto atualizado com sucesso!";
                 }
                 else
@@ -93,20 +112,20 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost("ExcluirProduto/{id}")]
-        public async Task<IActionResult> ExcluirProduto(Guid id)
+        [HttpPost("Excluir/{id}")]
+        public async Task<IActionResult> Excluir(Guid id)
         {
             try
             {
                 await _serviceProduto.ExcluirAsync(id);
                 TempData["Sucesso"] = "Produto excluído com sucesso!";
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
                 TempData["Erro"] = "Erro ao excluir produto: " + ex.Message;
+                return Json(new { success = false, message = ex.Message });
             }
-
-            return RedirectToAction("Index");
         }
 
         [HttpGet("GerenciarImagens/{id}")]
