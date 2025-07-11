@@ -14,15 +14,12 @@
     @RenderSection("styles", required: false)
 
     @Html.AntiForgeryToken()
-
-
 </head>
 <body>
     <header>
         <partial name="\PartialsLayout\_NavbarAcessibilidade" />
         <partial name="\PartialsLayout\_NavbarSuperior" />
         <partial name="\PartialsLayout\_NavbarInferior" />
-
     </header>
 
     <main role="main" class="pb-3 paddingX">
@@ -37,7 +34,9 @@
     </footer>
 
     <partial name="\PartialsLayout\_ReferenciasScript" />
-    
+
+    <script src="~/js/shared/carrinho.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

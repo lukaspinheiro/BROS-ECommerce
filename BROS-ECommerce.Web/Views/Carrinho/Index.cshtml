@@ -1,0 +1,116 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Carrinho.CarrinhoViewModel
+@{
+    ViewData["Title"] = "Carrinho de Compras";
+}
+
+@section Head {
+    <link href="~/css/Carrinho/carrinho.css" rel="stylesheet" />
+}
+
+<div class="carrinho-container">
+    <div class="carrinho-header">
+        <h2 class="carrinho-titulo">
+            <i class="fa-solid fa-cart-shopping me-3"></i>
+            CARRINHO (@(Model?.QuantidadeTotal ?? 0))
+        </h2>
+    </div>
+
+    @if (Model == null || !Model.TemItens)
+    {
+        <div class="carrinho-vazio">
+            <div class="carrinho-vazio-content">
+                <div class="carrinho-vazio-icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <h3>Seu carrinho ainda está vazio</h3>
+                <p>Que tal conferir algumas ofertas e produtos dos Gymbros?</p>
+                <div class="carrinho-vazio-actions">
+                    <a href="/" class="btn btn-continuar-comprando">
+                        Continuar comprando
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="carrinho-com-produtos">
+            <div class="row">
+                <div class="col-lg-8 col-md-12">
+                    <div class="carrinho-itens">
+                        @foreach (var item in Model.Itens)
+                        {
+                            <div class="carrinho-item" data-produto-id="@item.IdProduto">
+                                <div class="item-imagem">
+                                    <img src="@item.ImagemUrl" alt="@item.Nome" />
+                                </div>
+
+                                <div class="item-detalhes">
+                                    <h4 class="item-nome">@item.Nome</h4>
+                                    <div class="item-preco">@item.PrecoFormatado</div>
+                                </div>
+
+                                <div class="item-quantidade">
+                                    <button class="btn-quantidade" onclick="alterarQuantidade('@Model.IdCarrinho', '@item.IdProduto', @(item.Quantidade - 1))">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <span class="quantidade-valor">@item.Quantidade</span>
+                                    <button class="btn-quantidade" onclick="alterarQuantidade('@Model.IdCarrinho', '@item.IdProduto', @(item.Quantidade + 1))">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+
+                                <div class="item-subtotal">
+                                    @item.SubtotalFormatado
+                                </div>
+
+                                <div class="item-acoes">
+                                    <button class="btn-remover" onclick="removerProduto('@Model.IdCarrinho', '@item.IdProduto')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="carrinho-acoes">
+                        <button class="btn btn-adicionar-cupom">
+                            <i class="fa-solid fa-tag me-2"></i>
+                            Adicionar cupom
+                        </button>
+                        <a href="/" class="btn btn-continuar-comprando">
+                            Continuar comprando
+                        </a>
+                    </div>
+                </div>
+
+                
+                <div class="col-lg-4 col-md-12">
+                    <div class="carrinho-resumo">
+                        <h3>Total</h3>
+
+                        <div class="resumo-linha">
+                            <span>Quantidade de itens:</span>
+                            <span id="resumo-quantidade">@Model.QuantidadeTotal</span>
+                        </div>
+
+                        <div class="resumo-linha resumo-total">
+                            <span>Total:</span>
+                            <span id="resumo-total">@Model.ValorTotal.ToString("C2")</span>
+                        </div>
+
+                        <div class="resumo-acoes">
+                            <a href="/Carrinho/Checkout" class="btn btn-finalizar-compra">
+                                Finalizar compra
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/Carrinho/carrinho-page.js"></script>
+}
