@@ -22,6 +22,85 @@ namespace BROS_ECommerce.Infra.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Carrinho", b =>
+                {
+                    b.Property<Guid>("IdCarrinho")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdCarrinho");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCriacao")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<Guid?>("IdUsuario")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdUsuario");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasDefaultValue("Aberto")
+                        .HasColumnName("Status");
+
+                    b.HasKey("IdCarrinho");
+
+                    b.HasIndex("DataCriacao")
+                        .HasDatabaseName("IX_Carrinhos_DataCriacao");
+
+                    b.HasIndex("IdUsuario")
+                        .HasDatabaseName("IX_Carrinhos_IdUsuario");
+
+                    b.HasIndex("Status")
+                        .HasDatabaseName("IX_Carrinhos_Status");
+
+                    b.ToTable("Carrinhos", (string)null);
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.CarrinhoItem", b =>
+                {
+                    b.Property<Guid>("IdCarrinhoItem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdCarrinhoItem");
+
+                    b.Property<Guid>("IdCarrinho")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdCarrinho");
+
+                    b.Property<Guid>("IdProduto")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdProduto");
+
+                    b.Property<decimal>("PrecoUnitario")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PrecoUnitario");
+
+                    b.Property<int>("Quantidade")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1)
+                        .HasColumnName("Quantidade");
+
+                    b.HasKey("IdCarrinhoItem");
+
+                    b.HasIndex("IdCarrinho")
+                        .HasDatabaseName("IX_CarrinhoItens_IdCarrinho");
+
+                    b.HasIndex("IdProduto")
+                        .HasDatabaseName("IX_CarrinhoItens_IdProduto");
+
+                    b.HasIndex("IdCarrinho", "IdProduto")
+                        .IsUnique()
+                        .HasDatabaseName("IX_CarrinhoItens_CarrinhoProduto");
+
+                    b.ToTable("CarrinhoItens", (string)null);
+                });
+
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Estoque", b =>
                 {
                     b.Property<Guid>("IdEstoque")
@@ -301,7 +380,7 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Masculino",
                             Nascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Administrador Sistema",
-                            Senha = "rQZK5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE="
+                            Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF="
                         },
                         new
                         {
@@ -315,6 +394,37 @@ namespace BROS_ECommerce.Infra.Migrations
                             Nome = "João Silva Santos",
                             Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF="
                         });
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Carrinho", b =>
+                {
+                    b.HasOne("BROS_ECommerce.Domain.Entities.User", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("IdUsuario")
+                        .HasConstraintName("FK_Carrinhos_Usuario");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.CarrinhoItem", b =>
+                {
+                    b.HasOne("BROS_ECommerce.Domain.Entities.Carrinho", "Carrinho")
+                        .WithMany("Itens")
+                        .HasForeignKey("IdCarrinho")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CarrinhoItens_Carrinho");
+
+                    b.HasOne("BROS_ECommerce.Domain.Entities.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_CarrinhoItens_Produto");
+
+                    b.Navigation("Carrinho");
+
+                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Estoque", b =>
@@ -348,6 +458,11 @@ namespace BROS_ECommerce.Infra.Migrations
                     b.Navigation("Imagem");
 
                     b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Carrinho", b =>
+                {
+                    b.Navigation("Itens");
                 });
 
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Imagem", b =>

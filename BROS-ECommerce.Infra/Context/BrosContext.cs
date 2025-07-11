@@ -1,4 +1,5 @@
-﻿using BROS_ECommerce.Domain.Entities;
+﻿
+using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Crud;
 using BROS_ECommerce.Infra.EntityConfig;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +23,22 @@ namespace BROS_ECommerce.Infra.Context
         public DbSet<Imagem> Imagens { get; set; }
         public DbSet<ProdutoImagem> ProdutoImagens { get; set; }
 
+        
+        public DbSet<Carrinho> Carrinhos { get; set; }
+        public DbSet<CarrinhoItem> CarrinhoItens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.ApplyConfiguration(new ProdutoMap());
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new EstoqueMap());
             modelBuilder.ApplyConfiguration(new ImagemMap());
             modelBuilder.ApplyConfiguration(new ProdutoImagemMap());
+
+            
+            modelBuilder.ApplyConfiguration(new CarrinhoMap());
+            modelBuilder.ApplyConfiguration(new CarrinhoItemMap());
 
             SeedUsers(modelBuilder);
             SeedEstoque(modelBuilder);
@@ -43,7 +53,7 @@ namespace BROS_ECommerce.Infra.Context
                 minimumLevel: LogLevel.Information);
         }
 
-        public async Task<bool> SaveChangesAsync()
+        public new async Task<bool> SaveChangesAsync()
         {
             return await base.SaveChangesAsync() > 0;
         }
@@ -58,7 +68,7 @@ namespace BROS_ECommerce.Infra.Context
                     Cpf = "12345678901",
                     Nome = "Administrador Sistema",
                     Nascimento = new DateTime(1990, 1, 1),
-                    Senha = "rQZK5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE9K5vNzZGE=",
+                    Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=",
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true
@@ -80,6 +90,7 @@ namespace BROS_ECommerce.Infra.Context
 
         private void SeedEstoque(ModelBuilder modelBuilder)
         {
+           
         }
     }
 }

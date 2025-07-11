@@ -10,7 +10,7 @@ namespace BROS_ECommerce.Infra.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Criar tabela Carrinhos
+            
             migrationBuilder.CreateTable(
                 name: "Carrinhos",
                 columns: table => new
@@ -31,7 +31,7 @@ namespace BROS_ECommerce.Infra.Migrations
                         onDelete: ReferentialAction.NoAction);
                 });
 
-            // Criar tabela CarrinhoItens
+            
             migrationBuilder.CreateTable(
                 name: "CarrinhoItens",
                 columns: table => new
@@ -59,7 +59,7 @@ namespace BROS_ECommerce.Infra.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            // Criar índices para Carrinhos
+            
             migrationBuilder.CreateIndex(
                 name: "IX_Carrinhos_IdUsuario",
                 table: "Carrinhos",
@@ -75,7 +75,7 @@ namespace BROS_ECommerce.Infra.Migrations
                 table: "Carrinhos",
                 column: "Status");
 
-            // Criar índices para CarrinhoItens
+            
             migrationBuilder.CreateIndex(
                 name: "IX_CarrinhoItens_IdCarrinho",
                 table: "CarrinhoItens",
