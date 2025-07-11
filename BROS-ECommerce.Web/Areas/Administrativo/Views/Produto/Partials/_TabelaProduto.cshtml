@@ -1,113 +1,112 @@
 ﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Produto.TabelaProdutoViewModel>
 
-@if (Model != null && Model.Any())
+@if (Model.Any())
 {
-    <table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Produtos">
-        <thead>
-            <tr>
-                <th class="text-start">Imagem</th>
-                <th class="text-start">Nome</th>
-                <th class="text-start">Título da Descrição</th>
-                <th class="text-start">Descrição</th>
-                <th class="text-start">Preço</th>
-                <th style="width: 15%;">Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var produto in Model)
-            {
+    <div class="table-responsive">
+        <table class="table table-light table-sm" id="tabela-produto">
+            <thead>
                 <tr>
-                    <td>
-                        <div class="position-relative" style="width: 50px; height: 50px;">
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Título da Descrição</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var produto in Model)
+                {
+                    <tr>
+                        <td>
                             @if (produto.TemImagem)
                             {
-                                <img src="@produto.ImagemPrincipal" alt="@produto.Nome"
-                                     class="img-thumbnail w-100 h-100" style="object-fit: cover; cursor: pointer;"
-                                     onclick="visualizarImagem('@produto.ImagemPrincipal', '@produto.Nome')">
-
-                                @if (produto.Imagens.Count > 1)
-                                {
-                                    <span class="badge badge-primary position-absolute"
-                                          style="top: -5px; right: -5px; font-size: 0.7em;">
-                                        +@(produto.Imagens.Count - 1)
-                                    </span>
-                                }
+                                <button type="button"
+                                        class="btn btn-link p-0"
+                                        onclick="visualizarImagem('@produto.ImagemPrincipal', '@produto.Nome')"
+                                        title="Ver imagem">
+                                    <img src="@produto.ImagemPrincipal"
+                                         alt="@produto.Nome"
+                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
+                                </button>
                             }
                             else
                             {
-                                <div class="bg-light border rounded d-flex align-items-center justify-content-center w-100 h-100">
+                                <div style="width: 50px; height: 50px; background-color: #f8f9fa; border: 1px dashed #dee2e6; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
                                     <i class="fas fa-image text-muted"></i>
                                 </div>
                             }
-                        </div>
-                    </td>
-                    <td>
-                        <strong>@produto.Nome</strong>
-                        <br>
-                        <small class="text-muted">Slug: @produto.Slug</small>
-                    </td>
-                    <td>@produto.TituloDescricao</td>
-                    <td>
-                        <span class="d-inline-block text-truncate" style="max-width: 200px;" title="@produto.Descricao">
-                            @produto.Descricao
-                        </span>
-                    </td>
-                    <td>
-                        <span class="font-weight-bold text-success">
-                            R$ @produto.Preco.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"))
-                        </span>
-                    </td>
-                    <td>
-                        <div class="btn-group btn-group-sm gap-2" role="group">
-                            <button type="button"
-                                    class="btn btn-sm btn-custom-visualizar btn-visualizar"
-                                    title="Visualizar"
-                                    data-id-produto="@produto.IdProduto"
-                                    data-nome="@produto.Nome"
-                                    data-slug="@produto.Slug"
-                                    data-titulo="@produto.TituloDescricao"
-                                    data-descricao="@produto.Descricao"
-                                    data-preco="@produto.Preco">
-                                <i class="fa-solid fa-eye" style="color: #007bff;"></i>
-                            </button>
+                        </td>
+                        <td>
+                            <strong>@produto.Nome</strong>
+                            <br>
+                            <small class="text-muted">Slug: @produto.Slug</small>
+                        </td>
+                        <td>@produto.TituloDescricao</td>
+                        <td>
+                            <span class="d-inline-block text-truncate" style="max-width: 200px;" title="@produto.Descricao">
+                                @produto.Descricao
+                            </span>
+                        </td>
+                        <td>
+                            <span class="font-weight-bold text-success">
+                                R$ @produto.Preco.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"))
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm gap-1" role="group">
+                                <button type="button"
+                                        class="btn btn-sm btn-ver-detalhes bg-white"
+                                        title="Ver Detalhes"
+                                        data-id="@produto.IdProduto"
+                                        data-nome="@produto.Nome"
+                                        data-slug="@produto.Slug"
+                                        data-titulo="@produto.TituloDescricao"
+                                        data-descricao="@produto.Descricao"
+                                        data-preco="@produto.Preco">
+                                    <i class="fa-solid fa-eye fa-lg" style="color: #0d6efd;"></i>
+                                </button>
 
-                            <button type="button"
-                                    class="btn btn-sm btn-custom-editar btn-editar"
-                                    title="Editar"
-                                    data-id-produto="@produto.IdProduto"
-                                    data-nome="@produto.Nome"
-                                    data-slug="@produto.Slug"
-                                    data-titulo="@produto.TituloDescricao"
-                                    data-descricao="@produto.Descricao"
-                                    data-preco="@produto.Preco">
-                                <i class="fa-solid fa-edit" style="color: #ffc107;"></i>
-                            </button>
+                                <button type="button"
+                                        class="btn btn-sm btn-editar bg-white"
+                                        title="Editar"
+                                        data-id="@produto.IdProduto"
+                                        data-nome="@produto.Nome"
+                                        data-slug="@produto.Slug"
+                                        data-titulo="@produto.TituloDescricao"
+                                        data-descricao="@produto.Descricao"
+                                        data-preco="@produto.Preco">
+                                    <i class="fas fa-edit fa-lg" style="color: #198754;"></i>
+                                </button>
 
-                            <a href="@Url.Action("GerenciarImagens", new { id = produto.IdProduto })"
-                               class="btn btn-sm btn-custom-imagens" title="Gerenciar Imagens">
-                                <i class="fa-solid fa-images" style="color: #6f42c1;"></i>
-                            </a>
+                                <a href="@Url.Action("GerenciarImagens", new { id = produto.IdProduto })"
+                                   class="btn btn-sm bg-white"
+                                   title="Gerenciar Imagens"
+                                   style="border: 1px solid #dee2e6;">
+                                    <i class="fa-solid fa-images" style="color: #6f42c1;"></i>
+                                </a>
 
-                            <button type="button"
-                                    class="btn btn-sm btn-custom-excluir btn-excluir"
-                                    title="Excluir"
-                                    data-id-produto="@produto.IdProduto"
-                                    data-nome="@produto.Nome">
-                                <i class="fa-solid fa-trash" style="color: #dc3545;"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                                <button type="button"
+                                        class="btn btn-sm btn-excluir bg-white"
+                                        title="Excluir"
+                                        data-id="@produto.IdProduto"
+                                        data-nome="@produto.Nome">
+                                    <i class="fas fa-trash-alt fa-lg" style="color: #dc3545;"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-    <div class="row mt-3">
-        <div class="col-12">
-            <small class="text-muted">
-                <i class="fas fa-info-circle"></i>
-                Total de produtos: <strong>@Model.Count()</strong>
-            </small>
+        <div class="row mt-3">
+            <div class="col-12">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Total de produtos: <strong>@Model.Count()</strong>
+                </small>
+            </div>
         </div>
     </div>
 }
@@ -142,6 +141,7 @@ else
     </div>
 }
 
+
 <div class="modal fade" id="modalVisualizarImagem" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -155,43 +155,6 @@ else
         </div>
     </div>
 </div>
-
-<style>
-    .btn-custom-visualizar,
-    .btn-custom-editar,
-    .btn-custom-imagens,
-    .btn-custom-excluir {
-        background-color: white !important;
-        border: 1px solid #dee2e6 !important;
-        color: inherit !important;
-    }
-
-        .btn-custom-visualizar:hover,
-        .btn-custom-visualizar:focus,
-        .btn-custom-visualizar:active,
-        .btn-custom-editar:hover,
-        .btn-custom-editar:focus,
-        .btn-custom-editar:active,
-        .btn-custom-imagens:hover,
-        .btn-custom-imagens:focus,
-        .btn-custom-imagens:active,
-        .btn-custom-excluir:hover,
-        .btn-custom-excluir:focus,
-        .btn-custom-excluir:active {
-            background-color: white !important;
-            border: 1px solid #dee2e6 !important;
-            color: inherit !important;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-        }
-
-        .btn-custom-visualizar:focus,
-        .btn-custom-editar:focus,
-        .btn-custom-imagens:focus,
-        .btn-custom-excluir:focus {
-            outline: none !important;
-        }
-</style>
 
 <script>
     function visualizarImagem(caminho, nome) {

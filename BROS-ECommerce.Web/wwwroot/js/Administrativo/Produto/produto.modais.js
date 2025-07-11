@@ -33,7 +33,8 @@ export function editarProduto(id, nome, slug, titulo, descricao, preco) {
 
     document.querySelector('#modal-cadastrar-produto .modal-title').textContent = 'Editar Produto';
     document.querySelector('#modal-cadastrar-produto .btn-success').textContent = 'ATUALIZAR';
-    document.getElementById('form-cadastrar-produto').action = '/Administrativo/Produto/EditarProduto';
+    
+    document.getElementById('form-cadastrar-produto').action = '/Administrativo/Produto/AtualizarProduto';
     document.getElementById('btn-disable').disabled = false;
 
     $('#modal-cadastrar-produto').modal('show');
