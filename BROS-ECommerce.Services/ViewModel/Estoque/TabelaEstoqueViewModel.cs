@@ -20,5 +20,8 @@
         public string Nome { get; set; }
         public DateTime UltimaAtualizacao { get; set; }
         public int Quantidade { get; set; }
+        public List<string> Imagens { get; set; }
+        public string? ImagemPrincipal { get; set; }
+        public bool TemImagem => !string.IsNullOrEmpty(ImagemPrincipal);
     }
 }

@@ -17,9 +17,23 @@
             {
                 <tr>
                     <td>
-                        <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                            <i class="fas fa-image text-muted"></i>
-                        </div>
+                        @if (item.TemImagem)
+                        {
+                            <button type="button"
+                                    class="btn btn-link p-0"
+                                    onclick="visualizarImagem('@item.ImagemPrincipal', '@item.Nome')"
+                                    title="Ver imagem">
+                                <img src="@item.ImagemPrincipal"
+                                     alt="@item.Nome"
+                                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
+                            </button>
+                        }
+                        else
+                        {
+                            <div style="width: 50px; height: 50px; background-color: #f8f9fa; border: 1px dashed #dee2e6; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                                <i class="fas fa-image text-muted"></i>
+                            </div>
+                        }
                     </td>
                     <td><strong>@item.Nome</strong></td>
                     <td>@item.Quantidade</td>

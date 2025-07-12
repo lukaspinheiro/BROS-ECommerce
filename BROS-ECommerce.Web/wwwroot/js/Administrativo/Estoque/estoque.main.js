@@ -41,6 +41,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    document.getElementById('produtoSelect').addEventListener('change', function () {
+        var select = this;
+        var optionSelecionada = select.options[select.selectedIndex];
+        var imagemUrl = optionSelecionada.getAttribute('data-image-url') || '';
+
+        var imgPreview = document.getElementById('previewImagemProduto');
+        imgPreview.src = imagemUrl;
+    });
+
+    document.getElementById('produtoSelect').dispatchEvent(new Event('change'));
+
     window.fecharModalAlterarQuantidade = fecharModalAlterarQuantidade;
     window.fecharModalCadastrar = fecharModalCadastrar;
 });

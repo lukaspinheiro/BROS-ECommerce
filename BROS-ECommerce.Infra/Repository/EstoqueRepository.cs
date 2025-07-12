@@ -140,5 +140,16 @@ namespace BROS_ECommerce.Infra.Repository
             var estoque = await ObterPorIdProdutoAsync(idProduto);
             return estoque?.TemEstoqueSuficiente(quantidadeSolicitada) ?? false;
         }
+
+        public async Task<List<Estoque>> ObterTodosComImagensAsync()
+        {
+            return await _dbSet
+                .Include(e => e.Produto)
+                    .ThenInclude(p => p.ProdutoImagens)
+                        .ThenInclude(pi => pi.Imagem)
+                .ToListAsync();
+        }
+
+
     }
 }

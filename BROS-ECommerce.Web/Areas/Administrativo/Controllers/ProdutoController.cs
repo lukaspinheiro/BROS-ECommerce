@@ -141,8 +141,30 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         {
             try
             {
+                var imagens = await _serviceImagem.ObterImagensPorProdutoAsync(id);
+                
                 await _serviceProduto.ExcluirAsync(id);
-                TempData["Sucesso"] = "Produto excluído com sucesso!";
+                List<string> errosExclusaoImagens = new();
+
+                foreach (var imagem in imagens)
+                {
+                    try
+                    {
+                        await _serviceImagem.ExcluirAsync(imagem.IdImagem);
+                    }
+                    catch (Exception exImagem)
+                    {
+                        errosExclusaoImagens.Add($"Erro ao excluir imagem {imagem.IdImagem}: {exImagem.Message}");
+                    }
+                }
+
+                if (errosExclusaoImagens.Count > 0)
+                {
+                    TempData["Erro"] = "Produto excluído, mas houve erro(s) ao excluir imagem(ns).";
+                    return Json(new { success = false, mensagens = errosExclusaoImagens });
+                }
+
+                TempData["Sucesso"] = "Produto e imagens excluídos com sucesso!";
                 return Json(new { success = true });
             }
             catch (Exception ex)

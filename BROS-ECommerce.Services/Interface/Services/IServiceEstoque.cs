@@ -21,6 +21,7 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task<bool> VerificarDisponibilidadeAsync(Guid idProduto, int quantidadeSolicitada);
         Task<bool> ExisteEstoqueParaProdutoAsync(Guid idProduto);
         Task PopularEstoqueInicialAsync();
+        Task<List<TabelaEstoqueViewModel>> ObterTabelaEstoqueAsync();
         Task AdicionarProdutoNoEstoqueAsync(CadastrarEstoqueViewModel cadastrarEstoqueViewModel);
     }
 }
