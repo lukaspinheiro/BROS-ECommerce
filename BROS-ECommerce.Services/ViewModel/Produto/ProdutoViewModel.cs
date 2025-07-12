@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BROS_ECommerce.Services.ViewModel.Produto
+﻿namespace BROS_ECommerce.Services.ViewModel.Produto
 {
     public class ProdutoViewModel
     {

@@ -6,13 +6,15 @@ import {
     confirmarExclusao,
     fecharModalCadastrar,
     fecharModalDetalhes,
-    fecharModalExclusao
+    fecharModalExclusao,
+    inicializarEventosDetalhes
 } from './produto.modais.js';
 import { verificarEspacos, limparFormulario, marcarCampoTocado } from './produto.formulario.js';
 import { inicializarImagemProduto } from './produto.imagem.js';
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    inicializarEventosDetalhes();
     inicializarImagemProduto();
     inicializarTabela();
 

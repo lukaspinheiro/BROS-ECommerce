@@ -58,14 +58,10 @@
                                 <button type="button"
                                         class="btn btn-sm btn-ver-detalhes bg-white"
                                         title="Ver Detalhes"
-                                        data-id="@produto.IdProduto"
-                                        data-nome="@produto.Nome"
-                                        data-slug="@produto.Slug"
-                                        data-titulo="@produto.TituloDescricao"
-                                        data-descricao="@produto.Descricao"
-                                        data-preco="@produto.Preco">
+                                        data-id="@produto.IdProduto">
                                     <i class="fa-solid fa-eye fa-lg" style="color: #0d6efd;"></i>
                                 </button>
+
 
                                 <button type="button"
                                         class="btn btn-sm btn-editar bg-white"
@@ -78,13 +74,6 @@
                                         data-preco="@produto.Preco">
                                     <i class="fas fa-edit fa-lg" style="color: #198754;"></i>
                                 </button>
-
-                                <a href="@Url.Action("GerenciarImagens", new { id = produto.IdProduto })"
-                                   class="btn btn-sm bg-white"
-                                   title="Gerenciar Imagens"
-                                   style="border: 1px solid #dee2e6;">
-                                    <i class="fa-solid fa-images" style="color: #6f42c1;"></i>
-                                </a>
 
                                 <button type="button"
                                         class="btn btn-sm btn-excluir bg-white"

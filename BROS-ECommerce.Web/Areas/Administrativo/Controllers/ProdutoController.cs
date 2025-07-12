@@ -70,6 +70,30 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet("ObterDetalhes/{id}")]
+        public async Task<IActionResult> ObterDetalhes(Guid id)
+        {
+            var produto = await _serviceProduto.ObterPorIdAsync(id);
+            if (produto == null)
+                return NotFound();
+
+            var imagensUrls = produto.Imagens?
+                .Select(i => Url.Content($"{i}"))
+                .ToList() ?? new List<string>();
+
+            return Json(new
+            {
+                nome = produto.Nome,
+                slug = produto.Slug,
+                tituloDescricao = produto.TituloDescricao,
+                descricao = produto.Descricao,
+                preco = produto.Preco,
+                imagens = imagensUrls
+            });
+        }
+
+
+
         [HttpPost("AtualizarProduto")]
         public async Task<IActionResult> AtualizarProduto(IndexProdutoViewModel indexProdutoViewModel)
         {
