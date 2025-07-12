@@ -8,10 +8,12 @@ import {
     fecharModalDetalhes,
     fecharModalExclusao
 } from './produto.modais.js';
-import { verificarEspacos, limparFormulario } from './produto.formulario.js';
+import { verificarEspacos, limparFormulario, marcarCampoTocado } from './produto.formulario.js';
+import { inicializarImagemProduto } from './produto.imagem.js';
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    inicializarImagemProduto();
     inicializarTabela();
 
     document.getElementById("btn-abrir-modal").addEventListener("click", function (e) {
@@ -66,7 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const camposParaVerificar = document.querySelectorAll('#form-cadastrar-produto input');
 
     camposParaVerificar.forEach(campo => {
-        campo.addEventListener("keyup", verificarEspacos);
+        campo.addEventListener("input", () => marcarCampoTocado(campo.id));
+        campo.addEventListener("focus", () => marcarCampoTocado(campo.id)); // NOVO: ao focar também
     });
 
     window.fecharModalCadastrar = fecharModalCadastrar;

@@ -43,28 +43,28 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var produto = new CadastrarProdutoViewModel
-                    {
-                        Nome = indexProdutoViewModel.cadastrarProdutoViewModel.Nome,
-                        Slug = indexProdutoViewModel.cadastrarProdutoViewModel.Slug,
-                        TituloDescricao = indexProdutoViewModel.cadastrarProdutoViewModel.TituloDescricao,
-                        Descricao = indexProdutoViewModel.cadastrarProdutoViewModel.Descricao,
-                        Preco = indexProdutoViewModel.cadastrarProdutoViewModel.Preco
-                    };
+                var cadastrarProduto = indexProdutoViewModel.cadastrarProdutoViewModel;
 
-                    await _serviceProduto.Adicionar(produto);
-                    TempData["Sucesso"] = "Produto cadastrado com sucesso!";
-                }
-                else
+                cadastrarProduto.IndiceImagemPrincipal = indexProdutoViewModel.IndiceImagemPrincipal;
+
+                if (cadastrarProduto.Arquivos == null || !cadastrarProduto.Arquivos.Any())
                 {
-                    TempData["Erro"] = "Por favor, preencha todos os campos obrigatórios.";
+                    ModelState.AddModelError("cadastrarProdutoViewModel.Arquivos", "Envie pelo menos uma imagem.");
                 }
+
+                if (!ModelState.IsValid)
+                {
+                    TempData["Erro"] = "Todos os campos obrigatórios, incluindo as imagens, devem ser preenchidos.";
+                    return RedirectToAction("Index");
+                }
+
+                await _serviceProduto.AdicionarComImagensAsync(indexProdutoViewModel);
+
+                TempData["Sucesso"] = "Produto cadastrado com sucesso!";
             }
             catch (Exception ex)
             {
-                TempData["Erro"] = "Erro ao cadastrar produto: " + ex.Message;
+                TempData["Erro"] = $"Erro ao cadastrar produto: {ex.Message}";
             }
 
             return RedirectToAction("Index");

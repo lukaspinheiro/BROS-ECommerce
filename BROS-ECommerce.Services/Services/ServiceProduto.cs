@@ -1,6 +1,7 @@
 ﻿using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
 using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.ViewModel.Imagem;
 using BROS_ECommerce.Services.ViewModel.Produto;
 
 namespace BROS_ECommerce.Services.Services
@@ -9,11 +10,13 @@ namespace BROS_ECommerce.Services.Services
     {
         private readonly IRepositoryProduto _repositoryProduto;
         private readonly IRepositoryEstoque _repositoryEstoque;
+        private readonly IServiceImagem _serviceImagem;
 
-        public ProdutoService(IRepositoryProduto repositoryProduto, IRepositoryEstoque repositoryEstoque)
+        public ProdutoService(IRepositoryProduto repositoryProduto, IRepositoryEstoque repositoryEstoque, IServiceImagem serviceImagem)
         {
             _repositoryProduto = repositoryProduto;
             _repositoryEstoque = repositoryEstoque;
+            _serviceImagem = serviceImagem;
         }
 
         public async Task<List<TabelaProdutoViewModel>> ObterTabelaProdutosAsync()
@@ -218,6 +221,46 @@ namespace BROS_ECommerce.Services.Services
                     .ToList()
             });
         }
+
+        public async Task AdicionarComImagensAsync(IndexProdutoViewModel indexProdutoViewModel)
+        {
+            var vm = indexProdutoViewModel.cadastrarProdutoViewModel;
+
+            var slugExiste = await _repositoryProduto.SlugExisteAsync(vm.Slug);
+            if (slugExiste)
+                throw new InvalidOperationException($"Já existe um produto com o slug '{vm.Slug}'");
+
+            var novoProduto = new Produto
+            {
+                IdProduto = Guid.NewGuid(),
+                Nome = vm.Nome,
+                Slug = vm.Slug,
+                TituloDescricao = vm.TituloDescricao,
+                Descricao = vm.Descricao,
+                Preco = vm.Preco
+            };
+
+            await _repositoryProduto.AdicionarAsync(novoProduto);
+
+            var imagemVM = new CadastrarImagemViewModel
+            {
+                Arquivos = vm.Arquivos
+            };
+
+            var idsImagens = await _serviceImagem.AdicionarMultiplasAsync(imagemVM);
+
+            if (idsImagens == null || !idsImagens.Any())
+                throw new Exception("Falha ao salvar imagens");
+
+            await _serviceImagem.AssociarImagensAoProdutoAsync(novoProduto.IdProduto, idsImagens);
+
+            if (vm.IndiceImagemPrincipal.HasValue && vm.IndiceImagemPrincipal.Value < idsImagens.Count)
+            {
+                var idPrincipal = idsImagens[vm.IndiceImagemPrincipal.Value];
+                await _serviceImagem.DefinirImagemPrincipalAsync(novoProduto.IdProduto, idPrincipal);
+            }
+        }
+
 
         public async Task PopularDadosIniciais()
         {

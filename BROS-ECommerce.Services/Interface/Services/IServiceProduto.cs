@@ -19,7 +19,7 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task AtualizarAsync(ProdutoViewModel produtoVM);
         Task ExcluirAsync(Guid id);
         Task<IEnumerable<ProdutoViewModel>> BuscarPorTermoAsync(string termo);
-
+        Task AdicionarComImagensAsync(IndexProdutoViewModel indexProdutoViewModel);
         Task PopularDadosIniciais();
     }
 }

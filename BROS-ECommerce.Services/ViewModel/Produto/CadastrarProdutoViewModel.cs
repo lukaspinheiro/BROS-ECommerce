@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace BROS_ECommerce.Services.ViewModel.Produto;
 
@@ -30,4 +31,8 @@ public class CadastrarProdutoViewModel
 
     [Required, Display(Name = "Preço")]
     public decimal Preco { get; set; }
+
+    [Display(Name = "Imagem do Produto")]
+    public List<IFormFile> Arquivos { get; set; }
+    public int? IndiceImagemPrincipal { get; set; }
 }
