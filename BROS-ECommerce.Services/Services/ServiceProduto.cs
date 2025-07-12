@@ -214,11 +214,13 @@ namespace BROS_ECommerce.Services.Services
                 Descricao = p.Descricao,
                 Preco = p.Preco,
                 Imagens = p.ProdutoImagens
-                    .Where(pi => pi.Imagem.Ativo)
+                   .Where(pi => pi.Imagem.Ativo)
                     .OrderByDescending(pi => pi.Principal)
                     .ThenBy(pi => pi.Ordem)
-                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .Select(pi => $"{pi.Imagem.CaminhoArquivo}")
                     .ToList()
+
+
             });
         }
 

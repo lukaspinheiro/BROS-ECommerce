@@ -115,15 +115,18 @@ namespace BROS_ECommerce.Infra.Repository
             }
         }
 
-        
+
         public async Task<List<Produto>> BuscarPorNomeAsync(string nome)
         {
-            return await _dbSet
+            var produtos = await _dbSet
+                .Include(p => p.ProdutoImagens.Where(pi => pi.Principal))
+                    .ThenInclude(pi => pi.Imagem)
                 .Where(p => p.Nome.Contains(nome))
                 .ToListAsync();
+
+            return produtos;
         }
 
-        
         public async Task<List<Produto>> ObterPaginadoAsync(int pagina, int tamanhoPagina)
         {
             return await _dbSet
