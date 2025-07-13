@@ -7,25 +7,11 @@
     <link rel="stylesheet" type="text/css" href="/css/Administrativo/Produto/produto.css" />
 }
 
-@if (TempData["Sucesso"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["Sucesso"]
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-}
+<partial name="PartialsLayout/_AlertasTempData" />
+<script>
+    console.log("TempData renderizado");
+</script>
 
-@if (TempData["Erro"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="fas fa-exclamation-circle"></i> @TempData["Erro"]
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-}
 
 <div class="container">
     <div class="card mt-0">
@@ -58,4 +44,5 @@
 @section Scripts {
     <script src="~/lib/DataTables/datatables.min.js"></script>
     <script type="module" src="~/js/Administrativo/Produto/produto.main.js"></script>
+    <script type="module" src="~/js/shared/temp-data.js"></script>
 }

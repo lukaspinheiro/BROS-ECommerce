@@ -55,7 +55,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                 if (!ModelState.IsValid)
                 {
                     TempData["Erro"] = "Todos os campos obrigatórios, incluindo as imagens, devem ser preenchidos.";
-                    return RedirectToAction("Index");
+                    return RedirectToAction(nameof(Index));
                 }
 
                 await _serviceProduto.AdicionarComImagensAsync(indexProdutoViewModel);
@@ -67,7 +67,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                 TempData["Erro"] = $"Erro ao cadastrar produto: {ex.Message}";
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet("ObterDetalhes/{id}")]

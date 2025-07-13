@@ -55,9 +55,3 @@ document.addEventListener("DOMContentLoaded", function () {
     window.fecharModalAlterarQuantidade = fecharModalAlterarQuantidade;
     window.fecharModalCadastrar = fecharModalCadastrar;
 });
-$(document).ready(function () {
-    setTimeout(() => {
-        $('#alert-sucesso').alert('close');
-        $('#alert-erro').alert('close');
-    }, 2500);
-});
