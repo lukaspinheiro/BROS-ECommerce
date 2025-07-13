@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = Model.Nome;
 }
-@section Head{
+@section Head {
     <link href="~/css/Shared/promocoes.css" rel="stylesheet" />
     <link href="/css/Produto/index.css" rel="stylesheet" />
 }
@@ -23,74 +23,73 @@
                     @foreach (var imagem in Model.Imagens)
                     {
                         <div class="carousel-item @(primeiro ? "active" : "")">
-                            <img src="@imagem" alt="@Model.Nome" class="d-block w-100" style="max-height: 400px; object-fit: cover;" />
+                            <img src="@imagem" alt="@Model.Nome" />
                         </div>
                         primeiro = false;
                     }
                 </div>
 
-                @if (Model.Imagens.Count > 1)
-                {
-                    <button class="scroll-btn-produto left" data-target="#carouselProduto" data-slide="prev">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="scroll-btn-produto right" data-target="#carouselProduto" data-slide="next">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                <button class="scroll-btn-produto left" data-target="#carouselProduto" data-slide="prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="scroll-btn-produto right" data-target="#carouselProduto" data-slide="next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
 
-                    <ol class="carousel-indicators">
-                        @for (int i = 0; i < Model.Imagens.Count; i++)
-                        {
-                            <li data-target="#carouselProduto" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
-                        }
-                    </ol>
-                }
-            </div>
-        }
-        else
-        {
-            <div class="bg-light d-flex align-items-center justify-content-center rounded-4" style="height: 400px;">
-                <div class="text-center">
-                    <i class="fas fa-image fa-4x text-muted mb-3"></i>
-                    <p class="text-muted">Imagem não disponível</p>
-                </div>
+                <ol class="carousel-indicators">
+                    @for (int i = 0; i < Model.Imagens.Count; i++)
+                    {
+                        <li data-target="#carouselProduto" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+                    }
+                </ol>
             </div>
         }
     </div>
 
     <div class="produto-compra">
-        <div class="preco-container">
-            <span class="preco-atual">@Model.Preco.ToString("C", new System.Globalization.CultureInfo("pt-BR"))</span>
+        <div class="text-end">
+            <p class="marca mb-0">Gymbros Suplemments</p>
+            <h3 class="fw-bolder mt-0 mb-lg-5">@Model.Nome</h3>
+            <p class="preco">R$@Model.Preco.ToString("F2")</p>
+            <p class="parcelamento">ou R$@((Model.Preco * 1.02m / 6).ToString("F2")) em até 6x sem juros</p>
         </div>
+        <div class="frete row w-100">
 
-        <div class="desconto-pix">
-            <span class="badge badge-success">10% OFF no PIX</span>
-        </div>
+            <button class="btn-finalizar">
+                <span>Finalizar compra</span>
+                <i class="fas fa-cart-plus"></i>
+            </button>
 
-        <div class="botoes-acao mt-3">
-            <button class="btn btn-primary btn-lg btn-block">
-                <i class="fas fa-shopping-cart"></i> COMPRAR AGORA
-            </button>
-            
-            <button class="btn btn-outline-primary btn-lg btn-block mt-2">
-                <i class="fas fa-heart"></i> ADICIONAR AOS FAVORITOS
-            </button>
+            <p class="d-flex justify-content-start fw-bold mt-5 mb-2">Calcule o frete</p>
+            <form class="d-flex justify-content-center align-items-center px-0 w-100">
+                <input class="form-control border border-2 rounded-3 py-2"
+                       type="text"
+                       placeholder="Digite seu CEP">
+
+                <button type="submit"
+                        class="btn btn-success fw-semibold rounded-3 px-4 py-2">
+                    <i class="fas fa-truck me-2"></i> Calcular
+                </button>
+            </form>
+
         </div>
     </div>
 </div>
 
-@section Scripts {
+<partial name="\PartialsLayout\_Promocoes" />
+
+@section scripts {
+    <script src="~/js/shared/promocoes.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        $(document).ready(function() {
-            @if (Model.Imagens?.Count > 1)
-            {
-                <text>
-                $('#carouselProduto').carousel({
-                    interval: 5000,
-                    ride: 'carousel'
-                });
-                </text>
-            }
+        $(document).ready(function () {
+            $('#carouselExampleIndicators').carousel({
+                interval: 5000,
+                pause: 'hover',
+                wrap: true
+            });
         });
     </script>
 }
