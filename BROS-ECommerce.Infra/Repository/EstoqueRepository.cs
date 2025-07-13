@@ -115,12 +115,13 @@ namespace BROS_ECommerce.Infra.Repository
             }
         }
 
-        public async Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar)
+        public async Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar, DateTime UltimaAtualizacao)
         {
             var estoque = await ObterPorIdProdutoAsync(idProduto);
             if (estoque != null)
             {
                 estoque.AdicionarQuantidade(quantidadeAdicionar);
+                estoque.UltimaAtualizacao = UltimaAtualizacao;
                 await AtualizarAsync(estoque);
             }
         }

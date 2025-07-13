@@ -70,14 +70,14 @@ namespace BROS_ECommerce.Services.Services
             await _repositoryEstoque.AtualizarQuantidadeAsync(idProduto, novaQuantidade, UltimaAtualizacao);
         }
 
-        public async Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar)
+        public async Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar, DateTime UltimaAtualizacao)
         {
             if (quantidadeAdicionar <= 0)
             {
                 throw new ArgumentException("A quantidade a adicionar deve ser maior que zero");
             }
 
-            await _repositoryEstoque.AdicionarQuantidadeAsync(idProduto, quantidadeAdicionar);
+            await _repositoryEstoque.AdicionarQuantidadeAsync(idProduto, quantidadeAdicionar, UltimaAtualizacao);
         }
 
         public async Task RemoverQuantidadeAsync(Guid idProduto, int quantidadeRemover)

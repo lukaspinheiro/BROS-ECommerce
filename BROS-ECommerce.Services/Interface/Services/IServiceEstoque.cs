@@ -13,7 +13,7 @@ namespace BROS_ECommerce.Services.Interface.Services
 
         Task CriarEstoqueParaProdutoAsync(Guid idProduto, int quantidadeInicial = 1);
         Task AtualizarQuantidadeAsync(Guid idProduto, int novaQuantidade, DateTime UltimaAtualizacao);
-        Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar);
+        Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar, DateTime UltimaAtualizacao);
         Task RemoverQuantidadeAsync(Guid idProduto, int quantidadeRemover);
         Task ExcluirAsync(Guid id);
         Task ExcluirPorIdProdutoAsync(Guid idProduto);

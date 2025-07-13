@@ -11,33 +11,14 @@
             background-size: 20px 20px;
             background-position: 5px center;
         }
+
             .custom-select-with-image option.with-image {
                 padding-left: 35px !important;
             }
     </style>
-
 }
 
-@if (TempData["Sucesso"] != null)
-{
-    <div id="alert-sucesso" class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> @TempData["Sucesso"]
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-}
-
-@if (TempData["Erro"] != null)
-{
-    <div id="alert-erro" class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="fas fa-exclamation-circle"></i> @TempData["Erro"]
-        <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-}
-
+<partial name="PartialsLayout/_AlertasTempData" />
 
 <div class="container">
     <div class="card mt-0">
@@ -70,4 +51,5 @@
 @section Scripts {
     <script src="~/lib/DataTables/datatables.min.js"></script>
     <script type="module" src="~/js/Administrativo/Estoque/estoque.main.js"></script>
+    <script type="module" src="~/js/shared/temp-data.js"></script>
 }
