@@ -1,4 +1,6 @@
-﻿namespace BROS_ECommerce.Services.ViewModel.Produto
+﻿using BROS_ECommerce.Services.ViewModel.Imagem;
+
+namespace BROS_ECommerce.Services.ViewModel.Produto
 {
     public class ProdutoViewModel
     {
@@ -9,6 +11,7 @@
         public string Descricao { get; set; }
         public decimal Preco { get; set; }
         public List<string> Imagens { get; set; } = new();
+        public List<ImagemViewModel> ImagensDetalhadas { get; set; } = new();
     }
 
 }

@@ -1,19 +1,18 @@
 ﻿import { verificarEspacos, marcarTentativaEnvio } from './produto.formulario.js';
 
-let imagensSelecionadas = [];
-
+export const imagensSelecionadas = [];
 export function adicionarImagens(files) {
     imagensSelecionadas.push(...files);
     document.getElementById('Imagens').value = '';
     atualizarPreview();
-    verificarEspacos();
+
     const indicePrincipal = document.getElementById('IndiceImagemPrincipal');
     const imagemPrincipalErro = document.getElementById('imagem-principal-error');
 
     if (imagemPrincipalErro) {
         imagemPrincipalErro.style.display = imagensSelecionadas.length > 0 && !indicePrincipal.value ? "block" : "none";
     }
-
+    verificarEspacos();
 }
 
 function atualizarPreview() {
@@ -21,7 +20,9 @@ function atualizarPreview() {
     const nomesArquivos = document.getElementById('nomes-arquivos');
     const indicePrincipal = document.getElementById('IndiceImagemPrincipal');
 
+    const imagensAntigas = Array.from(preview.querySelectorAll('.imagem-existente'));
     preview.innerHTML = '';
+    imagensAntigas.forEach(imagem => preview.appendChild(imagem));
     nomesArquivos.value = imagensSelecionadas.map(f => f.name).join(', ');
 
     imagensSelecionadas.forEach((file, i) => {
@@ -41,7 +42,7 @@ function atualizarPreview() {
             img.onclick = () => {
                 preview.querySelectorAll('img').forEach(im => im.classList.remove('border-primary'));
                 img.classList.add('border-primary');
-                indicePrincipal.value = i.toString();
+                indicePrincipal.value = img.dataset.index;
                 verificarEspacos();
             };
 
@@ -56,20 +57,13 @@ function atualizarPreview() {
             btnRemover.innerHTML = '&times;';
             btnRemover.title = 'Remover imagem';
             btnRemover.onclick = () => {
-                const indicePrincipal = document.getElementById('IndiceImagemPrincipal');
-
-                const removendoPrincipal = indicePrincipal.value === i.toString();
-                if (removendoPrincipal) {
-                    indicePrincipal.value = '';
-                }
+                const removendoPrincipal = indicePrincipal.value === img.dataset.index;
+                if (removendoPrincipal) indicePrincipal.value = '';
 
                 imagensSelecionadas.splice(i, 1);
                 atualizarPreview();
-                verificarEspacos(); 
+                verificarEspacos();
             };
-
-
-
 
             container.appendChild(img);
             container.appendChild(btnRemover);
@@ -95,8 +89,11 @@ export function inicializarImagemProduto() {
         }
 
         const formData = new FormData(form);
+
         formData.delete('cadastrarProdutoViewModel.Arquivos');
-        imagensSelecionadas.forEach(file => formData.append('cadastrarProdutoViewModel.Arquivos', file));
+        imagensSelecionadas.forEach(file =>
+            formData.append('cadastrarProdutoViewModel.Arquivos', file)
+        );
 
         fetch(form.action, {
             method: form.method,

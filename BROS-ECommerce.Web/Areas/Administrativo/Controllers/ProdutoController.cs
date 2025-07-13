@@ -45,7 +45,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             {
                 var cadastrarProduto = indexProdutoViewModel.cadastrarProdutoViewModel;
 
-                cadastrarProduto.IndiceImagemPrincipal = indexProdutoViewModel.IndiceImagemPrincipal;
+                cadastrarProduto.IndiceImagemPrincipal = indexProdutoViewModel.cadastrarProdutoViewModel.IndiceImagemPrincipal;
 
                 if (cadastrarProduto.Arquivos == null || !cadastrarProduto.Arquivos.Any())
                 {
@@ -77,10 +77,16 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             if (produto == null)
                 return NotFound();
 
-            var imagensUrls = produto.Imagens?
-                .Select(i => Url.Content($"{i}"))
-                .ToList() ?? new List<string>();
+            var imagens = produto.ImagensDetalhadas
+                .Select(i => new
+                {
+                    id = i.IdImagem,
+                    url = Url.Content(i.CaminhoArquivo),
+                    principal = i.Principal
+                })
+                .ToList();
 
+            var imagemPrincipal = produto.ImagensDetalhadas.FirstOrDefault(i => i.Principal);
             return Json(new
             {
                 nome = produto.Nome,
@@ -88,11 +94,26 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                 tituloDescricao = produto.TituloDescricao,
                 descricao = produto.Descricao,
                 preco = produto.Preco,
-                imagens = imagensUrls
+                imagens = imagens,
+                idImagemPrincipal = imagemPrincipal?.IdImagem.ToString() ?? ""
             });
         }
 
+        [HttpGet("ObterImagensPorProduto/{idProduto}")]
+        public async Task<IActionResult> ObterImagensPorProduto(Guid idProduto)
+        {
+            try
+            {
+                var imagens = await _serviceImagem.ObterImagensPorProdutoAsync(idProduto);
+                var urls = imagens.Select(i => Url.Content(i.CaminhoArquivo)).ToList();
 
+                return Json(urls);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Erro ao obter imagens: " + ex.Message });
+            }
+        }
 
         [HttpPost("AtualizarProduto")]
         public async Task<IActionResult> AtualizarProduto(IndexProdutoViewModel indexProdutoViewModel)
@@ -101,7 +122,6 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    
                     var idString = Request.Form["id"].ToString();
                     if (!Guid.TryParse(idString, out var id))
                     {
@@ -109,18 +129,10 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    var produtoParaAtualizar = new ProdutoViewModel
-                    {
-                        IdProduto = id,
-                        Nome = indexProdutoViewModel.cadastrarProdutoViewModel.Nome,
-                        Slug = indexProdutoViewModel.cadastrarProdutoViewModel.Slug,
-                        TituloDescricao = indexProdutoViewModel.cadastrarProdutoViewModel.TituloDescricao,
-                        Descricao = indexProdutoViewModel.cadastrarProdutoViewModel.Descricao,
-                        Preco = indexProdutoViewModel.cadastrarProdutoViewModel.Preco,
-                        Imagens = new List<string>() 
-                    };
+                    indexProdutoViewModel.cadastrarProdutoViewModel.IdProduto = id;
 
-                    await _serviceProduto.AtualizarAsync(produtoParaAtualizar);
+                    await _serviceProduto.AtualizarComImagensAsync(indexProdutoViewModel);
+
                     TempData["Sucesso"] = "Produto atualizado com sucesso!";
                 }
                 else

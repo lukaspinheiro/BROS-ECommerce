@@ -9,8 +9,6 @@ namespace BROS_ECommerce.Services.Interface.Services
         
         List<ProdutoViewModel> ObterTodos();
         ProdutoViewModel? ObterPorSlug(string slug);
-
-        
         Task<List<ProdutoViewModel>> ObterTodosAsync();
         Task<List<TabelaProdutoViewModel>> ObterTabelaProdutosAsync();
         Task<ProdutoViewModel?> ObterPorIdAsync(Guid id);
@@ -21,5 +19,7 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task<IEnumerable<ProdutoViewModel>> BuscarPorTermoAsync(string termo);
         Task AdicionarComImagensAsync(IndexProdutoViewModel indexProdutoViewModel);
         Task PopularDadosIniciais();
+        Task AtualizarComImagensAsync(IndexProdutoViewModel indexProdutoViewModel);
+
     }
 }

@@ -128,13 +128,27 @@ namespace BROS_ECommerce.Services.Services
                 TituloDescricao = produto.TituloDescricao,
                 Descricao = produto.Descricao,
                 Preco = produto.Preco,
+
                 Imagens = produto.ProdutoImagens
-                    .Where(pi => pi.Imagem.Ativo)
-                    .OrderByDescending(pi => pi.Principal)
-                    .ThenBy(pi => pi.Ordem)
-                    .Select(pi => pi.Imagem.CaminhoArquivo)
-                    .ToList()
+                .Where(pi => pi.Imagem.Ativo)
+                .OrderByDescending(pi => pi.Principal)
+                .ThenBy(pi => pi.Ordem)
+                .Select(pi => pi.Imagem.CaminhoArquivo)
+                .ToList(),
+
+                ImagensDetalhadas = produto.ProdutoImagens
+                   .Where(pi => pi.Imagem.Ativo)
+                   .OrderByDescending(pi => pi.Principal)
+                   .ThenBy(pi => pi.Ordem)
+                   .Select(pi => new ImagemViewModel
+                   {
+                       IdImagem = pi.IdImagem,
+                       CaminhoArquivo = pi.Imagem.CaminhoArquivo,
+                       Principal = pi.Principal
+                   })
+                   .ToList()
             };
+
         }
 
         public async Task Adicionar(CadastrarProdutoViewModel produtoVM)
@@ -180,6 +194,73 @@ namespace BROS_ECommerce.Services.Services
             produto.Preco = produtoVM.Preco;
 
             await _repositoryProduto.AtualizarAsync(produto);
+        }
+
+        public async Task AtualizarComImagensAsync(IndexProdutoViewModel indexProdutoViewModel)
+        {
+            var vm = indexProdutoViewModel.cadastrarProdutoViewModel;
+            var produto = await _repositoryProduto.ObterPorIdComImagensAsync(vm.IdProduto);
+
+            if (produto == null)
+                throw new Exception("Produto não encontrado.");
+
+            var slugExiste = await _repositoryProduto.SlugExisteAsync(vm.Slug, vm.IdProduto);
+            if (slugExiste)
+                throw new InvalidOperationException($"Já existe outro produto com o slug '{vm.Slug}'");
+
+            produto.Nome = vm.Nome;
+            produto.Slug = vm.Slug;
+            produto.TituloDescricao = vm.TituloDescricao;
+            produto.Descricao = vm.Descricao;
+            produto.Preco = vm.Preco;
+
+            await _repositoryProduto.AtualizarAsync(produto);
+
+            List<Guid> novasImagens = new();
+
+            if (vm.Arquivos != null && vm.Arquivos.Any())
+            {
+                var imagemVM = new CadastrarImagemViewModel
+                {
+                    Arquivos = vm.Arquivos
+                };
+
+                novasImagens = await _serviceImagem.AdicionarMultiplasAsync(imagemVM);
+                await _serviceImagem.AssociarImagensAoProdutoAsync(produto.IdProduto, novasImagens);
+            }
+
+            if (!string.IsNullOrWhiteSpace(vm.IndiceImagemPrincipal))
+            {
+                if (vm.IndiceImagemPrincipal.StartsWith("antiga-"))
+                {
+                    var idImagemAntigaStr = vm.IndiceImagemPrincipal.Replace("antiga-", "");
+                    if (Guid.TryParse(idImagemAntigaStr, out Guid idImagemAntiga))
+                    {
+                        await _serviceImagem.DefinirImagemPrincipalAsync(produto.IdProduto, idImagemAntiga);
+                    }
+                }
+                else if (int.TryParse(vm.IndiceImagemPrincipal, out int indexNova))
+                {
+                    if (indexNova >= 0 && indexNova < novasImagens.Count)
+                    {
+                        var idImagemPrincipal = novasImagens[indexNova];
+                        await _serviceImagem.DefinirImagemPrincipalAsync(produto.IdProduto, idImagemPrincipal);
+                    }
+                    else
+                    {
+                        var imagensOrdenadas = produto.ProdutoImagens
+                            .OrderByDescending(pi => pi.Principal)
+                            .ThenBy(pi => pi.Ordem)
+                            .ToList();
+
+                        if (indexNova >= 0 && indexNova < imagensOrdenadas.Count)
+                        {
+                            var idImagemPrincipalAntiga = imagensOrdenadas[indexNova].IdImagem;
+                            await _serviceImagem.DefinirImagemPrincipalAsync(produto.IdProduto, idImagemPrincipalAntiga);
+                        }
+                    }
+                }
+            }
         }
 
         public async Task ExcluirAsync(Guid id)
@@ -256,13 +337,14 @@ namespace BROS_ECommerce.Services.Services
 
             await _serviceImagem.AssociarImagensAoProdutoAsync(novoProduto.IdProduto, idsImagens);
 
-            if (vm.IndiceImagemPrincipal.HasValue && vm.IndiceImagemPrincipal.Value < idsImagens.Count)
+            if (!string.IsNullOrWhiteSpace(vm.IndiceImagemPrincipal) &&
+                int.TryParse(vm.IndiceImagemPrincipal, out int indice) &&
+                indice >= 0 && indice < idsImagens.Count)
             {
-                var idPrincipal = idsImagens[vm.IndiceImagemPrincipal.Value];
+                var idPrincipal = idsImagens[indice];
                 await _serviceImagem.DefinirImagemPrincipalAsync(novoProduto.IdProduto, idPrincipal);
             }
         }
-
 
         public async Task PopularDadosIniciais()
         {

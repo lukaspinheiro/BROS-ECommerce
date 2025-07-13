@@ -51,15 +51,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.querySelectorAll('.btn-editar').forEach(btn => {
-        btn.addEventListener("click", () => editarProduto(
-            btn.dataset.id,
-            btn.dataset.nome,
-            btn.dataset.slug,
-            btn.dataset.titulo,
-            btn.dataset.descricao,
-            btn.dataset.preco
-        ));
+        btn.addEventListener("click", async () => {
+            const id = btn.dataset.id;
+
+            try {
+                const response = await fetch(`/Administrativo/Produto/ObterDetalhes/${id}`);
+                if (!response.ok) throw new Error("Erro ao buscar detalhes");
+                const data = await response.json();
+
+                editarProduto(
+                    id,
+                    data.nome,
+                    data.slug,
+                    data.tituloDescricao,
+                    data.descricao,
+                    data.preco,
+                    data.imagens,
+                    data.idImagemPrincipal
+                );
+            } catch (error) {
+                console.error("Erro ao buscar detalhes do produto:", error);
+                alert("Não foi possível carregar os detalhes do produto.");
+            }
+        });
     });
+
+
+
 
     document.querySelectorAll('.btn-excluir').forEach(btn => {
         btn.addEventListener("click", () => confirmarExclusao(btn.dataset.id, btn.dataset.nome));

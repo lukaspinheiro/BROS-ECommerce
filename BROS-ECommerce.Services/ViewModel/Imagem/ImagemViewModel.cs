@@ -13,7 +13,8 @@
         public bool Ativo { get; set; } = true;
         public int QuantidadeProdutos { get; set; } = 0;
         public string TamanhoFormatado => FormatarTamanho(TamanhoArquivo);
-
+        public int Ordem { get; set; } = 0;
+        public bool Principal { get; set; }
         private static string FormatarTamanho(long bytes)
         {
             string[] suffixes = { "B", "KB", "MB", "GB" };

@@ -32,7 +32,8 @@ public class CadastrarProdutoViewModel
     [Required, Display(Name = "Preço")]
     public decimal Preco { get; set; }
 
+
     [Display(Name = "Imagem do Produto")]
-    public List<IFormFile> Arquivos { get; set; }
-    public int? IndiceImagemPrincipal { get; set; }
+    public List<IFormFile>? Arquivos { get; set; }
+    public string? IndiceImagemPrincipal { get; set; }
 }
