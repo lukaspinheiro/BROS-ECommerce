@@ -1,7 +1,8 @@
-﻿using BROS_ECommerce.Services.Interface.Services;
-using BROS_ECommerce.Domain.Entities;
+﻿using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
+using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Estoque;
+using BROS_ECommerce.Services.ViewModel.Produto;
 
 namespace BROS_ECommerce.Services.Services
 {
@@ -126,6 +127,31 @@ namespace BROS_ECommerce.Services.Services
             //    }
             //}
         }
+
+        public async Task<List<TabelaEstoqueViewModel>> ObterTabelaEstoqueAsync()
+        {
+            var estoques = await _repositoryEstoque.ObterTodosComImagensAsync();
+
+            return estoques.Select(e => new TabelaEstoqueViewModel
+            {
+                IdEstoque = e.IdEstoque,
+                IdProduto = e.IdProduto,
+                Nome = e.Produto?.Nome ?? "[Produto não encontrado]",
+                Quantidade = e.Quantidade,
+                UltimaAtualizacao = e.UltimaAtualizacao,
+                ImagemPrincipal = e.Produto?.ProdutoImagens
+                    .Where(pi => pi.Principal && pi.Imagem.Ativo)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .FirstOrDefault(),
+                Imagens = e.Produto?.ProdutoImagens
+                    .Where(pi => pi.Imagem.Ativo)
+                    .OrderByDescending(pi => pi.Principal)
+                    .ThenBy(pi => pi.Ordem)
+                    .Select(pi => pi.Imagem.CaminhoArquivo)
+                    .ToList() ?? new List<string>()
+            }).ToList();
+        }
+
 
         public async Task AdicionarProdutoNoEstoqueAsync(CadastrarEstoqueViewModel cadastrarEstoqueViewModel)
         {

@@ -1,5 +1,4 @@
-﻿using BROS_ECommerce.Domain.Entities;
-using BROS_ECommerce.Services.Helpers;
+﻿using BROS_ECommerce.Services.Helpers;
 using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Estoque;
 using BROS_ECommerce.Services.ViewModel.Produto;
@@ -25,37 +24,27 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         {
             try
             {
-                var estoques = await _serviceEstoque.ObterTodosAsync();
-
-                var produtosTabela = estoques.Select(e => new TabelaEstoqueViewModel
-                {
-                    IdEstoque = e.IdEstoque,
-                    IdProduto = e.IdProduto,
-                    Nome = e.Produto?.Nome ?? "[Produto não encontrado]",
-                    Quantidade = e.Quantidade,
-                    UltimaAtualizacao = e.UltimaAtualizacao
-                }).ToList();
-
+                var produtosTabela = await _serviceEstoque.ObterTabelaEstoqueAsync();
                 var produtos = await _serviceProduto.ObterTodosAsync();
 
                 var filtro = new FiltroEstoqueViewModel();
-                var viewModel = new IndexEstoqueViewModel(filtro, produtosTabela)
+                var viewModel = new IndexEstoqueViewModel(filtro, produtosTabela.ToList())
                 {
-                    Produtos = produtos
+                    Produtos = produtos.ToList()
                 };
-
                 return View(viewModel);
             }
             catch (Exception ex)
             {
-                ViewBag.Erro = "Erro ao carregar produtos: " + ex.Message;
-
+                ViewBag.Erro = "Erro ao carregar Estoque: " + ex.Message;
                 var filtro = new FiltroEstoqueViewModel();
-                var viewModel = new IndexEstoqueViewModel(filtro, new List<TabelaEstoqueViewModel>())
-                {
-                    Produtos = new List<ProdutoViewModel>()
-                };
+                var tabelaVazia = new List<TabelaEstoqueViewModel>();
+                var produtosVazios = new List<ProdutoViewModel>();
 
+                var viewModel = new IndexEstoqueViewModel(filtro, tabelaVazia)
+                {
+                    Produtos = produtosVazios
+                };
                 return View(viewModel);
             }
         }

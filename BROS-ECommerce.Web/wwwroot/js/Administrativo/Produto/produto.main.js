@@ -6,12 +6,16 @@ import {
     confirmarExclusao,
     fecharModalCadastrar,
     fecharModalDetalhes,
-    fecharModalExclusao
+    fecharModalExclusao,
+    inicializarEventosDetalhes
 } from './produto.modais.js';
-import { verificarEspacos, limparFormulario } from './produto.formulario.js';
+import { verificarEspacos, limparFormulario, marcarCampoTocado } from './produto.formulario.js';
+import { inicializarImagemProduto } from './produto.imagem.js';
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    inicializarEventosDetalhes();
+    inicializarImagemProduto();
     inicializarTabela();
 
     document.getElementById("btn-abrir-modal").addEventListener("click", function (e) {
@@ -47,15 +51,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.querySelectorAll('.btn-editar').forEach(btn => {
-        btn.addEventListener("click", () => editarProduto(
-            btn.dataset.id,
-            btn.dataset.nome,
-            btn.dataset.slug,
-            btn.dataset.titulo,
-            btn.dataset.descricao,
-            btn.dataset.preco
-        ));
+        btn.addEventListener("click", async () => {
+            const id = btn.dataset.id;
+
+            try {
+                const response = await fetch(`/Administrativo/Produto/ObterDetalhes/${id}`);
+                if (!response.ok) throw new Error("Erro ao buscar detalhes");
+                const data = await response.json();
+
+                editarProduto(
+                    id,
+                    data.nome,
+                    data.slug,
+                    data.tituloDescricao,
+                    data.descricao,
+                    data.preco,
+                    data.imagens,
+                    data.idImagemPrincipal
+                );
+            } catch (error) {
+                console.error("Erro ao buscar detalhes do produto:", error);
+                alert("Não foi possível carregar os detalhes do produto.");
+            }
+        });
     });
+
+
+
 
     document.querySelectorAll('.btn-excluir').forEach(btn => {
         btn.addEventListener("click", () => confirmarExclusao(btn.dataset.id, btn.dataset.nome));
@@ -66,7 +88,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const camposParaVerificar = document.querySelectorAll('#form-cadastrar-produto input');
 
     camposParaVerificar.forEach(campo => {
-        campo.addEventListener("keyup", verificarEspacos);
+        campo.addEventListener("input", () => marcarCampoTocado(campo.id));
+        campo.addEventListener("focus", () => marcarCampoTocado(campo.id)); // NOVO: ao focar também
     });
 
     window.fecharModalCadastrar = fecharModalCadastrar;

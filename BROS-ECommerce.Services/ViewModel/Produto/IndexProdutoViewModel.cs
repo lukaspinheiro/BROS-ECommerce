@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BROS_ECommerce.Services.ViewModel.Produto
+﻿namespace BROS_ECommerce.Services.ViewModel.Produto
 {
     public class IndexProdutoViewModel
     {
@@ -21,5 +19,6 @@ namespace BROS_ECommerce.Services.ViewModel.Produto
         public FiltroProdutoViewModel Filtro { get; set; } = new FiltroProdutoViewModel();
         public ICollection<TabelaProdutoViewModel> Tabela { get; set; } = new List<TabelaProdutoViewModel>();
         public CadastrarProdutoViewModel cadastrarProdutoViewModel { get; set; } = new CadastrarProdutoViewModel();
+        public int IndiceImagemPrincipal { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
         Task AdicionarQuantidadeAsync(Guid idProduto, int quantidadeAdicionar);
         Task RemoverQuantidadeAsync(Guid idProduto, int quantidadeRemover);
         Task<bool> VerificarDisponibilidadeAsync(Guid idProduto, int quantidadeSolicitada);
+        Task<List<Estoque>> ObterTodosComImagensAsync();
     }
 }

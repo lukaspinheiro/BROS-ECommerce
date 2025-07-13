@@ -43,31 +43,76 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var produto = new CadastrarProdutoViewModel
-                    {
-                        Nome = indexProdutoViewModel.cadastrarProdutoViewModel.Nome,
-                        Slug = indexProdutoViewModel.cadastrarProdutoViewModel.Slug,
-                        TituloDescricao = indexProdutoViewModel.cadastrarProdutoViewModel.TituloDescricao,
-                        Descricao = indexProdutoViewModel.cadastrarProdutoViewModel.Descricao,
-                        Preco = indexProdutoViewModel.cadastrarProdutoViewModel.Preco
-                    };
+                var cadastrarProduto = indexProdutoViewModel.cadastrarProdutoViewModel;
 
-                    await _serviceProduto.Adicionar(produto);
-                    TempData["Sucesso"] = "Produto cadastrado com sucesso!";
-                }
-                else
+                cadastrarProduto.IndiceImagemPrincipal = indexProdutoViewModel.cadastrarProdutoViewModel.IndiceImagemPrincipal;
+
+                if (cadastrarProduto.Arquivos == null || !cadastrarProduto.Arquivos.Any())
                 {
-                    TempData["Erro"] = "Por favor, preencha todos os campos obrigatórios.";
+                    ModelState.AddModelError("cadastrarProdutoViewModel.Arquivos", "Envie pelo menos uma imagem.");
                 }
+
+                if (!ModelState.IsValid)
+                {
+                    TempData["Erro"] = "Todos os campos obrigatórios, incluindo as imagens, devem ser preenchidos.";
+                    return RedirectToAction("Index");
+                }
+
+                await _serviceProduto.AdicionarComImagensAsync(indexProdutoViewModel);
+
+                TempData["Sucesso"] = "Produto cadastrado com sucesso!";
             }
             catch (Exception ex)
             {
-                TempData["Erro"] = "Erro ao cadastrar produto: " + ex.Message;
+                TempData["Erro"] = $"Erro ao cadastrar produto: {ex.Message}";
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet("ObterDetalhes/{id}")]
+        public async Task<IActionResult> ObterDetalhes(Guid id)
+        {
+            var produto = await _serviceProduto.ObterPorIdAsync(id);
+            if (produto == null)
+                return NotFound();
+
+            var imagens = produto.ImagensDetalhadas
+                .Select(i => new
+                {
+                    id = i.IdImagem,
+                    url = Url.Content(i.CaminhoArquivo),
+                    principal = i.Principal
+                })
+                .ToList();
+
+            var imagemPrincipal = produto.ImagensDetalhadas.FirstOrDefault(i => i.Principal);
+            return Json(new
+            {
+                nome = produto.Nome,
+                slug = produto.Slug,
+                tituloDescricao = produto.TituloDescricao,
+                descricao = produto.Descricao,
+                preco = produto.Preco,
+                imagens = imagens,
+                idImagemPrincipal = imagemPrincipal?.IdImagem.ToString() ?? ""
+            });
+        }
+
+        [HttpGet("ObterImagensPorProduto/{idProduto}")]
+        public async Task<IActionResult> ObterImagensPorProduto(Guid idProduto)
+        {
+            try
+            {
+                var imagens = await _serviceImagem.ObterImagensPorProdutoAsync(idProduto);
+                var urls = imagens.Select(i => Url.Content(i.CaminhoArquivo)).ToList();
+
+                return Json(urls);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Erro ao obter imagens: " + ex.Message });
+            }
         }
 
         [HttpPost("AtualizarProduto")]
@@ -77,7 +122,6 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    
                     var idString = Request.Form["id"].ToString();
                     if (!Guid.TryParse(idString, out var id))
                     {
@@ -85,18 +129,10 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    var produtoParaAtualizar = new ProdutoViewModel
-                    {
-                        IdProduto = id,
-                        Nome = indexProdutoViewModel.cadastrarProdutoViewModel.Nome,
-                        Slug = indexProdutoViewModel.cadastrarProdutoViewModel.Slug,
-                        TituloDescricao = indexProdutoViewModel.cadastrarProdutoViewModel.TituloDescricao,
-                        Descricao = indexProdutoViewModel.cadastrarProdutoViewModel.Descricao,
-                        Preco = indexProdutoViewModel.cadastrarProdutoViewModel.Preco,
-                        Imagens = new List<string>() 
-                    };
+                    indexProdutoViewModel.cadastrarProdutoViewModel.IdProduto = id;
 
-                    await _serviceProduto.AtualizarAsync(produtoParaAtualizar);
+                    await _serviceProduto.AtualizarComImagensAsync(indexProdutoViewModel);
+
                     TempData["Sucesso"] = "Produto atualizado com sucesso!";
                 }
                 else
@@ -117,8 +153,30 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         {
             try
             {
+                var imagens = await _serviceImagem.ObterImagensPorProdutoAsync(id);
+                
                 await _serviceProduto.ExcluirAsync(id);
-                TempData["Sucesso"] = "Produto excluído com sucesso!";
+                List<string> errosExclusaoImagens = new();
+
+                foreach (var imagem in imagens)
+                {
+                    try
+                    {
+                        await _serviceImagem.ExcluirAsync(imagem.IdImagem);
+                    }
+                    catch (Exception exImagem)
+                    {
+                        errosExclusaoImagens.Add($"Erro ao excluir imagem {imagem.IdImagem}: {exImagem.Message}");
+                    }
+                }
+
+                if (errosExclusaoImagens.Count > 0)
+                {
+                    TempData["Erro"] = "Produto excluído, mas houve erro(s) ao excluir imagem(ns).";
+                    return Json(new { success = false, mensagens = errosExclusaoImagens });
+                }
+
+                TempData["Sucesso"] = "Produto e imagens excluídos com sucesso!";
                 return Json(new { success = true });
             }
             catch (Exception ex)
