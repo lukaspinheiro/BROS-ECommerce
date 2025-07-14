@@ -1,4 +1,4 @@
-﻿import { inicializarTabela } from './produto.table.js';
+﻿import { inicializarTabelaProduto } from './produto.table.js';
 import {
     abrirModalCadastro,
     verDetalhes,
@@ -16,7 +16,7 @@ import { inicializarImagemProduto } from './produto.imagem.js';
 document.addEventListener("DOMContentLoaded", function () {
     inicializarEventosDetalhes();
     inicializarImagemProduto();
-    inicializarTabela();
+    inicializarTabelaProduto();
 
     document.getElementById("btn-abrir-modal").addEventListener("click", function (e) {
         e.preventDefault();

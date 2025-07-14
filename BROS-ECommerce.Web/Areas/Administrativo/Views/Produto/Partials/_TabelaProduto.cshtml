@@ -6,12 +6,12 @@
         <table class="table table-light table-sm" id="tabela">
             <thead>
                 <tr>
-                    <th>Imagem</th>
+                    <th class="img-relatorio">Imagem</th>
                     <th>Nome</th>
                     <th>Título da Descrição</th>
                     <th>Descrição</th>
                     <th>Preço</th>
-                    <th style="width: 20%;">Ação</th>
+                    <th class="nao-exportar" style="width: 20%;">Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,7 +25,8 @@
                                         class="btn btn-link p-0"
                                         onclick="visualizarImagem('@produto.ImagemPrincipal', '@produto.Nome')"
                                         title="Ver imagem">
-                                    <img src="@produto.ImagemPrincipal"
+                                    <img src="@produto.ImagemPrincipal" 
+                                         class="img-relatorio"
                                          alt="@produto.Nome"
                                          style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
                                 </button>
@@ -40,7 +41,9 @@
                         <td>
                             <strong>@produto.Nome</strong>
                             <br>
-                            <small class="text-muted">Caminho URL: @produto.Slug</small>
+                            <div class="nao-exportar">
+                                <small class="text-muted">Caminho URL: @produto.Slug</small>
+                            </div>
                         </td>
                         <td>@produto.TituloDescricao</td>
                         <td>
@@ -105,12 +108,12 @@ else
         <table class="table table-light table-sm">
             <thead>
                 <tr>
-                    <th>Imagem</th>
+                    <th class="img-relatorio">Imagem</th>
                     <th>Nome</th>
                     <th>Título da Descrição</th>
                     <th>Descrição</th>
                     <th>Preço</th>
-                    <th>Ação</th>
+                    <th class="nao-exportar">Ação</th>
                 </tr>
             </thead>
             <tbody>

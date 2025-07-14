@@ -5,11 +5,11 @@
     <table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Produtos">
         <thead>
             <tr>
-                <th class="text-start" style="width: 10%;">Imagem</th>
+                <th class="text-start img-relatorio" style="width: 10%;">Imagem</th>
                 <th class="text-start">Nome</th>
                 <th class="text-start" style="width: 10%;">Quantidade</th>
                 <th class="text-start" style="width: 15%;">Última Atualização</th>
-                <th style="width: 15%;">Ação</th>
+                <th class="nao-exportar" style="width: 15%;">Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -23,7 +23,7 @@
                                     class="btn btn-link p-0"
                                     onclick="visualizarImagem('@item.ImagemPrincipal', '@item.Nome')"
                                     title="Ver imagem">
-                                <img src="@item.ImagemPrincipal"
+                                <img src="@item.ImagemPrincipal" class="img-relatorio"
                                      alt="@item.Nome"
                                      style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
                             </button>
@@ -77,11 +77,11 @@ else
         <table class="table table-light table-sm">
             <thead>
                 <tr>
-                    <th>Imagem</th>
+                    <th class="img-relatorio">Imagem</th>
                     <th>Nome</th>
                     <th>Quantidade</th>
                     <th>Última Atualização</th>
-                    <th>Ação</th>
+                    <th class="nao-exportar">Ação</th>
                 </tr>
             </thead>
             <tbody>

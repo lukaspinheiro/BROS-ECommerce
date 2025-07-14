@@ -3,7 +3,7 @@
     ViewData["Title"] = "Gerenciar Produtos";
 }
 @section Head {
-    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
+    <partial name="Css\_datatables" />
     <link rel="stylesheet" type="text/css" href="/css/Administrativo/Produto/produto.css" />
 }
 
@@ -42,7 +42,7 @@
 <partial name="Partials/_ModalExclusaoProduto">
 
 @section Scripts {
-    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <partial name="Script\_datatables" />
     <script type="module" src="~/js/Administrativo/Produto/produto.main.js"></script>
     <script type="module" src="~/js/shared/temp-data.js"></script>
 }
