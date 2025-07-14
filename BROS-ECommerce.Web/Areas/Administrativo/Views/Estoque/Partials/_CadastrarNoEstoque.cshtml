@@ -1,0 +1,61 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Estoque.IndexEstoqueViewModel
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="modal-cadastrar-produto-no-estoque">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="form-cadastrar-produto-no-estoque" asp-area="Administrativo" asp-controller="Estoque" asp-action="CadastrarProdutoNoEstoque" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="@Model.cadastrarEstoqueViewModel.IdProduto" name="idProduto" id="produto-estoque-id-edicao" />
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Produto Ao Estoque</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fecharModalCadastrar()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div style="overflow-x:auto;">
+                    <div class="modal-body">
+                        <div class="form-group">
+
+                            <div class="form-group">
+                                <label for="ProdutoId">Produto</label>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <select id="produtoSelect" asp-for="cadastrarEstoqueViewModel.IdProduto" class="form-control" required style="flex-grow:1;">
+                                        <option value="">Selecione um produto</option>
+                                        @foreach (var produto in Model.Produtos)
+                                        {
+                                            var imagemUrl = produto.Imagens != null && produto.Imagens.Any()
+                                            ? produto.Imagens.First()
+                                            : Url.Content("");
+
+                                            <option value="@produto.IdProduto" data-image-url="@imagemUrl">
+                                                @produto.Nome
+                                            </option>
+                                        }
+
+                                    </select>
+                                    <img id="previewImagemProduto" src="" alt="Imagem do Produto" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;" />
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label asp-for="@Model.cadastrarEstoqueViewModel.Quantidade" class="control-label"></label>
+                                <input asp-for="@Model.cadastrarEstoqueViewModel.Quantidade" type="number" id="Quantidade" class="form-control" autocomplete="off" required style="text-transform: unset;">
+                                <span asp-validation-for="@Model.cadastrarEstoqueViewModel.Quantidade" class="text-danger"></span>
+                                <span id="nome-error" class="text-danger small" style="display: none;">Informe uma quantidade, sem espaços em branco.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fecharModalCadastrar()">Cancelar</button>
+                    <button id="btn-disable" disabled="true" type="submit" class="btn btn-success">ADICIONAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/shared/desabilitar-botao-ao-realizar-submit.js"></script>

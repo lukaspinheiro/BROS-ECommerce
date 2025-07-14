@@ -1,0 +1,55 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Estoque.IndexEstoqueViewModel
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="modal-alterar-quantidade-estoque">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="form-alterar-quantidade-estoque" asp-area="Administrativo" asp-controller="Estoque" asp-action="AlterarQuantidadeEstoque" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotoesEmPartials(this)">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="@Model.cadastrarEstoqueViewModel.IdProduto" name="idProduto" id="id-produto-alterar" />
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Alterar Quantidade em Estoque</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar" onclick="fecharModalAlterarQuantidade();">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div style="overflow-x:auto;">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Produto</label>
+                            <input type="text" class="form-control" value="@Model.cadastrarEstoqueViewModel.Nome" readonly id="nome-produto-alterar" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="@Model.cadastrarEstoqueViewModel.Quantidade" class="control-label">Nova Quantidade</label>
+                            <input asp-for="@Model.cadastrarEstoqueViewModel.Quantidade"
+                                   name="novaQuantidade"
+                                   type="number"
+                                   min="0"
+                                   class="form-control"
+                                   required
+                                   id="quantidade-alterar" />
+                            <span asp-validation-for="@Model.cadastrarEstoqueViewModel.Quantidade" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Última Atualização</label>
+                            <input type="text"
+                                   class="form-control"
+                                   value="@Model.cadastrarEstoqueViewModel.UltimaAtualizacao.ToString("dd/MM/yyyy HH:mm")"
+                                   readonly
+                                   id="data-atualizacao-alterar" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fecharModalAlterarQuantidade();">Cancelar</button>
+                    <button type="submit" class="btn btn-success btn-disable" id="btn-disable">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/shared/desabilitar-botao-ao-realizar-submit.js"></script>

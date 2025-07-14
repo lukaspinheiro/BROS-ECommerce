@@ -1,0 +1,296 @@
+﻿@{
+    ViewData["Title"] = "Gerenciar Imagens do Produto";
+    var produto = ViewBag.Produto as BROS_ECommerce.Services.ViewModel.Produto.ProdutoViewModel;
+    var imagensProduto = ViewBag.ImagensProduto as List<BROS_ECommerce.Services.ViewModel.Imagem.ImagemViewModel>;
+    var todasImagens = ViewBag.TodasImagens as List<BROS_ECommerce.Services.ViewModel.Imagem.ImagemViewModel>;
+}
+
+@section Head {
+    <style>
+        .imagem-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+            .imagem-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+
+            .imagem-card.selecionada {
+                border-color: #007bff;
+                box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+            }
+
+            .imagem-card.principal {
+                border-color: #28a745;
+                box-shadow: 0 0 0 2px rgba(40,167,69,0.25);
+            }
+
+        .imagem-preview {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .badge-principal {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #28a745;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            margin-bottom: 20px;
+        }
+
+        .grid-imagens {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+    </style>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2>Gerenciar Imagens</h2>
+        <p class="text-muted mb-0">Produto: <strong>@produto?.Nome</strong></p>
+    </div>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Sucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["Erro"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5><i class="fas fa-upload"></i> Fazer Upload de Novas Imagens</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="UploadEAssociar" asp-route-idProduto="@produto.IdProduto" method="post" enctype="multipart/form-data">
+            <div class="upload-area">
+                <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
+                <p>Arraste e solte imagens aqui ou clique para selecionar</p>
+                <input type="file" name="arquivos" multiple accept="image/*" class="form-control-file d-none" id="fileInput">
+                <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-folder-open"></i> Selecionar Arquivos
+                </button>
+            </div>
+
+            <div class="form-group mt-3">
+                <label for="altText">Texto Alternativo (opcional)</label>
+                <input name="altText" class="form-control" placeholder="Descrição da imagem para acessibilidade">
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3">
+                <i class="fas fa-upload"></i> Upload e Associar ao Produto
+            </button>
+        </form>
+    </div>
+</div>
+
+
+@if (imagensProduto?.Any() == true)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5><i class="fas fa-images"></i> Imagens do Produto (@imagensProduto.Count)</h5>
+        </div>
+        <div class="card-body">
+            <div class="grid-imagens">
+                @foreach (var imagem in imagensProduto)
+                {
+                    <div class="imagem-card @(imagem.IdImagem == imagensProduto.FirstOrDefault()?.IdImagem ? "principal" : "")"
+                         data-imagem-id="@imagem.IdImagem">
+
+                        @* Badge de Principal *@
+                        <span class="badge badge-principal">Principal</span>
+
+                        <img src="@imagem.CaminhoArquivo" alt="@imagem.AltText" class="imagem-preview"
+                             onclick="visualizarImagem('@imagem.CaminhoArquivo', '@imagem.NomeArquivo')">
+
+                        <div class="p-2">
+                            <h6 class="mb-1">@imagem.NomeArquivo</h6>
+                            <small class="text-muted">@imagem.TamanhoFormatado</small>
+
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-sm btn-success"
+                                        onclick="definirPrincipal('@produto.IdProduto', '@imagem.IdImagem')">
+                                    <i class="fas fa-star"></i> Principal
+                                </button>
+
+                                <button type="button" class="btn btn-sm btn-danger"
+                                        onclick="removerImagem('@produto.IdProduto', '@imagem.IdImagem')">
+                                    <i class="fas fa-unlink"></i> Remover
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fas fa-database"></i> Banco de Imagens</h5>
+        <small class="text-muted">Clique em uma imagem para associar ao produto</small>
+    </div>
+    <div class="card-body">
+        @if (todasImagens?.Any() == true)
+        {
+            <div class="grid-imagens">
+                @foreach (var imagem in todasImagens)
+                {
+                    var jaAssociada = imagensProduto?.Any(ip => ip.IdImagem == imagem.IdImagem) == true;
+
+                    <div class="imagem-card @(jaAssociada ? "selecionada" : "")"
+                         data-imagem-id="@imagem.IdImagem"
+                         onclick="@(jaAssociada ? "" : $"associarImagem('{produto.IdProduto}', '{imagem.IdImagem}')")">
+
+                        @if (jaAssociada)
+                        {
+                            <span class="badge badge-success position-absolute" style="top: 5px; right: 5px;">
+                                Associada
+                            </span>
+                        }
+
+                        <img src="@imagem.CaminhoArquivo" alt="@imagem.AltText" class="imagem-preview">
+
+                        <div class="p-2">
+                            <h6 class="mb-1">@imagem.NomeArquivo</h6>
+                            <small class="text-muted">@imagem.TamanhoFormatado</small>
+
+                            @if (imagem.QuantidadeProdutos > 0)
+                            {
+                                <div class="mt-1">
+                                    <span class="badge badge-info">@imagem.QuantidadeProdutos produto(s)</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4">
+                <i class="fas fa-images fa-3x text-muted mb-3"></i>
+                <h5>Nenhuma imagem no banco</h5>
+                <p class="text-muted">
+                    <a href="@Url.Action("Index", "Imagem")">Vá para Gerenciar Imagens</a>
+                    para fazer upload de imagens primeiro.
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalVisualizacao" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalImagemTitulo"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImagemPreview" class="img-fluid" style="max-height: 500px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function visualizarImagem(caminho, nome) {
+            document.getElementById('modalImagemTitulo').textContent = nome;
+            document.getElementById('modalImagemPreview').src = caminho;
+            new bootstrap.Modal(document.getElementById('modalVisualizacao')).show();
+        }
+
+        function associarImagem(idProduto, idImagem) {
+            fetch('@Url.Action("AssociarImagem")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `idProduto=${idProduto}&idImagem=${idImagem}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            });
+        }
+
+        function removerImagem(idProduto, idImagem) {
+            if (confirm('Remover esta imagem do produto?')) {
+                fetch('@Url.Action("RemoverImagem")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `idProduto=${idProduto}&idImagem=${idImagem}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Erro: ' + data.message);
+                    }
+                });
+            }
+        }
+
+        function definirPrincipal(idProduto, idImagem) {
+            fetch('@Url.Action("DefinirImagemPrincipal")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `idProduto=${idProduto}&idImagem=${idImagem}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            });
+        }
+    </script>
+}

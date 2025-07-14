@@ -1,14 +1,12 @@
 services:
   bros-ecommerce.web:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_HTTP_PORTS=${WEB_HTTP_PORT}
+      - ASPNETCORE_HTTPS_PORTS=${WEB_HTTPS_PORT}
     ports:
-      - "8080"
-      - "8081"
+      - "${WEB_HTTP_PORT}:${WEB_HTTP_PORT}"
+      - "${WEB_HTTPS_PORT}:${WEB_HTTPS_PORT}"
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/https:ro

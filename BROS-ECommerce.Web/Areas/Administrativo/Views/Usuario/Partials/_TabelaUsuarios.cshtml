@@ -1,0 +1,127 @@
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Usuario.UsuarioTabelaViewModel>
+
+@section Head {
+    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/Administrativo/Produto/produto.css" />
+}
+
+@if (Model != null && Model.Any())
+{
+    <table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Usuários">
+        <thead>
+            <tr>
+                <th class="text-start nao-exportar">Imagem</th>
+                <th class="text-start">Nome</th>
+                <th class="text-start">Email</th>
+                <th class="text-start">CPF</th>
+                <th class="text-start">Nascimento</th>
+                <th class="text-start">Gênero</th>
+                <th class="text-start">Status</th>
+                <th class="nao-exportar" style="width: 15%;">Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <i class="fas fa-user text-muted"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>@usuario.Nome</strong>
+                    </td>
+                    <td>@usuario.Email</td>
+                    <td>@usuario.Cpf</td>
+                    <td>@usuario.Nascimento.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @{
+                            var generoTexto = usuario.Genero switch
+                            {
+                                "M" => "Masculino",
+                                "F" => "Feminino",
+                                "O" => "Outro",
+                                _ => usuario.Genero
+                            };
+                        }
+                        @generoTexto
+                    </td>
+                    <td>
+                        @if (usuario.Ativo)
+                        {
+                            <span class="badge badge-success">Ativo</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-secondary">Inativo</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm gap-1" role="group">
+                            <button type="button"
+                                    class="btn btn-sm btn-editar-usuario bg-white"
+                                    title="Editar"
+                                    data-id="@usuario.IdUser"
+                                    data-nome="@usuario.Nome"
+                                    data-email="@usuario.Email"
+                                    data-cpf="@usuario.Cpf"
+                                    data-genero="@usuario.Genero"
+                                    data-nascimento="@usuario.Nascimento.ToString("yyyy-MM-dd")"
+                                    data-ativo="@usuario.Ativo">
+                                <i class="fas fa-edit fa-lg" style="color: #198754;"></i>
+                            </button>
+                            <button type="button"
+                                    class="btn btn-sm btn-excluir-usuario bg-white"
+                                    title="Excluir"
+                                    data-id="@usuario.IdUser"
+                                    data-nome="@usuario.Nome">
+                                <i class="fas fa-trash-alt fa-lg" style="color: #dc3545;"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <small class="text-muted">
+                <i class="fas fa-info-circle"></i>
+                Total de usuários: <strong>@Model.Count()</strong>
+            </small>
+        </div>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-light table-sm">
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>CPF</th>
+                    <th>Nascimento</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="7" class="text-center py-4">
+                        <div class="text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            <strong>Nenhum usuário encontrado</strong>
+                            <br>
+                            <small>Adicione usuários para começar a gerenciar sua base.</small>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BROS_ECommerce.Web</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <partial name="\PartialsLayout\_ReferenciasCSS" />
+    @RenderSection("Head", required: false)
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <header>
+        
+        <partial name="\PartialsLayout\_NavbarAcessibilidade" />
+        <partial name="\PartialsLayout\_NavbarLogin" />
+       
+    </header>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="w-100">
+            
+            <partial name="\PartialsLayout\_FooterSuperior" />
+            <partial name="\PartialsLayout\_FooterInferior" />
+        </div>
+    </footer>
+
+    <partial name="\PartialsLayout\_ReferenciasScript" />
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,38 +1,157 @@
-﻿<table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Produtos">
-    <thead>
-        <tr>
-            <th>Imagem</th>
-            <th>Nome</th>
-            <th>Título da Descrição</th>
-            <th>Descrição</th>
-            <th>Preço</th>
-            <th style="width: 15%;">ação</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-        </tr>
-        <tr>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-        </tr>
-        <tr>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-            <td>TESTE</td>
-        </tr>
-    </tbody>
-</table>
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Produto.TabelaProdutoViewModel>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-light table-sm" id="tabela">
+            <thead>
+                <tr>
+                    <th class="img-relatorio">Imagem</th>
+                    <th>Nome</th>
+                    <th>Título da Descrição</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th class="nao-exportar" style="width: 20%;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var produto in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (produto.TemImagem)
+                            {
+                                <button type="button"
+                                        class="btn btn-link p-0"
+                                        onclick="visualizarImagem('@produto.ImagemPrincipal', '@produto.Nome')"
+                                        title="Ver imagem">
+                                    <img src="@produto.ImagemPrincipal" 
+                                         class="img-relatorio"
+                                         alt="@produto.Nome"
+                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
+                                </button>
+                            }
+                            else
+                            {
+                                <div style="width: 50px; height: 50px; background-color: #f8f9fa; border: 1px dashed #dee2e6; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                                    <i class="fas fa-image text-muted"></i>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <strong>@produto.Nome</strong>
+                            <br>
+                            <div class="nao-exportar">
+                                <small class="text-muted">Caminho URL: @produto.Slug</small>
+                            </div>
+                        </td>
+                        <td>@produto.TituloDescricao</td>
+                        <td>
+                            <span class="d-inline-block text-truncate" style="max-width: 200px;" title="@produto.Descricao">
+                                @produto.Descricao
+                            </span>
+                        </td>
+                        <td>
+                            <span class="font-weight-bold text-success">
+                                R$ @produto.Preco.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"))
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm gap-1" role="group">
+                                <button type="button"
+                                        class="btn btn-sm btn-ver-detalhes bg-white"
+                                        title="Ver Detalhes"
+                                        data-id="@produto.IdProduto">
+                                    <i class="fa-solid fa-eye fa-lg" style="color: #0d6efd;"></i>
+                                </button>
+
+
+                                <button type="button"
+                                        class="btn btn-sm btn-editar bg-white"
+                                        title="Editar"
+                                        data-id="@produto.IdProduto"
+                                        data-nome="@produto.Nome"
+                                        data-slug="@produto.Slug"
+                                        data-titulo="@produto.TituloDescricao"
+                                        data-descricao="@produto.Descricao"
+                                        data-preco="@produto.Preco">
+                                    <i class="fas fa-edit fa-lg" style="color: #198754;"></i>
+                                </button>
+
+                                <button type="button"
+                                        class="btn btn-sm btn-excluir bg-white"
+                                        title="Excluir"
+                                        data-id="@produto.IdProduto"
+                                        data-nome="@produto.Nome">
+                                    <i class="fas fa-trash-alt fa-lg" style="color: #dc3545;"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="row mt-3">
+            <div class="col-12">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Total de produtos: <strong>@Model.Count()</strong>
+                </small>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-light table-sm">
+            <thead>
+                <tr>
+                    <th class="img-relatorio">Imagem</th>
+                    <th>Nome</th>
+                    <th>Título da Descrição</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th class="nao-exportar">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="6" class="text-center py-4">
+                        <div class="text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            <strong>Nenhum produto encontrado</strong>
+                            <br>
+                            <small>Cadastre produtos para começar a gerenciar seu catálogo.</small>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+
+<div class="modal fade" id="modalVisualizarImagem" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalImagemTitulo"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImagemPreview" class="img-fluid" style="max-height: 500px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function visualizarImagem(caminho, nome) {
+        document.getElementById('modalImagemTitulo').textContent = nome;
+        document.getElementById('modalImagemPreview').src = caminho;
+        new bootstrap.Modal(document.getElementById('modalVisualizarImagem')).show();
+    }
+</script>
