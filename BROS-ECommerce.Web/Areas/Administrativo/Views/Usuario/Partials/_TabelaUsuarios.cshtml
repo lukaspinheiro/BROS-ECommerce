@@ -7,16 +7,17 @@
 
 @if (Model != null && Model.Any())
 {
-    <table id="tabela-usuarios" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Usuários">
+    <table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Usuários">
         <thead>
             <tr>
-                <th class="text-start">Imagem</th>
+                <th class="text-start nao-exportar">Imagem</th>
                 <th class="text-start">Nome</th>
                 <th class="text-start">Email</th>
                 <th class="text-start">CPF</th>
                 <th class="text-start">Nascimento</th>
+                <th class="text-start">Gênero</th>
                 <th class="text-start">Status</th>
-                <th style="width: 15%;">Ação</th>
+                <th class="nao-exportar" style="width: 15%;">Ação</th>
             </tr>
         </thead>
         <tbody>
@@ -30,24 +31,22 @@
                     </td>
                     <td>
                         <strong>@usuario.Nome</strong>
-                        <br>
-                        <small class="text-muted">
-                            Gênero: @{
-                                var generoTexto = usuario.Genero switch
-                                {
-                                    "M" => "Masculino",
-                                    "F" => "Feminino",
-                                    "O" => "Outro",
-                                    _ => usuario.Genero
-                                };
-                            }
-                            @generoTexto
-                        </small>
-
                     </td>
                     <td>@usuario.Email</td>
                     <td>@usuario.Cpf</td>
                     <td>@usuario.Nascimento.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @{
+                            var generoTexto = usuario.Genero switch
+                            {
+                                "M" => "Masculino",
+                                "F" => "Feminino",
+                                "O" => "Outro",
+                                _ => usuario.Genero
+                            };
+                        }
+                        @generoTexto
+                    </td>
                     <td>
                         @if (usuario.Ativo)
                         {

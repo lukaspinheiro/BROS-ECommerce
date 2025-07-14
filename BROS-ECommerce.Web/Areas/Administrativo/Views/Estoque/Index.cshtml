@@ -3,7 +3,7 @@
     ViewData["Title"] = "Gerenciar Estoque";
 }
 @section Head {
-    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
+    <partial name="Css\_datatables" />
     <style>
         .custom-select-with-image option {
             padding-left: 30px;
@@ -49,6 +49,7 @@
 
 
 @section Scripts {
+    <partial name="Script\_datatables" />
     <script src="~/lib/DataTables/datatables.min.js"></script>
     <script type="module" src="~/js/Administrativo/Estoque/estoque.main.js"></script>
     <script type="module" src="~/js/shared/temp-data.js"></script>

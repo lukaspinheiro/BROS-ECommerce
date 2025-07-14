@@ -1,4 +1,4 @@
-﻿import { inicializarTabela } from './estoque.table.js';
+﻿import { inicializarTabelaEstoque } from './estoque.table.js';
 import {
     abrirModalCadastro,
     fecharModalCadastrar,
@@ -9,8 +9,7 @@ import {
 import { verificarEspacos, limparFormulario, verificarEspacosAlterar} from './estoque.formulario.js';
 
 document.addEventListener("DOMContentLoaded", function () {
-    inicializarTabela();
-
+    inicializarTabelaEstoque();
 
     document.getElementById("btn-abrir-modal").addEventListener("click", function (e) {
         e.preventDefault();

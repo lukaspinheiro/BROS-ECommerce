@@ -5,7 +5,7 @@
 }
 
 @section Head {
-    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet">
+    <partial name="Css\_datatables" />
     <link rel="stylesheet" href="~/css/Administrativo/Usuario/usuario.css" />
 }
 
@@ -57,6 +57,6 @@
 @* Removido: <partial name="Partials/_Editar" /> pois o modal de cadastro já trata ambos *@
 
 @section Scripts {
-    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <partial name="Script\_datatables" />
     <script type="module" src="~/js/Administrativo/Usuario/usuario.main.js"></script>
 }
