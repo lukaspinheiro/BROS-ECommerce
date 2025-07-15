@@ -12,6 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.RegisterServices(builder.Configuration);
 
+builder.Services.AddScoped<IStripeService, StripeService>();
+builder.Services.AddScoped<IMercadoPagoService, MercadoPagoService>();
+
+
 // Autenticação JWT + leitura do cookie BrosToken
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
