@@ -31,10 +31,40 @@
                         </ul>
                     </div>
                 </div>
+
+                <form id="form-finalizar-pedido" method="post" action="/pagamento/iniciar">
+                    <div class="checkout-section">
+                        <h3>Forma de Pagamento</h3>
+
+                        <div class="payment-option">
+                            <label for="stripe">
+                                <input type="radio" name="metodo" id="stripe" value="stripe" />
+                                <span>Stripe</span>
+                            </label>
+                        </div>
+
+                        <div class="payment-option">
+                            <label for="mercadopago">
+                                <input type="radio" name="metodo" id="mercadopago" value="mercadopago" />
+                                <span>MercadoPago</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="checkout-actions">
+                        <a href="/Carrinho" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-2"></i>
+                            Voltar ao Carrinho
+                        </a>
+                        <button id="btn-finalizar" class="btn btn-success btn-lg" type="submit">
+                            <i class="fa-solid fa-lock me-2"></i>
+                            Finalizar Pedido
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <div class="col-lg-4">
-                
                 <div class="checkout-summary">
                     <h3>Resumo do Pedido</h3>
                     <div class="summary-placeholder">
@@ -62,15 +92,16 @@
             </div>
         </div>
     </div>
-
-    <div class="checkout-actions">
-        <a href="/Carrinho" class="btn btn-outline-secondary">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Voltar ao Carrinho
-        </a>
-        <button class="btn btn-success btn-lg" disabled>
-            <i class="fa-solid fa-lock me-2"></i>
-            Finalizar Pedido
-        </button>
-    </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById("form-finalizar-pedido").addEventListener("submit", function (e) {
+            const selected = document.querySelector('input[name="metodo"]:checked');
+            if (!selected) {
+                e.preventDefault();
+                alert("Selecione uma forma de pagamento antes de continuar.");
+            }
+        });
+    </script>
+}
