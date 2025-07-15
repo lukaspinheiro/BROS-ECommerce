@@ -18,20 +18,16 @@
     <div class="checkout-content">
         <div class="row">
             <div class="col-lg-8">
-               
                 <div class="checkout-section">
                     <h3>Dados de Entrega</h3>
                     <div class="implementation-placeholder">
                         <div class="placeholder-icon">
                             <i class="fa-solid fa-code"></i>
                         </div>
-                        <h4>Área de Implementação</h4>
-                        <p>Esta seção será implementada pelo responsável pela tela de pagamento.</p>
+                        <h4>Zona de pagamento</h4>
+                        <p>Área de pagamento.</p>
                         <ul class="implementation-list">
                             <li>Formulário de endereço</li>
-                            <li>Opções de entrega</li>
-                            <li>Dados de pagamento</li>
-                            <li>Confirmação do pedido</li>
                         </ul>
                     </div>
                 </div>
@@ -42,18 +38,24 @@
                 <div class="checkout-summary">
                     <h3>Resumo do Pedido</h3>
                     <div class="summary-placeholder">
-                        <div class="d-flex justify-content-between">
-                            <span>Subtotal:</span>
-                            <span>R$ XXX,XX</span>
+                        <div class="summary-item">
+                            <div class="d-flex justify-content-between">
+                                <span>Subtotal:</span>
+                                <span>R$ XXX,XX</span>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <span>Frete:</span>
-                            <span>A calcular</span>
+                        <div class="summary-item">
+                            <div class="d-flex justify-content-between">
+                                <span>Frete:</span>
+                                <span>A calcular</span>
+                            </div>
                         </div>
                         <hr>
-                        <div class="d-flex justify-content-between fw-bold">
-                            <span>Total:</span>
-                            <span>R$ XXX,XX</span>
+                        <div class="summary-total">
+                            <div class="d-flex justify-content-between fw-bold">
+                                <span>Total:</span>
+                                <span>R$ XXX,XX</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,5 +68,9 @@
             <i class="fa-solid fa-arrow-left me-2"></i>
             Voltar ao Carrinho
         </a>
+        <button class="btn btn-success btn-lg" disabled>
+            <i class="fa-solid fa-lock me-2"></i>
+            Finalizar Pedido
+        </button>
     </div>
 </div>

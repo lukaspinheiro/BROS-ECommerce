@@ -1,4 +1,5 @@
 ﻿
+
 /**
  * 
  * @param {string} produtoId 
@@ -19,21 +20,34 @@ async function adicionarAoCarrinho(produtoId, quantidade = 1) {
         const result = await response.json();
 
         if (result.sucesso) {
-            mostrarMensagem(result.mensagem, 'sucesso');
-
             atualizarContadorCarrinho(result.quantidadeItens);
 
-            setTimeout(() => {
-                if (confirm('Produto adicionado com sucesso! Deseja ir para o carrinho?')) {
-                    window.location.href = result.redirect;
-                }
-            }, 1000);
+            if (window.carrinhoSidebar) {
+                await window.carrinhoSidebar.abrir();
+                window.carrinhoSidebar.mostrarToast('Produto adicionado com sucesso!', 'success');
+            } else {
+                mostrarMensagem('Produto adicionado com sucesso!', 'sucesso');
+
+                setTimeout(() => {
+                    if (confirm('Produto adicionado com sucesso! Deseja ir para o carrinho?')) {
+                        window.location.href = '/Carrinho';
+                    }
+                }, 1000);
+            }
         } else {
-            mostrarMensagem('Erro: ' + result.mensagem, 'erro');
+            if (window.carrinhoSidebar) {
+                window.carrinhoSidebar.mostrarToast('Erro: ' + result.mensagem, 'error');
+            } else {
+                mostrarMensagem('Erro: ' + result.mensagem, 'erro');
+            }
         }
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
-        mostrarMensagem('Erro ao adicionar produto ao carrinho', 'erro');
+        if (window.carrinhoSidebar) {
+            window.carrinhoSidebar.mostrarToast('Erro ao adicionar produto ao carrinho', 'error');
+        } else {
+            mostrarMensagem('Erro ao adicionar produto ao carrinho', 'erro');
+        }
     }
 }
 
@@ -42,7 +56,7 @@ async function adicionarAoCarrinho(produtoId, quantidade = 1) {
  * @param {number} quantidade 
  */
 function atualizarContadorCarrinho(quantidade) {
-=    const contadorCarrinho = document.querySelector('#contador-carrinho');
+    const contadorCarrinho = document.querySelector('#contador-carrinho');
     if (contadorCarrinho) {
         contadorCarrinho.textContent = quantidade;
         contadorCarrinho.style.display = quantidade > 0 ? 'inline-block' : 'none';
@@ -66,7 +80,7 @@ function atualizarContadorCarrinho(quantidade) {
  * @param {string} tipo 
  */
 function mostrarMensagem(mensagem, tipo) {
-   
+    
     const alertsAnteriores = document.querySelectorAll('.alert-carrinho');
     alertsAnteriores.forEach(alert => alert.remove());
 
@@ -86,7 +100,7 @@ function mostrarMensagem(mensagem, tipo) {
 
     alertDiv.innerHTML = `
         <div class="d-flex align-items-center">
-            <i class="fas fa-${tipo === 'sucesso' ? 'check-circle' : 'exclamation-circle'} me-2"></i> 
+            <i class="fas fa-${tipo === 'sucesso' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
             <span>${mensagem}</span>
             <button type="button" class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
         </div>
@@ -94,48 +108,45 @@ function mostrarMensagem(mensagem, tipo) {
 
     document.body.appendChild(alertDiv);
 
-    
     setTimeout(() => {
         if (alertDiv.parentNode) {
-            alertDiv.style.animation = 'slideOutRight 0.3s ease-in';
+            alertDiv.style.animation = 'slideOutRight 0.3s ease-in forwards';
             setTimeout(() => alertDiv.remove(), 300);
         }
     }, 4000);
 }
 
 
-async function carregarQuantidadeCarrinho() {
+async function carregarContadorInicial() {
     try {
         const response = await fetch('/Carrinho/QuantidadeItens');
-        const result = await response.json();
-        atualizarContadorCarrinho(result.quantidade || 0);
+        const data = await response.json();
+        atualizarContadorCarrinho(data.quantidade);
     } catch (error) {
-        console.error('Erro ao carregar quantidade do carrinho:', error);
+        console.log('Erro ao carregar contador inicial:', error);
     }
 }
 
-if (!document.querySelector('#carrinho-animations')) {
-    const style = document.createElement('style');
-    style.id = 'carrinho-animations';
-    style.textContent = `
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-        .carrinho-com-itens {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-    `;
-    document.head.appendChild(style);
-}
+document.addEventListener('DOMContentLoaded', function () {
+    carregarContadorInicial();
 
-document.addEventListener('DOMContentLoaded', carregarQuantidadeCarrinho);
+    if (!document.getElementById('carrinho-animations-fallback')) {
+        const style = document.createElement('style');
+        style.id = 'carrinho-animations-fallback';
+        style.textContent = `
+            @keyframes slideInRight {
+                from { opacity: 0; transform: translateX(20px); }
+                to { opacity: 1; transform: translateX(0); }
+            }
+            @keyframes slideOutRight {
+                from { opacity: 1; transform: translateX(0); }
+                to { opacity: 0; transform: translateX(20px); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+});
+
+window.adicionarAoCarrinho = adicionarAoCarrinho;
+window.atualizarContadorCarrinho = atualizarContadorCarrinho;
+window.mostrarMensagem = mostrarMensagem;

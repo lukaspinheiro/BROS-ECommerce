@@ -1,0 +1,172 @@
+﻿
+.btn-finalizar {
+    position: relative;
+    background-color: #00C600;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    width: 100%;
+    max-width: 500px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+    .btn-finalizar:hover:not(:disabled) {
+        background-color: #00b000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 200, 0, 0.4);
+    }
+
+    .btn-finalizar:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-finalizar:disabled {
+        opacity: 0.8;
+        cursor: not-allowed;
+        transform: none !important;
+        background-color: #00C600 !important;
+    }
+
+    .btn-finalizar.loading {
+        pointer-events: none;
+    }
+
+    .btn-finalizar .btn-text {
+        transition: all 0.3s ease;
+    }
+
+    .btn-finalizar .btn-icon {
+        position: absolute;
+        right: 20px;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-finalizar .btn-loader {
+        position: absolute;
+        right: 20px;
+        font-size: 1.2rem;
+        color: white;
+        animation: spin 1s linear infinite;
+    }
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Estado de sucesso */
+.btn-finalizar.success {
+    background-color: #28a745 !important;
+    animation: pulse-success 0.8s ease;
+}
+
+    .btn-finalizar.success .btn-icon {
+        animation: bounce-icon 0.6s ease;
+    }
+
+@keyframes pulse-success {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+}
+
+@keyframes bounce-icon {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-finalizar {
+        font-size: 1.1rem;
+        padding: 0.9rem 1.5rem;
+    }
+
+        .btn-finalizar .btn-icon,
+        .btn-finalizar .btn-loader {
+            right: 15px;
+            font-size: 1.3rem;
+        }
+}
+
+
+.btn-finalizar {
+    overflow: hidden;
+    position: relative;
+}
+
+    .btn-finalizar::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-finalizar:active::before {
+        width: 300px;
+        height: 300px;
+    }
+
+
+    .btn-finalizar:focus {
+        outline: 3px solid rgba(0, 200, 0, 0.3);
+        outline-offset: 2px;
+    }
+
+        .btn-finalizar:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-finalizar,
+    .btn-finalizar .btn-icon,
+    .btn-finalizar .btn-loader {
+        transition: none;
+        animation: none;
+    }
+
+        .btn-finalizar:hover {
+            transform: none;
+        }
+}
