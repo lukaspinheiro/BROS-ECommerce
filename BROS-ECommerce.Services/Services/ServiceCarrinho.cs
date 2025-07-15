@@ -10,15 +10,18 @@ namespace BROS_ECommerce.Services.Services
         private readonly IRepositoryCarrinho _repositoryCarrinho;
         private readonly IRepositoryCarrinhoItem _repositoryCarrinhoItem;
         private readonly IRepositoryProduto _repositoryProduto;
+        private readonly IRepositoryEstoque _repositoryEstoque;
 
         public ServiceCarrinho(
             IRepositoryCarrinho repositoryCarrinho,
             IRepositoryCarrinhoItem repositoryCarrinhoItem,
-            IRepositoryProduto repositoryProduto)
+            IRepositoryProduto repositoryProduto,
+            IRepositoryEstoque repositoryEstoque)
         {
             _repositoryCarrinho = repositoryCarrinho;
             _repositoryCarrinhoItem = repositoryCarrinhoItem;
             _repositoryProduto = repositoryProduto;
+            _repositoryEstoque = repositoryEstoque;
         }
 
         public async Task<CarrinhoViewModel?> ObterCarrinhoUsuarioAsync(Guid idUsuario)
@@ -53,12 +56,21 @@ namespace BROS_ECommerce.Services.Services
 
         public async Task<CarrinhoViewModel> AdicionarProdutoAsync(Guid? idUsuario, Guid idProduto, int quantidade = 1)
         {
+            Console.WriteLine($"[SERVICE] =================================");
+            Console.WriteLine($"[SERVICE] ServiceCarrinho.AdicionarProdutoAsync");
+            Console.WriteLine($"[SERVICE] Produto ID: {idProduto}");
+            Console.WriteLine($"[SERVICE] Usuario ID: {idUsuario}");
+            Console.WriteLine($"[SERVICE] Quantidade: {quantidade}");
+
             var carrinho = idUsuario.HasValue
                 ? await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario.Value)
                 : null;
 
+            Console.WriteLine($"[SERVICE] Carrinho existente: {carrinho?.IdCarrinho}");
+
             if (carrinho == null)
             {
+                Console.WriteLine($"[SERVICE] Criando novo carrinho...");
                 carrinho = new Carrinho
                 {
                     IdCarrinho = Guid.NewGuid(),
@@ -67,21 +79,45 @@ namespace BROS_ECommerce.Services.Services
                     Status = "Aberto"
                 };
                 await _repositoryCarrinho.CriarCarrinhoAsync(carrinho);
+                Console.WriteLine($"[SERVICE] Novo carrinho criado: {carrinho.IdCarrinho}");
             }
 
-            var produto = await _repositoryProduto.ObterPorIdAsync(idProduto);
-            if (produto == null)
-                throw new ArgumentException("Produto não encontrado");
+            Console.WriteLine($"[SERVICE] Buscando produto no banco...");
 
+            
+            var produto = await _repositoryProduto.ObterPorIdAsync(idProduto);
+
+            Console.WriteLine($"[SERVICE] Produto encontrado: {produto != null}");
+
+            if (produto != null)
+            {
+                Console.WriteLine($"[SERVICE] Produto - ID: {produto.IdProduto}");
+                Console.WriteLine($"[SERVICE] Produto - Nome: {produto.Nome}");
+                Console.WriteLine($"[SERVICE] Produto - Preço: {produto.Preco}");
+            }
+
+            if (produto == null)
+            {
+                Console.WriteLine($"[SERVICE] ERRO: Produto não encontrado!");
+                Console.WriteLine($"[SERVICE] Produto ID buscado: {idProduto}");
+                throw new ArgumentException("Produto não encontrado");
+            }
+
+            Console.WriteLine($"[SERVICE] Verificando item existente no carrinho...");
             var itemExistente = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(carrinho.IdCarrinho, idProduto);
+            Console.WriteLine($"[SERVICE] Item existente: {itemExistente != null}");
 
             if (itemExistente != null)
             {
+                Console.WriteLine($"[SERVICE] Atualizando quantidade do item existente...");
+                Console.WriteLine($"[SERVICE] Quantidade antiga: {itemExistente.Quantidade}");
                 itemExistente.Quantidade += quantidade;
+                Console.WriteLine($"[SERVICE] Nova quantidade: {itemExistente.Quantidade}");
                 await _repositoryCarrinhoItem.AtualizarItemAsync(itemExistente);
             }
             else
             {
+                Console.WriteLine($"[SERVICE] Criando novo item no carrinho...");
                 var novoItem = new CarrinhoItem
                 {
                     IdCarrinhoItem = Guid.NewGuid(),
@@ -90,10 +126,23 @@ namespace BROS_ECommerce.Services.Services
                     Quantidade = quantidade,
                     PrecoUnitario = produto.Preco
                 };
+
+                Console.WriteLine($"[SERVICE] Novo item - ID: {novoItem.IdCarrinhoItem}");
+                Console.WriteLine($"[SERVICE] Novo item - Carrinho: {novoItem.IdCarrinho}");
+                Console.WriteLine($"[SERVICE] Novo item - Produto: {novoItem.IdProduto}");
+                Console.WriteLine($"[SERVICE] Novo item - Quantidade: {novoItem.Quantidade}");
+                Console.WriteLine($"[SERVICE] Novo item - Preço: {novoItem.PrecoUnitario}");
+
                 await _repositoryCarrinhoItem.AdicionarItemAsync(novoItem);
+                Console.WriteLine($"[SERVICE] Item adicionado com sucesso!");
             }
 
-            return await ObterCarrinhoPorIdAsync(carrinho.IdCarrinho) ?? new CarrinhoViewModel();
+            Console.WriteLine($"[SERVICE] Obtendo carrinho atualizado...");
+            var carrinhoAtualizado = await ObterCarrinhoPorIdAsync(carrinho.IdCarrinho) ?? new CarrinhoViewModel();
+            Console.WriteLine($"[SERVICE] Carrinho atualizado - Total itens: {carrinhoAtualizado.QuantidadeTotal}");
+            Console.WriteLine($"[SERVICE] =================================");
+
+            return carrinhoAtualizado;
         }
 
         public async Task<CarrinhoViewModel> AtualizarQuantidadeAsync(Guid idCarrinho, Guid idProduto, int quantidade)
@@ -146,6 +195,119 @@ namespace BROS_ECommerce.Services.Services
         public async Task<decimal> ObterTotalCarrinhoAsync(Guid idCarrinho)
         {
             return await _repositoryCarrinhoItem.CalcularTotalCarrinhoAsync(idCarrinho);
+        }
+
+
+        public async Task<CarrinhoViewModel> AtualizarQuantidadeProdutoAsync(Guid idUsuario, Guid idProduto, int novaQuantidade)
+        {
+            if (novaQuantidade <= 0)
+            {
+                throw new ArgumentException("Quantidade deve ser maior que zero");
+            }
+
+            var carrinho = await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario);
+            if (carrinho == null)
+            {
+                throw new InvalidOperationException("Carrinho não encontrado");
+            }
+
+            var item = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(carrinho.IdCarrinho, idProduto);
+            if (item == null)
+            {
+                throw new InvalidOperationException("Produto não encontrado no carrinho");
+            }
+
+            var produto = await _repositoryProduto.ObterPorIdAsync(idProduto);
+            if (produto == null)
+            {
+                throw new InvalidOperationException("Produto não encontrado");
+            }
+
+            var estoque = await _repositoryEstoque.ObterPorIdProdutoAsync(idProduto);
+            if (estoque != null && estoque.Quantidade < novaQuantidade)
+            {
+                throw new InvalidOperationException($"Estoque insuficiente. Disponível: {estoque.Quantidade}");
+            }
+
+            item.Quantidade = novaQuantidade;
+            await _repositoryCarrinhoItem.AtualizarItemAsync(item);
+
+            return await ObterCarrinhoUsuarioAsync(idUsuario) ?? new CarrinhoViewModel();
+        }
+
+        public async Task<CarrinhoViewModel> AdicionarOuAtualizarProdutoAsync(Guid? idUsuario, Guid idProduto, int quantidade)
+        {
+            if (!idUsuario.HasValue)
+            {
+                throw new UnauthorizedAccessException("Usuário não autenticado");
+            }
+
+            var produto = await _repositoryProduto.ObterPorIdAsync(idProduto);
+            if (produto == null)
+            {
+                throw new InvalidOperationException("Produto não encontrado");
+            }
+
+            var estoque = await _repositoryEstoque.ObterPorIdProdutoAsync(idProduto);
+            if (estoque != null && estoque.Quantidade < quantidade)
+            {
+                throw new InvalidOperationException($"Estoque insuficiente. Disponível: {estoque.Quantidade}");
+            }
+
+            var carrinho = await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario.Value);
+            if (carrinho == null)
+            {
+                carrinho = new Carrinho
+                {
+                    IdCarrinho = Guid.NewGuid(),
+                    IdUsuario = idUsuario.Value,
+                    DataCriacao = DateTime.UtcNow,
+                    Status = "Aberto"
+                };
+                carrinho = await _repositoryCarrinho.CriarCarrinhoAsync(carrinho);
+            }
+
+            
+            var itemExistente = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(carrinho.IdCarrinho, idProduto);
+
+            if (itemExistente != null)
+            {
+                
+                var novaQuantidade = itemExistente.Quantidade + quantidade;
+
+                if (estoque != null && estoque.Quantidade < novaQuantidade)
+                {
+                    throw new InvalidOperationException($"Estoque insuficiente. Disponível: {estoque.Quantidade}");
+                }
+
+                itemExistente.Quantidade = novaQuantidade;
+                await _repositoryCarrinhoItem.AtualizarItemAsync(itemExistente);
+            }
+            else
+            {
+                
+                var novoItem = new CarrinhoItem
+                {
+                    IdCarrinhoItem = Guid.NewGuid(),
+                    IdCarrinho = carrinho.IdCarrinho,
+                    IdProduto = idProduto,
+                    Quantidade = quantidade,
+                    PrecoUnitario = produto.Preco
+                };
+                await _repositoryCarrinhoItem.AdicionarItemAsync(novoItem);
+            }
+
+            return await ObterCarrinhoUsuarioAsync(idUsuario.Value) ?? new CarrinhoViewModel();
+        }
+
+        public async Task<int> ObterQuantidadeItensCarrinhoAsync(Guid? idUsuario)
+        {
+            if (!idUsuario.HasValue) return 0;
+
+            var carrinho = await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario.Value);
+            if (carrinho == null) return 0;
+
+            return await _repositoryCarrinhoItem.ContarItensCarrinhoAsync(carrinho.IdCarrinho);
         }
 
         private async Task<CarrinhoViewModel> MapearCarrinhoParaViewModel(Carrinho carrinho)

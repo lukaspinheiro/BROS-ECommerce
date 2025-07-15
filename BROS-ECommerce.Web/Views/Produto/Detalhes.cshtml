@@ -59,9 +59,12 @@
         </div>
 
         <div class="frete row w-100">
-            <button class="btn-finalizar">
-                <span>Finalizar compra</span>
-                <i class="fas fa-cart-plus"></i>
+            <button class="btn-finalizar" onclick="adicionarProdutoCarrinho('@Model.IdProduto')" id="btn-adicionar-carrinho">
+                <span class="btn-text">Finalizar compra</span>
+                <i class="fas fa-cart-plus btn-icon"></i>
+                <div class="btn-loader" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
             </button>
 
             <p class="d-flex justify-content-start fw-bold mt-5 mb-2">Calcule o frete</p>
@@ -111,9 +114,10 @@
 
 @section Scripts {
     <script src="~/js/shared/promocoes.js"></script>
-    <script src="~/js/Produto/frete.js"></script> <!-- ← Script da API de CEP -->
+    <script src="~/js/Produto/frete.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $('#carouselProduto').carousel({
@@ -122,5 +126,92 @@
                 wrap: true
             });
         });
+
+        async function adicionarProdutoCarrinho(produtoId) {
+            const btn = document.getElementById('btn-adicionar-carrinho');
+            const btnText = btn.querySelector('.btn-text');
+            const btnIcon = btn.querySelector('.btn-icon');
+            const btnLoader = btn.querySelector('.btn-loader');
+
+            try {
+                console.log('Tentando adicionar produto:', produtoId);
+
+                btn.disabled = true;
+                btn.classList.add('loading');
+                if (btnText) btnText.style.display = 'none';
+                if (btnIcon) btnIcon.style.display = 'none';
+                if (btnLoader) btnLoader.style.display = 'inline-block';
+
+                if (window.CarrinhoSidebar) {
+                    console.log('Usando CarrinhoSidebar');
+                    await window.CarrinhoSidebar.adicionarProduto(produtoId, 1);
+
+                    btn.classList.add('success');
+                    setTimeout(() => btn.classList.remove('success'), 800);
+
+                } else {
+                    
+                    console.warn('CarrinhoSidebar não encontrado, usando método tradicional');
+                    await adicionarProdutoTradicional(produtoId);
+                }
+
+            } catch (error) {
+                console.error('Erro ao adicionar produto:', error);
+
+                
+                if (window.CarrinhoSidebar && window.CarrinhoSidebar.mostrarFeedback) {
+                    window.CarrinhoSidebar.mostrarFeedback('Erro ao adicionar produto ao carrinho', 'error');
+                } else {
+                    alert('Erro ao adicionar produto ao carrinho: ' + error.message);
+                }
+            } finally {
+                
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.classList.remove('loading');
+                    if (btnText) btnText.style.display = 'inline';
+                    if (btnIcon) btnIcon.style.display = 'inline';
+                    if (btnLoader) btnLoader.style.display = 'none';
+                }, 500);
+            }
+        }
+
+        
+        async function adicionarProdutoTradicional(produtoId) {
+            console.log('Usando método tradicional para produto:', produtoId);
+
+            const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+            const token = tokenElement ? tokenElement.value : '';
+
+            const response = await fetch('/Carrinho/AdicionarProduto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': token
+                },
+                body: `produtoId=${produtoId}&quantidade=1`
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.status);
+            }
+
+            const result = await response.json();
+            console.log('Resultado da requisição:', result);
+
+            if (result.sucesso) {
+                
+                if (confirm('Produto adicionado! Deseja ir para o carrinho?')) {
+                    window.location.href = '/Carrinho';
+                }
+            } else {
+                throw new Error(result.mensagem || 'Erro desconhecido');
+            }
+        }
+
+        
+        window.adicionarAoCarrinho = async function(produtoId, quantidade = 1) {
+            return await adicionarProdutoCarrinho(produtoId);
+        };
     </script>
 }

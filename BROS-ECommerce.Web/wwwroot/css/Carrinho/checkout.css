@@ -1,0 +1,253 @@
+﻿
+
+.checkout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-height: 80vh;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #eee;
+}
+
+    .checkout-header h2 {
+        color: #333;
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .checkout-header p {
+        color: #666;
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+.checkout-content {
+    margin-bottom: 3rem;
+}
+
+.checkout-section {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0f0f0;
+}
+
+    .checkout-section h3 {
+        color: #333;
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #FF4E4E;
+        display: inline-block;
+    }
+
+/* Placeholder para implementação futura */
+.implementation-placeholder {
+    text-align: center;
+    padding: 3rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 2px dashed #dee2e6;
+}
+
+.placeholder-icon {
+    font-size: 4rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.implementation-placeholder h4 {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.implementation-placeholder p {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.implementation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    text-align: left;
+}
+
+    .implementation-list li {
+        color: #6c757d;
+        padding: 0.25rem 0;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+        .implementation-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #FF4E4E;
+            font-weight: bold;
+        }
+
+/* Resumo do pedido */
+.checkout-summary {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0f0f0;
+    position: sticky;
+    top: 2rem;
+}
+
+    .checkout-summary h3 {
+        color: #333;
+        font-weight: 600;
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #FF4E4E;
+    }
+
+.summary-placeholder {
+    padding: 1rem 0;
+}
+
+.summary-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+
+.summary-total {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Ações do checkout */
+.checkout-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0f0f0;
+}
+
+    .checkout-actions .btn {
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .checkout-actions .btn-outline-secondary {
+        border: 2px solid #6c757d;
+        color: #6c757d;
+    }
+
+        .checkout-actions .btn-outline-secondary:hover {
+            background: #6c757d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
+
+    .checkout-actions .btn-success {
+        background: #FF4E4E;
+        border: 2px solid #FF4E4E;
+        font-size: 1.1rem;
+    }
+
+        .checkout-actions .btn-success:hover:not(:disabled) {
+            background: #e43f3f;
+            border-color: #e43f3f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 78, 78, 0.4);
+        }
+
+        .checkout-actions .btn-success:disabled {
+            background: #dee2e6;
+            border-color: #dee2e6;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .checkout-container {
+        padding: 1rem 0.5rem;
+    }
+
+    .checkout-header h2 {
+        font-size: 2rem;
+    }
+
+    .checkout-section,
+    .checkout-summary {
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .checkout-actions {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+        .checkout-actions .btn {
+            width: 100%;
+            text-align: center;
+        }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.checkout-section,
+.checkout-summary {
+    animation: fadeInUp 0.6s ease;
+}
+
+    .checkout-section:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .checkout-section:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+.checkout-summary {
+    animation-delay: 0.3s;
+}
+
+.checkout-actions {
+    animation-delay: 0.4s;
+}

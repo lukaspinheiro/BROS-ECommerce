@@ -1,0 +1,88 @@
+﻿
+<div class="carrinho-sidebar-overlay" id="carrinho-sidebar-overlay"></div>
+<div class="carrinho-sidebar" id="carrinho-sidebar">
+    <div class="carrinho-sidebar-header">
+        <h3 class="carrinho-sidebar-titulo">
+            <i class="fas fa-shopping-cart"></i>
+            CARRINHO (<span id="carrinho-quantidade-items">0</span>)
+        </h3>
+        <button class="carrinho-sidebar-close" id="carrinho-sidebar-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="carrinho-sidebar-content">
+        <div class="carrinho-sidebar-empty" id="carrinho-sidebar-empty">
+            <div class="carrinho-empty-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h4>Seu carrinho ainda está vazio</h4>
+            <p>Que tal conferir algumas ofertas e produtos dos Gymbros?</p>
+            <button class="btn-continuar-comprando" onclick="CarrinhoSidebar.fechar()">
+                Continuar comprando
+            </button>
+        </div>
+
+        
+        <div class="carrinho-sidebar-items" id="carrinho-sidebar-items" style="display: none;">
+            <div class="carrinho-items-list" id="carrinho-items-list">
+                
+            </div>
+
+            <div class="carrinho-sidebar-footer">
+                <div class="carrinho-total">
+                    <div class="total-row">
+                        <span>Total:</span>
+                        <span class="total-preco" id="carrinho-total-preco">R$ 0,00</span>
+                    </div>
+                    <div class="adicionar-cupom" onclick="CarrinhoSidebar.adicionarCupom()">
+                        <i class="fas fa-tag"></i>
+                        <span>Adicionar cupom</span>
+                    </div>
+                </div>
+
+                <div class="carrinho-acoes">
+                    <button class="btn-ir-carrinho" onclick="CarrinhoSidebar.irParaCarrinho()">
+                        Ir para o carrinho
+                    </button>
+                    <button class="btn-finalizar-compra" onclick="CarrinhoSidebar.finalizarCompra()">
+                        Finalizar compra
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<template id="carrinho-item-template">
+    <div class="carrinho-item" data-produto-id="">
+        <div class="item-imagem">
+            <img src="" alt="" />
+        </div>
+        <div class="item-detalhes">
+            <h5 class="item-nome"></h5>
+            <div class="item-preco"></div>
+            <div class="item-quantidade-controle">
+                <button class="btn-quantidade" onclick="CarrinhoSidebar.alterarQuantidade(this, -1)">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <span class="quantidade"></span>
+                <button class="btn-quantidade" onclick="CarrinhoSidebar.alterarQuantidade(this, 1)">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<div class="carrinho-toast" id="carrinho-toast">
+    <div class="toast-content">
+        <div class="toast-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="toast-message"></div>
+    </div>
+    <button class="toast-close">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
