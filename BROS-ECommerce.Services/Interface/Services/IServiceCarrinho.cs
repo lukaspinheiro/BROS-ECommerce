@@ -14,9 +14,9 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task<bool> FinalizarCarrinhoAsync(Guid idCarrinho);
         Task<int> ObterQuantidadeItensAsync(Guid? idUsuario);
         Task<decimal> ObterTotalCarrinhoAsync(Guid idCarrinho);
-
         Task<CarrinhoViewModel> AtualizarQuantidadeProdutoAsync(Guid idUsuario, Guid idProduto, int novaQuantidade);
         Task<CarrinhoViewModel> AdicionarOuAtualizarProdutoAsync(Guid? idUsuario, Guid idProduto, int quantidade);
         Task<int> ObterQuantidadeItensCarrinhoAsync(Guid? idUsuario);
+        Task<(bool EstoqueValido, string Mensagem, CarrinhoViewModel CarrinhoAtualizado)> ValidarEAjustarEstoqueCarrinhoAsync(Guid idUsuario);
     }
 }

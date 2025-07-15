@@ -1,51 +1,45 @@
 ﻿const CarrinhoSidebar = {
     sidebar: null,
     overlay: null,
-    quantidadeItems: null,
     emptyState: null,
     itemsState: null,
     itemsList: null,
-    totalPreco: null,
-
+    totalElement: null,
+    quantidadeElement: null,
     isOpen: false,
-    carrinho: {
-        items: [],
-        total: 0,
-        quantidadeTotal: 0
-    },
+    carrinho: null,
 
     init() {
-        this.bindElements();
-        this.bindEvents();
-        this.carregarCarrinho();
-        this.carregarContadorInicial();
-        console.log('[SIDEBAR] CarrinhoSidebar inicializado');
-    },
+        console.log('[SIDEBAR] Inicializando CarrinhoSidebar...');
 
-    bindElements() {
         this.sidebar = document.getElementById('carrinho-sidebar');
         this.overlay = document.getElementById('carrinho-sidebar-overlay');
-        this.quantidadeItems = document.getElementById('carrinho-quantidade-items');
         this.emptyState = document.getElementById('carrinho-sidebar-empty');
         this.itemsState = document.getElementById('carrinho-sidebar-items');
         this.itemsList = document.getElementById('carrinho-items-list');
-        this.totalPreco = document.getElementById('carrinho-total-preco');
+        this.totalElement = document.getElementById('carrinho-total-preco');
+        this.quantidadeElement = document.getElementById('carrinho-quantidade-items');
+
+        if (!this.sidebar) {
+            console.error('[SIDEBAR] Elemento carrinho-sidebar não encontrado');
+            return;
+        }
+
+        this.configurarEventos();
+        this.carregarContadorInicial();
+
+        console.log('[SIDEBAR] CarrinhoSidebar inicializado com sucesso');
     },
 
-    bindEvents() {
-        document.getElementById('carrinho-sidebar-close')?.addEventListener('click', () => {
-            this.fechar();
-        });
+    configurarEventos() {
+        if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.fechar());
+        }
 
-        this.overlay?.addEventListener('click', () => {
-            this.fechar();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isOpen) {
-                this.fechar();
-            }
-        });
+        const closeBtn = document.getElementById('carrinho-sidebar-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.fechar());
+        }
 
         const carrinhoLink = document.querySelector('a[href="/Carrinho"]');
         if (carrinhoLink) {
@@ -73,7 +67,7 @@
         this.overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
 
-        console.log('[SIDEBAR] Sidebar aberta - NÃO recarregando carrinho para evitar sobrescrita');
+        console.log('[SIDEBAR] Sidebar aberta');
     },
 
     async abrirECarregar() {
@@ -107,93 +101,72 @@
 
     async carregarCarrinho() {
         try {
+            console.log('[SIDEBAR] Carregando carrinho do servidor...');
+
             const response = await fetch('/Carrinho/ObterCarrinhoSidebar', {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    'Content-Type': 'application/json'
                 }
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                this.atualizarCarrinho(data);
-            } else {
-                console.error('[SIDEBAR] Erro ao carregar carrinho:', response.status);
-                this.atualizarCarrinho(null);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
             }
+
+            const carrinhoData = await response.json();
+            console.log('[SIDEBAR] Dados do carrinho recebidos:', carrinhoData);
+
+            this.atualizarCarrinho(carrinhoData);
         } catch (error) {
-            console.error('[SIDEBAR] Erro na requisição do carrinho:', error);
-            this.atualizarCarrinho(null);
+            console.error('[SIDEBAR] Erro ao carregar carrinho:', error);
+            this.mostrarEstadoVazio();
         }
     },
 
     async adicionarProduto(produtoId, quantidade = 1) {
         try {
-            console.log('[SIDEBAR] =================================');
-            console.log('[SIDEBAR] INÍCIO - Adicionando produto');
-            console.log('[SIDEBAR] Produto ID:', produtoId);
-            console.log('[SIDEBAR] Quantidade:', quantidade);
+            console.log('[SIDEBAR] Adicionando produto:', produtoId, 'quantidade:', quantidade);
 
-            this.mostrarLoader();
-
-            const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
-            const token = tokenElement ? tokenElement.value : '';
-
-            console.log('[SIDEBAR] Token encontrado:', !!token);
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
 
             const response = await fetch('/Carrinho/AdicionarProduto', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `produtoId=${encodeURIComponent(produtoId)}&quantidade=${quantidade}${token ? `&__RequestVerificationToken=${encodeURIComponent(token)}` : ''}`
+                body: `produtoId=${produtoId}&quantidade=${quantidade}` +
+                    (token ? `&__RequestVerificationToken=${token}` : '')
             });
 
-            console.log('[SIDEBAR] Response status:', response.status);
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('[SIDEBAR] Response error:', errorText);
-                throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
-            }
-
             const result = await response.json();
-            console.log('[SIDEBAR] Resultado recebido:', result);
+            console.log('[SIDEBAR] Resposta do servidor:', result);
 
             if (result.sucesso) {
-                console.log('[SIDEBAR] Produto adicionado com sucesso!');
-                console.log('[SIDEBAR] Dados do carrinho:', result.carrinho);
-
-                this.mostrarFeedback('Produto adicionado ao carrinho!', 'success');
+                this.mostrarFeedback('Adicionado ao carrinho!', 'success');
                 this.atualizarCarrinho(result.carrinho);
                 this.abrir();
-
-                console.log('[SIDEBAR] Sidebar atualizada e aberta');
             } else {
-                console.log('[SIDEBAR] Falha ao adicionar:', result.mensagem);
-                this.mostrarFeedback(result.mensagem || 'Erro ao adicionar produto', 'error');
+                if (result.redirectToLogin) {
+                    this.mostrarFeedback('Redirecionando...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '/Autenticacao/Login';
+                    }, 800);
+                } else {
+                    this.mostrarFeedback(result.mensagem || 'Erro ao adicionar produto', 'error');
+                }
             }
 
-            console.log('[SIDEBAR] =================================');
+            return result;
         } catch (error) {
             console.error('[SIDEBAR] Erro ao adicionar produto:', error);
-            this.mostrarFeedback('Erro ao adicionar produto ao carrinho: ' + error.message, 'error');
-        } finally {
-            this.ocultarLoader();
+            this.mostrarFeedback('Erro ao adicionar produto ao carrinho', 'error');
+            throw error;
         }
     },
 
-    async alterarQuantidade(button, incremento) {
-        const item = button.closest('.carrinho-item');
-        const produtoId = item.dataset.produtoId;
-        const quantidadeAtual = parseInt(item.querySelector('.quantidade').textContent);
-        const novaQuantidade = quantidadeAtual + incremento;
-
-        if (novaQuantidade <= 0) {
-            await this.removerItem(produtoId);
-            return;
-        }
+    async alterarQuantidade(produtoId, novaQuantidade) {
+        if (novaQuantidade < 0) return;
 
         try {
             const response = await fetch('/Carrinho/AtualizarQuantidadeSidebar', {
@@ -211,6 +184,7 @@
             const result = await response.json();
 
             if (result.sucesso) {
+                this.mostrarFeedback('Quantidade atualizada', 'success');
                 this.atualizarCarrinho(result.carrinho);
             } else {
                 this.mostrarFeedback(result.mensagem || 'Erro ao atualizar quantidade', 'error');
@@ -237,7 +211,7 @@
             const result = await response.json();
 
             if (result.sucesso) {
-                this.mostrarFeedback('Produto removido do carrinho', 'success');
+                this.mostrarFeedback('Removido do carrinho', 'success');
                 this.atualizarCarrinho(result.carrinho);
             } else {
                 this.mostrarFeedback(result.mensagem || 'Erro ao remover produto', 'error');
@@ -311,133 +285,88 @@
         console.log('[SIDEBAR] Limpando lista e renderizando', this.carrinho.itens.length, 'itens');
         this.itemsList.innerHTML = '';
 
-        this.carrinho.itens.forEach((item, index) => {
-            console.log(`[SIDEBAR] Renderizando item ${index + 1}:`, item);
-
-            const itemElement = template.content.cloneNode(true);
-
-            const carrinhoItem = itemElement.querySelector('.carrinho-item');
-            if (carrinhoItem) {
-                carrinhoItem.dataset.produtoId = item.idProduto;
-            }
-
-            const img = itemElement.querySelector('.item-imagem img');
-            if (img) {
-                img.src = item.imagemUrl || '/img/produto-placeholder.jpg';
-                img.alt = item.nome;
-            }
-
-            const nome = itemElement.querySelector('.item-nome');
-            if (nome) {
-                nome.textContent = item.nome;
-            }
-
-            const preco = itemElement.querySelector('.item-preco');
-            if (preco) {
-                preco.textContent = this.formatarPreco(item.precoUnitario);
-            }
-
-            const quantidade = itemElement.querySelector('.quantidade');
-            if (quantidade) {
-                quantidade.textContent = item.quantidade;
-            }
-
+        this.carrinho.itens.forEach(item => {
+            console.log('[SIDEBAR] Renderizando item:', item.nome);
+            const itemElement = this.criarElementoItem(item);
             this.itemsList.appendChild(itemElement);
-            console.log(`[SIDEBAR] Item ${index + 1} adicionado ao DOM`);
         });
 
-        console.log('[SIDEBAR] Renderização concluída');
         console.log('[SIDEBAR] =================================');
     },
 
+    criarElementoItem(item) {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'carrinho-item';
+        itemDiv.innerHTML = `
+            <div class="item-imagem">
+                <img src="${item.imagemUrl || '/images/produto-sem-imagem.png'}" alt="${item.nome}">
+            </div>
+            <div class="item-info">
+                <h4 class="item-nome">${item.nome}</h4>
+                <p class="item-preco">R$ ${item.precoUnitario.toFixed(2).replace('.', ',')}</p>
+                <div class="item-quantidade">
+                    <button onclick="CarrinhoSidebar.alterarQuantidade('${item.idProduto}', ${item.quantidade - 1})" 
+                            class="btn-quantidade" ${item.quantidade <= 1 ? 'disabled' : ''}>
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="quantidade">${item.quantidade}</span>
+                    <button onclick="CarrinhoSidebar.alterarQuantidade('${item.idProduto}', ${item.quantidade + 1})" 
+                            class="btn-quantidade">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="item-subtotal">
+                    Subtotal: R$ ${item.subtotal.toFixed(2).replace('.', ',')}
+                </div>
+            </div>
+            <button onclick="CarrinhoSidebar.removerItem('${item.idProduto}')" class="btn-remover">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+        return itemDiv;
+    },
+
     atualizarTotais() {
-        if (this.totalPreco && this.carrinho.total !== undefined) {
-            const totalFormatado = this.formatarPreco(this.carrinho.total);
-            this.totalPreco.textContent = totalFormatado;
-            console.log('[SIDEBAR] Total atualizado:', totalFormatado);
+        if (this.totalElement && this.carrinho) {
+            this.totalElement.textContent = `R$ ${this.carrinho.total.toFixed(2).replace('.', ',')}`;
         }
     },
 
     atualizarContadores(quantidade = null) {
-        const qtd = quantidade !== null ? quantidade : (this.carrinho.quantidadeTotal || 0);
+        const qtd = quantidade !== null ? quantidade : (this.carrinho?.quantidadeTotal || 0);
 
-        if (this.quantidadeItems) {
-            this.quantidadeItems.textContent = qtd;
+        if (this.quantidadeElement) {
+            this.quantidadeElement.textContent = qtd;
         }
 
-        const contadorExistente = document.querySelector('#contador-carrinho');
-        if (contadorExistente) {
-            contadorExistente.textContent = qtd;
-            contadorExistente.style.display = qtd > 0 ? 'inline-block' : 'none';
+        const contadorCarrinho = document.getElementById('contador-carrinho');
+        if (contadorCarrinho) {
+            contadorCarrinho.textContent = qtd;
+            contadorCarrinho.style.display = qtd > 0 ? 'inline' : 'none';
         }
 
-        console.log('[SIDEBAR] Contadores atualizados:', qtd);
+        console.log('[SIDEBAR] Contadores atualizados para:', qtd);
     },
 
-    formatarPreco(valor) {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        }).format(valor);
-    },
-
-    mostrarLoader() {
-        console.log('[SIDEBAR] Mostrando loader');
-        let loader = document.getElementById('carrinho-loader');
-        if (!loader) {
-            loader = document.createElement('div');
-            loader.id = 'carrinho-loader';
-            loader.innerHTML = `
-                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-                            background: rgba(0,0,0,0.5); z-index: 10000; display: flex; 
-                            align-items: center; justify-content: center;">
-                    <div style="background: white; padding: 2rem; border-radius: 8px; 
-                               display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 20px; height: 20px; border: 3px solid #f3f3f3; 
-                                   border-top: 3px solid #FF4E4E; border-radius: 50%; 
-                                   animation: spin 1s linear infinite;"></div>
-                        <span>Adicionando produto...</span>
-                    </div>
-                </div>
-                <style>
-                    @keyframes spin {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                    }
-                </style>
-            `;
-            document.body.appendChild(loader);
-        }
-        loader.style.display = 'flex';
-    },
-
-    ocultarLoader() {
-        console.log('[SIDEBAR] Ocultando loader');
-        const loader = document.getElementById('carrinho-loader');
-        if (loader) {
-            loader.style.display = 'none';
-        }
-    },
-
-    mostrarFeedback(mensagem, tipo = 'success') {
-        console.log(`[SIDEBAR] Feedback ${tipo}:`, mensagem);
-
-        const toast = document.getElementById('carrinho-toast');
+    mostrarFeedback(mensagem, tipo = 'info') {
+        let toast = document.querySelector('.carrinho-toast');
         if (!toast) {
-            console.error('[SIDEBAR] Toast element não encontrado');
-            return;
+            toast = document.createElement('div');
+            toast.className = 'carrinho-toast';
+            document.body.appendChild(toast);
         }
 
-        const toastMessage = toast.querySelector('.toast-message');
-        const toastIcon = toast.querySelector('.toast-icon i');
-
-        if (toastMessage) {
-            toastMessage.textContent = mensagem;
-        }
-
-        if (toastIcon) {
-            toastIcon.className = tipo === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-        }
+        toast.innerHTML = `
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="${this.obterIconeFeedback(tipo)}"></i>
+                </div>
+                <div class="toast-message">${mensagem}</div>
+            </div>
+            <button class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
 
         toast.className = `carrinho-toast ${tipo} show`;
 
@@ -450,6 +379,14 @@
             closeBtn.onclick = () => {
                 toast.classList.remove('show');
             };
+        }
+    },
+
+    obterIconeFeedback(tipo) {
+        switch (tipo) {
+            case 'success': return 'fas fa-check-circle';
+            case 'error': return 'fas fa-exclamation-circle';
+            default: return 'fas fa-info-circle';
         }
     },
 
@@ -470,12 +407,71 @@
         this.mostrarFeedback('Funcionalidade de cupom em desenvolvimento', 'info');
     },
 
-    irParaCarrinho() {
-        window.location.href = '/Carrinho';
+    async irParaCarrinho() {
+        try {
+            const response = await fetch('/Carrinho/ValidarEstoqueCompleto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                }
+            });
+
+            if (response.status === 401) {
+                this.mostrarFeedback('Redirecionando...', 'info');
+                setTimeout(() => {
+                    window.location.href = '/Autenticacao/Login';
+                }, 800);
+                return;
+            }
+
+            const result = await response.json();
+
+            if (!result.sucesso && result.carrinho) {
+                this.atualizarCarrinho(result.carrinho);
+                this.mostrarFeedback(result.mensagem, 'error');
+            }
+
+            window.location.href = '/Carrinho';
+        } catch (error) {
+            console.error('[SIDEBAR] Erro ao validar estoque:', error);
+            window.location.href = '/Carrinho';
+        }
     },
 
-    finalizarCompra() {
-        window.location.href = '/Carrinho/Checkout';
+    async finalizarCompra() {
+        try {
+            const response = await fetch('/Carrinho/ValidarEstoqueCompleto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                }
+            });
+
+            if (response.status === 401) {
+                this.mostrarFeedback('Redirecionando...', 'info');
+                setTimeout(() => {
+                    window.location.href = '/Autenticacao/Login';
+                }, 800);
+                return;
+            }
+
+            const result = await response.json();
+
+            if (result.sucesso) {
+                window.location.href = '/Carrinho/Checkout';
+            } else {
+                this.mostrarFeedback(result.mensagem, 'error');
+
+                if (result.carrinho) {
+                    this.atualizarCarrinho(result.carrinho);
+                }
+            }
+        } catch (error) {
+            console.error('[SIDEBAR] Erro ao validar estoque:', error);
+            this.mostrarFeedback('Erro ao validar estoque. Tente novamente.', 'error');
+        }
     }
 };
 
