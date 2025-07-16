@@ -7,7 +7,10 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
+    <link href="~/css/Carrinho/carrinho-sidebar.css" rel="stylesheet" />
+    <link href="~/css/Carrinho/carrinho-toast.css" rel="stylesheet" />
+    <link href="~/css/Produto/produto-carrinho-integration.css" rel="stylesheet" />
+    <link href="~/css/shared/carrinho-icon-fix.css" rel="stylesheet" />
     <partial name="\PartialsLayout\_ReferenciasCss" />
 
     @RenderSection("Head", required: false)
@@ -34,7 +37,9 @@
     </footer>
 
     <partial name="\PartialsLayout\_ReferenciasScript" />
+    <partial name="PartialsLayout/_CarrinhoSidebar" />
 
+    <script src="~/js/shared/carrinho-sidebar.js"></script>
     <script src="~/js/shared/carrinho.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

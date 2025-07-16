@@ -1,37 +1,100 @@
 ﻿
-# contador-carrinho {
-min - width: 20px;
-height: 20px;
-line - height: 1.2;
-font - weight: 700;
-font - size: 0.7rem!important;
-background - color: #ffc107 !important;
+#contador-carrinho {
+    min-width: 20px;
+    height: 20px;
+    line-height: 1.2;
+    font-weight: 700;
+    font-size: 0.7rem !important;
+    background-color: #ffc107 !important;
     color: #000 !important;
     border: 2px solid #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-animation: bounceIn 0.5s ease-out;
+    animation: bounceIn 0.5s ease-out;
 }
 
-@keyframes bounceIn
-{
-    0% { transform: scale(0); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+    }
 
-.carrinho - com - itens {
-animation: pulse 2s infinite;
-}
+    50% {
+        transform: scale(1.2);
+    }
 
-@keyframes pulse
-{
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    100% {
+        transform: scale(1);
+    }
 }
 
 
-.navbar.fa - cart - shopping:hover {
+.carrinho-com-itens {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+.fa-cart-shopping:hover {
     transform: scale(1.1);
-transition: transform 0.2s ease;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+
+.fa-cart-shopping.carrinho-com-itens {
+    color: #FF4E4E !important;
+}
+
+
+.position-relative a[href="/Carrinho"] {
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+    .position-relative a[href="/Carrinho"]:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .position-relative a[href="/Carrinho"]:active {
+        transform: scale(0.95);
+    }
+
+#contador-carrinho.updating {
+    animation: updateBounce 0.6s ease;
+}
+
+@keyframes updateBounce {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.3);
+    }
+
+    50% {
+        transform: scale(0.9);
+    }
+
+    75% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }

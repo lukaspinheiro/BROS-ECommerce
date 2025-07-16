@@ -26,7 +26,11 @@ namespace BROS_ECommerce.Infra.Context
         
         public DbSet<Carrinho> Carrinhos { get; set; }
         public DbSet<CarrinhoItem> CarrinhoItens { get; set; }
-
+        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<CategoriaProduto> CategoriaProdutos { get; set; }
+        public DbSet<Promocao> Promocoes { get; set; }
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<PedidoItem> PedidoItens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
@@ -35,8 +39,12 @@ namespace BROS_ECommerce.Infra.Context
             modelBuilder.ApplyConfiguration(new EstoqueMap());
             modelBuilder.ApplyConfiguration(new ImagemMap());
             modelBuilder.ApplyConfiguration(new ProdutoImagemMap());
+            modelBuilder.ApplyConfiguration(new CategoriaMap());
+            modelBuilder.ApplyConfiguration(new CategoriaProdutoMap());
+            modelBuilder.ApplyConfiguration(new PromocaoMap());
+            modelBuilder.ApplyConfiguration(new PedidoMap());
+            modelBuilder.ApplyConfiguration(new PedidoItemMap());
 
-            
             modelBuilder.ApplyConfiguration(new CarrinhoMap());
             modelBuilder.ApplyConfiguration(new CarrinhoItemMap());
 
