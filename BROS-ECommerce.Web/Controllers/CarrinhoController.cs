@@ -70,7 +70,7 @@ namespace BROS_ECommerce.Web.Controllers
                 Console.WriteLine($"[CARRINHO] Validações OK - Chamando service...");
                 var carrinho = await _serviceCarrinho.AdicionarProdutoAsync(idUsuario, produtoId, quantidade);
 
-                Console.WriteLine($"[CARRINHO]  Produto adicionado com sucesso!");
+                Console.WriteLine($"[CARRINHO] ✅ Produto adicionado com sucesso!");
                 Console.WriteLine($"[CARRINHO] Carrinho ID: {carrinho.IdCarrinho}");
                 Console.WriteLine($"[CARRINHO] Quantidade total: {carrinho.QuantidadeTotal}");
                 Console.WriteLine($"[CARRINHO] Valor total: {carrinho.ValorTotal:C}");
@@ -118,6 +118,30 @@ namespace BROS_ECommerce.Web.Controllers
                     mensagem = $"Produto não encontrado no catálogo. ID: {produtoId}"
                 });
             }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("Estoque insuficiente"))
+            {
+                Console.WriteLine($"[CARRINHO] ❌ ESTOQUE INSUFICIENTE");
+                Console.WriteLine($"[CARRINHO] Produto ID: {produtoId}");
+                Console.WriteLine($"[CARRINHO] Erro: {ex.Message}");
+
+                return Json(new
+                {
+                    sucesso = false,
+                    mensagem = ex.Message
+                });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine($"[CARRINHO] ❌ USUÁRIO NÃO AUTENTICADO");
+                Console.WriteLine($"[CARRINHO] Produto ID: {produtoId}");
+                Console.WriteLine($"[CARRINHO] Erro: {ex.Message}");
+
+                return Json(new
+                {
+                    sucesso = false,
+                    mensagem = $"Usuário não autenticado. Produto ID: {produtoId}"
+                });
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"[CARRINHO] ❌ ERRO GERAL");
@@ -130,6 +154,165 @@ namespace BROS_ECommerce.Web.Controllers
                     sucesso = false,
                     mensagem = $"Erro interno: {ex.Message}"
                 });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ValidarEstoqueCompleto()
+        {
+            try
+            {
+                var idUsuario = ObterIdUsuarioLogado();
+                if (!idUsuario.HasValue)
+                {
+                    return Json(new { sucesso = false, mensagem = "Usuário não autenticado" });
+                }
+
+                var result = await _serviceCarrinho.ValidarEAjustarEstoqueCarrinhoAsync(idUsuario.Value);
+
+                if (result.EstoqueValido)
+                {
+                    return Json(new { sucesso = true, mensagem = "Estoque validado com sucesso" });
+                }
+
+                var carrinhoResponse = new CarrinhoDto
+                {
+                    Itens = result.CarrinhoAtualizado.Itens.Select(item => new CarrinhoItemDto
+                    {
+                        IdProduto = item.IdProduto,
+                        Nome = item.Nome,
+                        Quantidade = item.Quantidade,
+                        PrecoUnitario = item.PrecoUnitario,
+                        ImagemUrl = item.ImagemUrl,
+                        Subtotal = item.Subtotal
+                    }).ToList(),
+                    Total = result.CarrinhoAtualizado.ValorTotal,
+                    QuantidadeTotal = result.CarrinhoAtualizado.QuantidadeTotal
+                };
+
+                return Json(new
+                {
+                    sucesso = false,
+                    mensagem = result.Mensagem,
+                    carrinho = carrinhoResponse
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { sucesso = false, mensagem = $"Erro ao validar estoque: {ex.Message}" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AtualizarQuantidadeSidebar([FromBody] AtualizarQuantidadeRequest request)
+        {
+            try
+            {
+                var idUsuario = ObterIdUsuarioLogado();
+                if (!idUsuario.HasValue)
+                {
+                    return Json(new { sucesso = false, mensagem = "Usuário não autenticado" });
+                }
+
+                var carrinho = await _serviceCarrinho.AtualizarQuantidadeProdutoAsync(
+                    idUsuario.Value,
+                    request.ProdutoId,
+                    request.Quantidade
+                );
+
+                var response = new
+                {
+                    sucesso = true,
+                    mensagem = "Quantidade atualizada com sucesso!",
+                    carrinho = new CarrinhoDto
+                    {
+                        Itens = carrinho.Itens.Select(item => new CarrinhoItemDto
+                        {
+                            IdProduto = item.IdProduto,
+                            Nome = item.Nome,
+                            Quantidade = item.Quantidade,
+                            PrecoUnitario = item.PrecoUnitario,
+                            ImagemUrl = item.ImagemUrl,
+                            Subtotal = item.Subtotal
+                        }).ToList(),
+                        Total = carrinho.ValorTotal,
+                        QuantidadeTotal = carrinho.QuantidadeTotal
+                    }
+                };
+
+                return Json(response);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { sucesso = false, mensagem = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoverProdutoSidebar([FromBody] RemoverProdutoRequest request)
+        {
+            try
+            {
+                var idUsuario = ObterIdUsuarioLogado();
+                if (!idUsuario.HasValue)
+                {
+                    return Json(new { sucesso = false, mensagem = "Usuário não autenticado" });
+                }
+
+                var carrinho = await _serviceCarrinho.ObterCarrinhoUsuarioAsync(idUsuario.Value);
+                if (carrinho == null)
+                {
+                    return Json(new { sucesso = false, mensagem = "Carrinho não encontrado" });
+                }
+
+                var sucesso = await _serviceCarrinho.RemoverProdutoAsync(carrinho.IdCarrinho, request.ProdutoId);
+
+                if (!sucesso)
+                {
+                    return Json(new { sucesso = false, mensagem = "Erro ao remover produto" });
+                }
+
+                var carrinhoAtualizado = await _serviceCarrinho.ObterCarrinhoUsuarioAsync(idUsuario.Value);
+
+                CarrinhoDto carrinhoResponse;
+
+                if (carrinhoAtualizado == null || !carrinhoAtualizado.TemItens)
+                {
+                    carrinhoResponse = new CarrinhoDto
+                    {
+                        Itens = new List<CarrinhoItemDto>(),
+                        Total = 0,
+                        QuantidadeTotal = 0
+                    };
+                }
+                else
+                {
+                    carrinhoResponse = new CarrinhoDto
+                    {
+                        Itens = carrinhoAtualizado.Itens.Select(item => new CarrinhoItemDto
+                        {
+                            IdProduto = item.IdProduto,
+                            Nome = item.Nome,
+                            Quantidade = item.Quantidade,
+                            PrecoUnitario = item.PrecoUnitario,
+                            ImagemUrl = item.ImagemUrl,
+                            Subtotal = item.Subtotal
+                        }).ToList(),
+                        Total = carrinhoAtualizado.ValorTotal,
+                        QuantidadeTotal = carrinhoAtualizado.QuantidadeTotal
+                    };
+                }
+
+                return Json(new
+                {
+                    sucesso = true,
+                    mensagem = "Produto removido do carrinho",
+                    carrinho = carrinhoResponse
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { sucesso = false, mensagem = ex.Message });
             }
         }
 
@@ -244,6 +427,13 @@ namespace BROS_ECommerce.Web.Controllers
         [HttpGet]
         public IActionResult Checkout()
         {
+            var idUsuario = ObterIdUsuarioLogado();
+            if (!idUsuario.HasValue)
+            {
+                TempData["ErrorMessage"] = "Você precisa estar logado para finalizar a compra.";
+                return RedirectToAction("Login", "Autenticacao");
+            }
+
             return View();
         }
 
@@ -290,160 +480,38 @@ namespace BROS_ECommerce.Web.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AtualizarQuantidadeSidebar([FromBody] AtualizarQuantidadeRequest request)
-        {
-            try
-            {
-                var idUsuario = ObterIdUsuarioLogado();
-                if (!idUsuario.HasValue)
-                {
-                    return Json(new { sucesso = false, mensagem = "Usuário não autenticado" });
-                }
-
-                var carrinho = await _serviceCarrinho.AtualizarQuantidadeProdutoAsync(
-                    idUsuario.Value,
-                    request.ProdutoId,
-                    request.Quantidade
-                );
-
-                var response = new
-                {
-                    sucesso = true,
-                    mensagem = "Quantidade atualizada com sucesso!",
-                    carrinho = new CarrinhoDto
-                    {
-                        Itens = carrinho.Itens.Select(item => new CarrinhoItemDto
-                        {
-                            IdProduto = item.IdProduto,
-                            Nome = item.Nome,
-                            Quantidade = item.Quantidade,
-                            PrecoUnitario = item.PrecoUnitario,
-                            ImagemUrl = item.ImagemUrl,
-                            Subtotal = item.Subtotal
-                        }).ToList(),
-                        Total = carrinho.ValorTotal,
-                        QuantidadeTotal = carrinho.QuantidadeTotal
-                    }
-                };
-
-                return Json(response);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, mensagem = ex.Message });
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RemoverProdutoSidebar([FromBody] RemoverProdutoRequest request)
-        {
-            try
-            {
-                var idUsuario = ObterIdUsuarioLogado();
-                if (!idUsuario.HasValue)
-                {
-                    return Json(new { sucesso = false, mensagem = "Usuário não autenticado" });
-                }
-
-                var carrinho = await _serviceCarrinho.ObterCarrinhoUsuarioAsync(idUsuario.Value);
-                if (carrinho == null)
-                {
-                    return Json(new { sucesso = false, mensagem = "Carrinho não encontrado" });
-                }
-
-                var sucesso = await _serviceCarrinho.RemoverProdutoAsync(carrinho.IdCarrinho, request.ProdutoId);
-
-                if (!sucesso)
-                {
-                    return Json(new { sucesso = false, mensagem = "Erro ao remover produto" });
-                }
-
-                var carrinhoAtualizado = await _serviceCarrinho.ObterCarrinhoUsuarioAsync(idUsuario.Value);
-
-                CarrinhoDto carrinhoResponse;
-
-                if (carrinhoAtualizado == null || !carrinhoAtualizado.TemItens)
-                {
-                    carrinhoResponse = new CarrinhoDto
-                    {
-                        Itens = new List<CarrinhoItemDto>(),
-                        Total = 0m,
-                        QuantidadeTotal = 0
-                    };
-                }
-                else
-                {
-                    carrinhoResponse = new CarrinhoDto
-                    {
-                        Itens = carrinhoAtualizado.Itens.Select(item => new CarrinhoItemDto
-                        {
-                            IdProduto = item.IdProduto,
-                            Nome = item.Nome,
-                            Quantidade = item.Quantidade,
-                            PrecoUnitario = item.PrecoUnitario,
-                            ImagemUrl = item.ImagemUrl,
-                            Subtotal = item.Subtotal
-                        }).ToList(),
-                        Total = carrinhoAtualizado.ValorTotal,
-                        QuantidadeTotal = carrinhoAtualizado.QuantidadeTotal
-                    };
-                }
-
-                var response = new
-                {
-                    sucesso = true,
-                    mensagem = "Produto removido com sucesso!",
-                    carrinho = carrinhoResponse
-                };
-
-                return Json(response);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, mensagem = ex.Message });
-            }
-        }
-
         private Guid? ObterIdUsuarioLogado()
         {
-            if (User.Identity?.IsAuthenticated == true)
-            {
-                var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (Guid.TryParse(idClaim, out var id))
-                {
-                    return id;
-                }
-            }
-            return null;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return Guid.TryParse(userIdClaim, out var userId) ? userId : null;
         }
+    }
 
-        public class AtualizarQuantidadeRequest
-        {
-            public Guid ProdutoId { get; set; }
-            public int Quantidade { get; set; }
-        }
+    public class CarrinhoDto
+    {
+        public List<CarrinhoItemDto> Itens { get; set; } = new();
+        public decimal Total { get; set; }
+        public int QuantidadeTotal { get; set; }
+    }
 
-        public class RemoverProdutoRequest
-        {
-            public Guid ProdutoId { get; set; }
-        }
+    public class CarrinhoItemDto
+    {
+        public Guid IdProduto { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public int Quantidade { get; set; }
+        public decimal PrecoUnitario { get; set; }
+        public string ImagemUrl { get; set; } = string.Empty;
+        public decimal Subtotal { get; set; }
+    }
 
-        public class CarrinhoItemDto
-        {
-            public Guid IdProduto { get; set; }
-            public string Nome { get; set; } = string.Empty;
-            public int Quantidade { get; set; }
-            public decimal PrecoUnitario { get; set; }
-            public string ImagemUrl { get; set; } = string.Empty;
-            public decimal Subtotal { get; set; }
-        }
+    public class AtualizarQuantidadeRequest
+    {
+        public Guid ProdutoId { get; set; }
+        public int Quantidade { get; set; }
+    }
 
-        public class CarrinhoDto
-        {
-            public List<CarrinhoItemDto> Itens { get; set; } = new List<CarrinhoItemDto>();
-            public decimal Total { get; set; }
-            public int QuantidadeTotal { get; set; }
-        }
+    public class RemoverProdutoRequest
+    {
+        public Guid ProdutoId { get; set; }
     }
 }

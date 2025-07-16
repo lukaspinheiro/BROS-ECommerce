@@ -62,9 +62,32 @@ namespace BROS_ECommerce.Services.Services
             Console.WriteLine($"[SERVICE] Usuario ID: {idUsuario}");
             Console.WriteLine($"[SERVICE] Quantidade: {quantidade}");
 
-            var carrinho = idUsuario.HasValue
-                ? await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario.Value)
-                : null;
+            if (!idUsuario.HasValue)
+            {
+                throw new UnauthorizedAccessException("Usuário não autenticado");
+            }
+
+            var produto = await _repositoryProduto.ObterPorIdAsync(idProduto);
+            if (produto == null)
+            {
+                Console.WriteLine($"[SERVICE] ERRO: Produto não encontrado!");
+                throw new ArgumentException("Produto não encontrado");
+            }
+
+            Console.WriteLine($"[SERVICE] Produto encontrado: {produto.Nome}");
+
+            var estoque = await _repositoryEstoque.ObterPorIdProdutoAsync(idProduto);
+
+            if (estoque == null)
+            {
+                Console.WriteLine($"[SERVICE] ERRO: Produto não possui registro de estoque!");
+                Console.WriteLine($"[SERVICE] Produto: {produto.Nome} (ID: {idProduto})");
+                throw new InvalidOperationException($"O produto '{produto.Nome}' ainda não foi adicionado ao estoque. Contate o administrador.");
+            }
+
+            Console.WriteLine($"[SERVICE] Estoque encontrado: {estoque.Quantidade} unidades");
+
+            var carrinho = await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario.Value);
 
             Console.WriteLine($"[SERVICE] Carrinho existente: {carrinho?.IdCarrinho}");
 
@@ -82,37 +105,35 @@ namespace BROS_ECommerce.Services.Services
                 Console.WriteLine($"[SERVICE] Novo carrinho criado: {carrinho.IdCarrinho}");
             }
 
-            Console.WriteLine($"[SERVICE] Buscando produto no banco...");
-
-            
-            var produto = await _repositoryProduto.ObterPorIdAsync(idProduto);
-
-            Console.WriteLine($"[SERVICE] Produto encontrado: {produto != null}");
-
-            if (produto != null)
-            {
-                Console.WriteLine($"[SERVICE] Produto - ID: {produto.IdProduto}");
-                Console.WriteLine($"[SERVICE] Produto - Nome: {produto.Nome}");
-                Console.WriteLine($"[SERVICE] Produto - Preço: {produto.Preco}");
-            }
-
-            if (produto == null)
-            {
-                Console.WriteLine($"[SERVICE] ERRO: Produto não encontrado!");
-                Console.WriteLine($"[SERVICE] Produto ID buscado: {idProduto}");
-                throw new ArgumentException("Produto não encontrado");
-            }
-
             Console.WriteLine($"[SERVICE] Verificando item existente no carrinho...");
             var itemExistente = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(carrinho.IdCarrinho, idProduto);
             Console.WriteLine($"[SERVICE] Item existente: {itemExistente != null}");
 
+            int quantidadeFinal;
+
+            if (itemExistente != null)
+            {
+                quantidadeFinal = itemExistente.Quantidade + quantidade;
+                Console.WriteLine($"[SERVICE] Quantidade atual no carrinho: {itemExistente.Quantidade}");
+                Console.WriteLine($"[SERVICE] Quantidade final calculada: {quantidadeFinal}");
+            }
+            else
+            {
+                quantidadeFinal = quantidade;
+                Console.WriteLine($"[SERVICE] Novo item - Quantidade final: {quantidadeFinal}");
+            }
+
+            if (quantidadeFinal > estoque.Quantidade)
+            {
+                Console.WriteLine($"[SERVICE] ERRO: Estoque insuficiente!");
+                Console.WriteLine($"[SERVICE] Solicitado: {quantidadeFinal}, Disponível: {estoque.Quantidade}");
+                throw new InvalidOperationException($"Estoque insuficiente. Disponível: {estoque.Quantidade}");
+            }
+
             if (itemExistente != null)
             {
                 Console.WriteLine($"[SERVICE] Atualizando quantidade do item existente...");
-                Console.WriteLine($"[SERVICE] Quantidade antiga: {itemExistente.Quantidade}");
-                itemExistente.Quantidade += quantidade;
-                Console.WriteLine($"[SERVICE] Nova quantidade: {itemExistente.Quantidade}");
+                itemExistente.Quantidade = quantidadeFinal;
                 await _repositoryCarrinhoItem.AtualizarItemAsync(itemExistente);
             }
             else
@@ -127,39 +148,108 @@ namespace BROS_ECommerce.Services.Services
                     PrecoUnitario = produto.Preco
                 };
 
-                Console.WriteLine($"[SERVICE] Novo item - ID: {novoItem.IdCarrinhoItem}");
-                Console.WriteLine($"[SERVICE] Novo item - Carrinho: {novoItem.IdCarrinho}");
-                Console.WriteLine($"[SERVICE] Novo item - Produto: {novoItem.IdProduto}");
-                Console.WriteLine($"[SERVICE] Novo item - Quantidade: {novoItem.Quantidade}");
-                Console.WriteLine($"[SERVICE] Novo item - Preço: {novoItem.PrecoUnitario}");
-
                 await _repositoryCarrinhoItem.AdicionarItemAsync(novoItem);
                 Console.WriteLine($"[SERVICE] Item adicionado com sucesso!");
             }
 
             Console.WriteLine($"[SERVICE] Obtendo carrinho atualizado...");
-            var carrinhoAtualizado = await ObterCarrinhoPorIdAsync(carrinho.IdCarrinho) ?? new CarrinhoViewModel();
-            Console.WriteLine($"[SERVICE] Carrinho atualizado - Total itens: {carrinhoAtualizado.QuantidadeTotal}");
+            var carrinhoAtualizado = await ObterCarrinhoPorIdAsync(carrinho.IdCarrinho) ?? throw new InvalidOperationException("Erro ao obter carrinho atualizado");
+
+            Console.WriteLine($"[SERVICE] Carrinho atualizado com sucesso!");
             Console.WriteLine($"[SERVICE] =================================");
 
             return carrinhoAtualizado;
         }
 
+        public async Task<(bool EstoqueValido, string Mensagem, CarrinhoViewModel CarrinhoAtualizado)> ValidarEAjustarEstoqueCarrinhoAsync(Guid idUsuario)
+        {
+            var carrinho = await ObterCarrinhoUsuarioAsync(idUsuario);
+            if (carrinho == null || !carrinho.TemItens)
+            {
+                return (true, "Carrinho vazio", new CarrinhoViewModel());
+            }
+
+            bool houveMudancas = false;
+            var problemas = new List<string>();
+
+            foreach (var item in carrinho.Itens)
+            {
+                var estoque = await _repositoryEstoque.ObterPorIdProdutoAsync(item.IdProduto);
+
+                if (estoque == null)
+                {
+                    var carrinhoEntity = await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario);
+                    if (carrinhoEntity != null)
+                    {
+                        var itemEntity = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(carrinhoEntity.IdCarrinho, item.IdProduto);
+                        if (itemEntity != null)
+                        {
+                            await _repositoryCarrinhoItem.RemoverItemAsync(itemEntity.IdCarrinhoItem);
+                        }
+                    }
+                    problemas.Add($"{item.Nome} foi removido (sem estoque)");
+                    houveMudancas = true;
+                    continue;
+                }
+
+                if (item.Quantidade > estoque.Quantidade)
+                {
+                    var carrinhoEntity = await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario);
+                    if (carrinhoEntity != null)
+                    {
+                        var itemEntity = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(carrinhoEntity.IdCarrinho, item.IdProduto);
+                        if (itemEntity != null)
+                        {
+                            if (estoque.Quantidade == 0)
+                            {
+                                await _repositoryCarrinhoItem.RemoverItemAsync(itemEntity.IdCarrinhoItem);
+                                problemas.Add($"{item.Nome} foi removido (esgotado)");
+                            }
+                            else
+                            {
+                                itemEntity.Quantidade = estoque.Quantidade;
+                                await _repositoryCarrinhoItem.AtualizarItemAsync(itemEntity);
+                                problemas.Add($"{item.Nome} teve quantidade ajustada para {estoque.Quantidade}");
+                            }
+                        }
+                    }
+                    houveMudancas = true;
+                }
+            }
+
+            var carrinhoAtualizado = await ObterCarrinhoUsuarioAsync(idUsuario) ?? new CarrinhoViewModel();
+
+            if (houveMudancas)
+            {
+                var mensagem = "Alguns itens foram ajustados: " + string.Join(", ", problemas);
+                return (false, mensagem, carrinhoAtualizado);
+            }
+
+            return (true, "Estoque validado com sucesso", carrinhoAtualizado);
+        }
+
         public async Task<CarrinhoViewModel> AtualizarQuantidadeAsync(Guid idCarrinho, Guid idProduto, int quantidade)
         {
-            var item = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(idCarrinho, idProduto);
-            if (item == null)
-                throw new ArgumentException("Item não encontrado no carrinho");
-
             if (quantidade <= 0)
             {
-                await _repositoryCarrinhoItem.RemoverItemAsync(item.IdCarrinhoItem);
+                await RemoverProdutoAsync(idCarrinho, idProduto);
+                return await ObterCarrinhoPorIdAsync(idCarrinho) ?? new CarrinhoViewModel();
             }
-            else
+
+            var item = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(idCarrinho, idProduto);
+            if (item == null)
             {
-                item.Quantidade = quantidade;
-                await _repositoryCarrinhoItem.AtualizarItemAsync(item);
+                throw new InvalidOperationException("Produto não encontrado no carrinho");
             }
+
+            var estoque = await _repositoryEstoque.ObterPorIdProdutoAsync(idProduto);
+            if (estoque != null && estoque.Quantidade < quantidade)
+            {
+                throw new InvalidOperationException($"Estoque insuficiente. Disponível: {estoque.Quantidade}");
+            }
+
+            item.Quantidade = quantidade;
+            await _repositoryCarrinhoItem.AtualizarItemAsync(item);
 
             return await ObterCarrinhoPorIdAsync(idCarrinho) ?? new CarrinhoViewModel();
         }
@@ -169,12 +259,18 @@ namespace BROS_ECommerce.Services.Services
             var item = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(idCarrinho, idProduto);
             if (item == null) return false;
 
-            return await _repositoryCarrinhoItem.RemoverItemAsync(item.IdCarrinhoItem);
+            await _repositoryCarrinhoItem.RemoverItemAsync(item.IdCarrinhoItem);
+            return true;
         }
 
         public async Task<bool> LimparCarrinhoAsync(Guid idCarrinho)
         {
-            return await _repositoryCarrinhoItem.RemoverTodosItensCarrinhoAsync(idCarrinho);
+            var itens = await _repositoryCarrinhoItem.ObterItensPorCarrinhoAsync(idCarrinho);
+            foreach (var item in itens)
+            {
+                await _repositoryCarrinhoItem.RemoverItemAsync(item.IdCarrinhoItem);
+            }
+            return true;
         }
 
         public async Task<bool> FinalizarCarrinhoAsync(Guid idCarrinho)
@@ -196,7 +292,6 @@ namespace BROS_ECommerce.Services.Services
         {
             return await _repositoryCarrinhoItem.CalcularTotalCarrinhoAsync(idCarrinho);
         }
-
 
         public async Task<CarrinhoViewModel> AtualizarQuantidadeProdutoAsync(Guid idUsuario, Guid idProduto, int novaQuantidade)
         {
@@ -254,50 +349,7 @@ namespace BROS_ECommerce.Services.Services
                 throw new InvalidOperationException($"Estoque insuficiente. Disponível: {estoque.Quantidade}");
             }
 
-            var carrinho = await _repositoryCarrinho.ObterCarrinhoAbertoUsuarioAsync(idUsuario.Value);
-            if (carrinho == null)
-            {
-                carrinho = new Carrinho
-                {
-                    IdCarrinho = Guid.NewGuid(),
-                    IdUsuario = idUsuario.Value,
-                    DataCriacao = DateTime.UtcNow,
-                    Status = "Aberto"
-                };
-                carrinho = await _repositoryCarrinho.CriarCarrinhoAsync(carrinho);
-            }
-
-            
-            var itemExistente = await _repositoryCarrinhoItem.ObterPorCarrinhoEProdutoAsync(carrinho.IdCarrinho, idProduto);
-
-            if (itemExistente != null)
-            {
-                
-                var novaQuantidade = itemExistente.Quantidade + quantidade;
-
-                if (estoque != null && estoque.Quantidade < novaQuantidade)
-                {
-                    throw new InvalidOperationException($"Estoque insuficiente. Disponível: {estoque.Quantidade}");
-                }
-
-                itemExistente.Quantidade = novaQuantidade;
-                await _repositoryCarrinhoItem.AtualizarItemAsync(itemExistente);
-            }
-            else
-            {
-                
-                var novoItem = new CarrinhoItem
-                {
-                    IdCarrinhoItem = Guid.NewGuid(),
-                    IdCarrinho = carrinho.IdCarrinho,
-                    IdProduto = idProduto,
-                    Quantidade = quantidade,
-                    PrecoUnitario = produto.Preco
-                };
-                await _repositoryCarrinhoItem.AdicionarItemAsync(novoItem);
-            }
-
-            return await ObterCarrinhoUsuarioAsync(idUsuario.Value) ?? new CarrinhoViewModel();
+            return await AdicionarProdutoAsync(idUsuario, idProduto, quantidade);
         }
 
         public async Task<int> ObterQuantidadeItensCarrinhoAsync(Guid? idUsuario)
