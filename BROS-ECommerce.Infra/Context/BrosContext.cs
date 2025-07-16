@@ -87,7 +87,7 @@ namespace BROS_ECommerce.Infra.Context
                 }
             );
         }
-
+        
         private void SeedEstoque(ModelBuilder modelBuilder)
         {
            
