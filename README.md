@@ -1,6 +1,6 @@
 # 🏋️ GymBros – E-commerce de Produtos de Academia
 
-**BroStock** é um sistema de e-commerce voltado para a venda de produtos de academia, como suplementos, equipamentos e acessórios. O sistema foi desenvolvido com foco em escalabilidade, organização de perfis e usabilidade para os diferentes usuários da plataforma.
+**GymBros Supplements** é um sistema de e-commerce voltado para a venda de produtos de academia, como suplementos, equipamentos e acessórios. O sistema foi desenvolvido com foco em escalabilidade, organização de perfis e usabilidade para os diferentes usuários da plataforma.
 
 ---
 
@@ -8,19 +8,21 @@
 
 ### 📦 Área Comum (Todos os Perfis)
 - 🛒 Carrinho de compras  
+- 💳 Checkout
 - 💳 Módulo de pagamento  
-- 🔐 Login e cadastro  
-- ❤️ Favoritos  
-- 🎁 Sistema de pontos  
-- 📩 Envio de e-mails automatizados  
+- 🔐 Login e cadastro
+- 🚚 Cálculo de frete
+- 🦾 Recursos de acessibilidade
 
 ### 🔧 Área Administrativa
-- 🧑‍💼 **Administrador & Gestor de Produtos**  
+- 🧑‍💼 **Administrador**  
   - CRUD de produtos
+  - Banco de imagens
   - Gerenciamento de estoque
-- 📈 **Administrador**  
-  - Geração de relatórios de apoio à decisão
+  - Gerenciamento de promocoes
+  - Gerenciamento de categorias
   - Gerenciamento de usuarios   
+
 - 📤 **Exportação de Dados**  
   - Exportar para CSV, PDF e Excel  
 - 📦 **Operador de Pedidos**  
@@ -31,8 +33,6 @@
 ## 👥 Perfis de Usuário
 
 - **Administrador**  
-- **Gestor de Produtos**  
-- **Operador de Pedidos**  
 - **Cliente**
 
 ---
