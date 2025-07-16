@@ -25,7 +25,7 @@
                 <h3>Seu carrinho ainda está vazio</h3>
                 <p>Que tal conferir algumas ofertas e produtos dos Gymbros?</p>
                 <div class="carrinho-vazio-actions">
-                    <a href="/" class="btn btn-continuar-comprando">
+                    <a href="/" class="btn-continuar-comprando">
                         Continuar comprando
                     </a>
                 </div>
@@ -42,7 +42,7 @@
                         {
                             <div class="carrinho-item" data-produto-id="@item.IdProduto">
                                 <div class="item-imagem">
-                                    <img src="@item.ImagemUrl" alt="@item.Nome" />
+                                    <img src="@(item.ImagemUrl ?? "/images/produto-sem-imagem.png")" alt="@item.Nome" />
                                 </div>
 
                                 <div class="item-detalhes">
@@ -51,21 +51,24 @@
                                 </div>
 
                                 <div class="item-quantidade">
-                                    <button class="btn-quantidade" onclick="alterarQuantidade('@Model.IdCarrinho', '@item.IdProduto', @(item.Quantidade - 1))">
+                                    <button class="btn-quantidade btn-menos" onclick="alterarQuantidadeSegura('@item.IdProduto', 'menos')"
+                                            @(item.Quantidade <= 1 ? "disabled" : "") data-produto-id="@item.IdProduto">
                                         <i class="fa-solid fa-minus"></i>
                                     </button>
                                     <span class="quantidade-valor">@item.Quantidade</span>
-                                    <button class="btn-quantidade" onclick="alterarQuantidade('@Model.IdCarrinho', '@item.IdProduto', @(item.Quantidade + 1))">
+                                    <button class="btn-quantidade btn-mais" onclick="alterarQuantidadeSegura('@item.IdProduto', 'mais')"
+                                            data-produto-id="@item.IdProduto">
                                         <i class="fa-solid fa-plus"></i>
                                     </button>
                                 </div>
 
                                 <div class="item-subtotal">
-                                    @item.SubtotalFormatado
+                                    R$ @item.Subtotal.ToString("F2")
                                 </div>
 
                                 <div class="item-acoes">
-                                    <button class="btn-remover" onclick="removerProduto('@Model.IdCarrinho', '@item.IdProduto')">
+                                    <button class="btn-remover" onclick="removerItem('@item.IdProduto')"
+                                            title="Remover produto">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -74,35 +77,42 @@
                     </div>
 
                     <div class="carrinho-acoes">
-                        <button class="btn btn-adicionar-cupom">
-                            <i class="fa-solid fa-tag me-2"></i>
-                            Adicionar cupom
-                        </button>
-                        <a href="/" class="btn btn-continuar-comprando">
+                        <a href="/" class="btn-continuar-comprando">
+                            <i class="fa-solid fa-arrow-left me-2"></i>
                             Continuar comprando
                         </a>
                     </div>
                 </div>
 
-                
                 <div class="col-lg-4 col-md-12">
                     <div class="carrinho-resumo">
-                        <h3>Total</h3>
+                        <h3>Resumo do Pedido</h3>
 
                         <div class="resumo-linha">
                             <span>Quantidade de itens:</span>
                             <span id="resumo-quantidade">@Model.QuantidadeTotal</span>
                         </div>
 
-                        <div class="resumo-linha resumo-total">
-                            <span>Total:</span>
-                            <span id="resumo-total">@Model.ValorTotal.ToString("C2")</span>
+                        <div class="resumo-linha">
+                            <span>Subtotal:</span>
+                            <span id="resumo-subtotal">R$ @Model.ValorTotal.ToString("F2")</span>
                         </div>
 
-                        <div class="resumo-acoes">
-                            <a href="/Carrinho/Checkout" class="btn btn-finalizar-compra">
-                                Finalizar compra
-                            </a>
+                        <div class="resumo-linha">
+                            <span>Frete:</span>
+                            <span>A calcular</span>
+                        </div>
+
+                        <div class="resumo-linha resumo-total">
+                            <span>Total:</span>
+                            <span id="resumo-total">R$ @Model.ValorTotal.ToString("F2")</span>
+                        </div>
+
+                        <div class="carrinho-checkout">
+                            <button class="btn-finalizar-compra" onclick="finalizarCompra()">
+                                <i class="fa-solid fa-credit-card me-2"></i>
+                                Finalizar Compra
+                            </button>
                         </div>
                     </div>
                 </div>

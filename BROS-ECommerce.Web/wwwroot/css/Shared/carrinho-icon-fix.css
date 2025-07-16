@@ -142,9 +142,9 @@
     border-radius: 4px;
     transition: all 0.2s ease;
     position: absolute;
-    top: 50%;
+    top: 40%;
     right: 1rem;
-    transform: translateY(-50%);
+    transform: translateY(-10%);
     font-size: 0.9rem;
 }
 
