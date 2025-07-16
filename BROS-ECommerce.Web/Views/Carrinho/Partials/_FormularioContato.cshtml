@@ -1,0 +1,95 @@
+﻿<form id="form-contato" novalidate>
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="nome-completo" class="form-label">
+                <i class="fa-solid fa-user me-2"></i>
+                Nome Completo *
+            </label>
+            <input type="text"
+                   id="nome-completo"
+                   name="nomeCompleto"
+                   class="form-control"
+                   placeholder="Digite seu nome completo"
+                   required
+                   data-validation="required|min:3|max:100">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                Nome válido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="form-label">
+                <i class="fa-solid fa-envelope me-2"></i>
+                E-mail *
+            </label>
+            <input type="email"
+                   id="email"
+                   name="email"
+                   class="form-control"
+                   placeholder="seu@email.com"
+                   required
+                   data-validation="required|email">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                E-mail válido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="telefone" class="form-label">
+                <i class="fa-solid fa-phone me-2"></i>
+                Telefone *
+            </label>
+            <input type="tel"
+                   id="telefone"
+                   name="telefone"
+                   class="form-control"
+                   placeholder="(00) 00000-0000"
+                   required
+                   data-validation="required|phone">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                Telefone válido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cpf" class="form-label">
+                <i class="fa-solid fa-id-card me-2"></i>
+                CPF *
+            </label>
+            <input type="text"
+                   id="cpf"
+                   name="cpf"
+                   class="form-control"
+                   placeholder="000.000.000-00"
+                   required
+                   readonly
+                   data-validation="required|cpf">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                CPF validado automaticamente
+            </div>
+            <small class="form-text text-muted">
+                <i class="fa-solid fa-info-circle me-1"></i>
+                CPF preenchido automaticamente da sua conta
+            </small>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="button" id="btn-voltar-carrinho-contato" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Voltar ao Carrinho
+        </button>
+        <button type="submit" id="btn-continuar-endereco" class="btn btn-primary btn-lg">
+            <span class="btn-text">Continuar para Endereço</span>
+            <i class="fa-solid fa-arrow-right ms-2"></i>
+        </button>
+    </div>
+</form>
