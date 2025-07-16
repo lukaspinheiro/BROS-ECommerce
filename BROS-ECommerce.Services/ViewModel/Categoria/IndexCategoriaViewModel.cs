@@ -14,4 +14,6 @@ public class IndexCategoriaViewModel
     }
     public FiltroCategoriaViewModel Filtro { get; set; } = new FiltroCategoriaViewModel();
     public ICollection<TabelaCategoriaViewModel> Tabela { get; set; }
+    public CadastrarCategoriaViewModel cadastrarCategoriaViewModel { get; set; } = new CadastrarCategoriaViewModel();
+
 }
