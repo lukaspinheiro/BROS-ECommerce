@@ -1,0 +1,86 @@
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Categoria.TabelaCategoriaViewModel>
+
+@if (Model != null && Model.Any())
+{
+    <table id="tabela" class="small table table-hover table-light table-sm table-striped" style="width:100%" aria-describedby="Tabela de Produtos">
+        <thead>
+            <tr>
+                <th class="text-start">Categoria</th>
+                <th class="text-start">Descricao</th>
+                <th class="text-start" style="width: 15%;">Status</th>
+                <th class="text-start" style="width: 15%;">Última Atualização</th>
+                <th class="nao-exportar" style="width: 15%;">Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@item.NomeCategoria</strong></td>
+                    <td>@item.Descricao</td>
+                    <td>@item.Ativo</td>
+                    <td>@item.DataAtualizacao</td>
+                    <td>
+                        <div class="btn-group btn-group-sm gap-2" role="group">
+                            <button type="button"
+                                    class="btn btn-secondary btn-sm btn-alterar"
+                                    title="Alterar"
+                                    data-id-categoria="@item.IdCategoria"
+                                    data-descricao="@item.Descricao"
+                                    data-nome="@item.NomeCategoria"
+                                    data-ativo="@item.Ativo"
+                                    data-atualizacao="@item.DataAtualizacao">
+                                <i class="fas fa-edit fa-lg" style="color: #198754;"></i> Alterar
+                            </button>
+                            <button type="button"
+                                    class="btn btn-sm btn-excluir bg-white"
+                                    title="Excluir"
+                                    data-id-categoria="@item.IdCategoria"
+                                    data-nome="@item.NomeCategoria">
+                                <i class="fas fa-trash-alt fa-lg" style="color: #dc3545;"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <small class="text-muted">
+                <i class="fas fa-info-circle"></i>
+                Total de Categorias: <strong>@Model.Count()</strong>
+            </small>
+        </div>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-light table-sm">
+            <thead>
+                <tr>
+                    <th class="text-start">Categoria</th>
+                    <th class="text-start">Descricao</th>
+                    <th class="text-start" style="width: 15%;">Status</th>
+                    <th class="text-start" style="width: 15%;">Última Atualização</th>
+                    <th class="nao-exportar" style="width: 15%;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5" class="text-center py-4">
+                        <div class="text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            <strong>Nenhum item encontrado</strong>
+                            <br>
+                            <small>Adicione categorias para começar a gerenciar suas categorias.</small>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
