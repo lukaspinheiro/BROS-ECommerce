@@ -9,7 +9,7 @@
 ### 📦 Área Comum (Todos os Perfis)
 - 🛒 Carrinho de compras  
 - 💳 Checkout
-- 💳 Módulo de pagamento  
+- 💳 Módulo de pagamento (Stripe e MercadoPago)
 - 🔐 Login e cadastro
 - 🚚 Cálculo de frete
 - 🦾 Recursos de acessibilidade
