@@ -13,7 +13,8 @@ namespace BROS_ECommerce.Domain.Entities
         public string Descricao { get; set; } = string.Empty;
         public decimal Preco { get; set; }
 
-        // Relacionamentos
         public virtual ICollection<ProdutoImagem> ProdutoImagens { get; set; } = new List<ProdutoImagem>();
+        public virtual ICollection<CategoriaProduto> CategoriaProdutos { get; set; } = new List<CategoriaProduto>();
+        public virtual ICollection<Promocao> Promocoes { get; set; } = new List<Promocao>();
     }
 }

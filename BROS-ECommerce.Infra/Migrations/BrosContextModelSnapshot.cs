@@ -101,6 +101,93 @@ namespace BROS_ECommerce.Infra.Migrations
                     b.ToTable("CarrinhoItens", (string)null);
                 });
 
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Categoria", b =>
+                {
+                    b.Property<Guid>("IdCategoria")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdCategoria");
+
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("Ativo");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataAtualizacao");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCriacao")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("Descricao");
+
+                    b.Property<string>("NomeCategoria")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("NomeCategoria");
+
+                    b.HasKey("IdCategoria");
+
+                    b.HasIndex("Ativo")
+                        .HasDatabaseName("IX_Categorias_Ativo");
+
+                    b.HasIndex("DataCriacao")
+                        .HasDatabaseName("IX_Categorias_DataCriacao");
+
+                    b.HasIndex("NomeCategoria")
+                        .HasDatabaseName("IX_Categorias_NomeCategoria");
+
+                    b.ToTable("Categorias", (string)null);
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.CategoriaProduto", b =>
+                {
+                    b.Property<Guid>("IdCategoriaProduto")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdCategoriaProduto");
+
+                    b.Property<DateTime>("DataAssociacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataAssociacao")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<Guid>("IdCategoria")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdCategoria");
+
+                    b.Property<Guid>("IdProduto")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdProduto");
+
+                    b.HasKey("IdCategoriaProduto");
+
+                    b.HasIndex("DataAssociacao")
+                        .HasDatabaseName("IX_CategoriaProdutos_DataAssociacao");
+
+                    b.HasIndex("IdCategoria")
+                        .HasDatabaseName("IX_CategoriaProdutos_IdCategoria");
+
+                    b.HasIndex("IdProduto")
+                        .HasDatabaseName("IX_CategoriaProdutos_IdProduto");
+
+                    b.HasIndex("IdCategoria", "IdProduto")
+                        .IsUnique()
+                        .HasDatabaseName("IX_CategoriaProdutos_CategoriasProduto");
+
+                    b.ToTable("CategoriaProdutos", (string)null);
+                });
+
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Estoque", b =>
                 {
                     b.Property<Guid>("IdEstoque")
@@ -206,6 +293,155 @@ namespace BROS_ECommerce.Infra.Migrations
                     b.ToTable("Imagens", (string)null);
                 });
 
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Pedido", b =>
+                {
+                    b.Property<Guid>("IdPedido")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdPedido");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataAtualizacao");
+
+                    b.Property<DateTime?>("DataCancelamento")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCancelamento");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCriacao")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateTime>("DataPedido")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataPedido");
+
+                    b.Property<Guid>("IdUsuario")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdUsuario");
+
+                    b.Property<string>("MotivoCancelamento")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("MotivoCancelamento");
+
+                    b.Property<string>("NumeroPedido")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("NumeroPedido");
+
+                    b.Property<string>("ObservacoesInternas")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("ObservacoesInternas");
+
+                    b.Property<string>("ObservacoesPedido")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("ObservacoesPedido");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasDefaultValue("Pendente")
+                        .HasColumnName("Status");
+
+                    b.Property<decimal>("ValorDesconto")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m)
+                        .HasColumnName("ValorDesconto");
+
+                    b.Property<decimal>("ValorFrete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m)
+                        .HasColumnName("ValorFrete");
+
+                    b.Property<decimal>("ValorSubtotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("ValorSubtotal");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("ValorTotal");
+
+                    b.HasKey("IdPedido");
+
+                    b.HasIndex("DataCriacao")
+                        .HasDatabaseName("IX_Pedidos_DataCriacao");
+
+                    b.HasIndex("DataPedido")
+                        .HasDatabaseName("IX_Pedidos_DataPedido");
+
+                    b.HasIndex("IdUsuario")
+                        .HasDatabaseName("IX_Pedidos_IdUsuario");
+
+                    b.HasIndex("NumeroPedido")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Pedidos_NumeroPedido");
+
+                    b.HasIndex("Status")
+                        .HasDatabaseName("IX_Pedidos_Status");
+
+                    b.HasIndex("IdUsuario", "DataPedido")
+                        .HasDatabaseName("IX_Pedidos_UsuarioData");
+
+                    b.ToTable("Pedidos", (string)null);
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.PedidoItem", b =>
+                {
+                    b.Property<Guid>("IdPedidoItem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdPedidoItem");
+
+                    b.Property<Guid>("IdPedido")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdPedido");
+
+                    b.Property<Guid>("IdProduto")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdProduto");
+
+                    b.Property<decimal>("PrecoUnitario")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PrecoUnitario");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("int")
+                        .HasColumnName("Quantidade");
+
+                    b.Property<decimal>("ValorDesconto")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m)
+                        .HasColumnName("ValorDesconto");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("ValorTotal");
+
+                    b.HasKey("IdPedidoItem");
+
+                    b.HasIndex("IdPedido")
+                        .HasDatabaseName("IX_PedidoItens_IdPedido");
+
+                    b.HasIndex("IdProduto")
+                        .HasDatabaseName("IX_PedidoItens_IdProduto");
+
+                    b.HasIndex("IdPedido", "IdProduto")
+                        .HasDatabaseName("IX_PedidoItens_PedidoProduto");
+
+                    b.ToTable("PedidoItens", (string)null);
+                });
+
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Produto", b =>
                 {
                     b.Property<Guid>("IdProduto")
@@ -302,6 +538,80 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasFilter("Principal = 1");
 
                     b.ToTable("ProdutoImagens", (string)null);
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Promocao", b =>
+                {
+                    b.Property<Guid>("IdPromocao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdPromocao");
+
+                    b.Property<bool>("Ativo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true)
+                        .HasColumnName("Ativo");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataAtualizacao");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataCriacao")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateTime>("DataFim")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataFim");
+
+                    b.Property<DateTime>("DataInicio")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DataInicio");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("Descricao");
+
+                    b.Property<Guid>("IdProduto")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IdProduto");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("Nome");
+
+                    b.Property<decimal>("PercentualDesconto")
+                        .HasColumnType("decimal(5,2)")
+                        .HasColumnName("PercentualDesconto");
+
+                    b.Property<decimal?>("ValorDesconto")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("ValorDesconto");
+
+                    b.HasKey("IdPromocao");
+
+                    b.HasIndex("Ativo")
+                        .HasDatabaseName("IX_Promocoes_Ativo");
+
+                    b.HasIndex("DataFim")
+                        .HasDatabaseName("IX_Promocoes_DataFim");
+
+                    b.HasIndex("DataInicio")
+                        .HasDatabaseName("IX_Promocoes_DataInicio");
+
+                    b.HasIndex("IdProduto")
+                        .HasDatabaseName("IX_Promocoes_IdProduto");
+
+                    b.HasIndex("IdProduto", "DataInicio", "DataFim", "Ativo")
+                        .HasDatabaseName("IX_Promocoes_ProdutoVigencia");
+
+                    b.ToTable("Promocoes", (string)null);
                 });
 
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.User", b =>
@@ -427,6 +737,27 @@ namespace BROS_ECommerce.Infra.Migrations
                     b.Navigation("Produto");
                 });
 
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.CategoriaProduto", b =>
+                {
+                    b.HasOne("BROS_ECommerce.Domain.Entities.Categoria", "Categoria")
+                        .WithMany("CategoriaProdutos")
+                        .HasForeignKey("IdCategoria")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CategoriaProdutos_Categoria");
+
+                    b.HasOne("BROS_ECommerce.Domain.Entities.Produto", "Produto")
+                        .WithMany("CategoriaProdutos")
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_CategoriaProdutos_Produto");
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Produto");
+                });
+
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Estoque", b =>
                 {
                     b.HasOne("BROS_ECommerce.Domain.Entities.Produto", "Produto")
@@ -435,6 +766,39 @@ namespace BROS_ECommerce.Infra.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Estoque_Produto");
+
+                    b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Pedido", b =>
+                {
+                    b.HasOne("BROS_ECommerce.Domain.Entities.User", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_Pedidos_Usuario");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.PedidoItem", b =>
+                {
+                    b.HasOne("BROS_ECommerce.Domain.Entities.Pedido", "Pedido")
+                        .WithMany("PedidoItens")
+                        .HasForeignKey("IdPedido")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_PedidoItens_Pedido");
+
+                    b.HasOne("BROS_ECommerce.Domain.Entities.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_PedidoItens_Produto");
+
+                    b.Navigation("Pedido");
 
                     b.Navigation("Produto");
                 });
@@ -460,9 +824,26 @@ namespace BROS_ECommerce.Infra.Migrations
                     b.Navigation("Produto");
                 });
 
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Promocao", b =>
+                {
+                    b.HasOne("BROS_ECommerce.Domain.Entities.Produto", "Produto")
+                        .WithMany("Promocoes")
+                        .HasForeignKey("IdProduto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Promocoes_Produto");
+
+                    b.Navigation("Produto");
+                });
+
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Carrinho", b =>
                 {
                     b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Categoria", b =>
+                {
+                    b.Navigation("CategoriaProdutos");
                 });
 
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Imagem", b =>
@@ -470,9 +851,18 @@ namespace BROS_ECommerce.Infra.Migrations
                     b.Navigation("ProdutoImagens");
                 });
 
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Pedido", b =>
+                {
+                    b.Navigation("PedidoItens");
+                });
+
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Produto", b =>
                 {
+                    b.Navigation("CategoriaProdutos");
+
                     b.Navigation("ProdutoImagens");
+
+                    b.Navigation("Promocoes");
                 });
 #pragma warning restore 612, 618
         }
