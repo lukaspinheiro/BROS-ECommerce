@@ -1,5 +1,10 @@
 ﻿@using System.Security.Claims
 
+@{
+    var email = User.Identity?.Name;
+    var emailAdmin = "admin@bros.com";
+}
+
 <nav class="navbar navbar-expand-lg" style="background-color: #FF4E4E; color: white; height: 90px;">
     <div class="container-fluid py-2 w-100 paddingX">
         <div class="row w-100 align-items-center">
@@ -20,9 +25,13 @@
 
             <div class="col justify-content-end">
                 <div class="d-flex align-items-center justify-content-between gap-4" style="padding-left: 20%; margin-right: -1.5rem;">
-                    <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="nav-link hvr-bob">
-                        Administrativo
-                    </a>
+
+                    @if (User.Identity?.IsAuthenticated == true && email == emailAdmin)
+                    {
+                        <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="nav-link hvr-bob">
+                            Administrativo
+                        </a>
+                    }
 
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
