@@ -1,35 +1,60 @@
-﻿<div class="bg-light">
-        <nav class="navbar navbar-expand-lg navbar-dark py-2 justify-content-end my-0 paddingX">
-            <div class="d-flex justify-content-between align-self-end pt-1" style="width: 40rem;">
-                <a rel="noreferrer" class="btn text-dark btn-sm btn-link" asp-controller="Home" asp-action="Contatos" target="_self" title="contatos">
-                    <i style="font-size: medium" class="fa fa-phone" aria-hidden="true"></i>
-                    <span class="legend d-none d-lg-inline-block">
-                        Contatos
-                    </span>
-                </a>
-                <a id="zoomReset" rel="noreferrer" class="btn text-dark btn-sm btn-link h4" href="#" target="_self" title="zoom em tamanho padrão">
-                    <i style="font-size: larger;" class="fa fa-thin fa-a"></i><i style="font-size: smaller" class="fa fa-solid fa-equals"></i>
-                </a>
-                <a id="zoomMaior" rel="noreferrer" class="btn text-dark btn-sm btn-link text-decoration-none h4" href="#" target="_self" title="aumentar zoom">
-                    <span>
-                        <i style="font-size: larger;" class="fa fa-thin fa-a"></i><i style="font-size: smaller" class="fa fa-solid fa-plus"></i>
-                    </span>
-                </a>
-                <a id="zoomMenor" rel="noreferrer" class="btn text-dark btn-sm btn-link text-decoration-none h4" href="#" target="_self" title="diminuir zoom">
-                    <i style="font-size: larger;" class="fa fa-thin fa-a"></i><i style="font-size: smaller;" class="fa fa-solid fa-minus"></i>
-                </a>
-                <a rel="noreferrer" class="btn text-dark btn-sm btn-link text-decoration-none" href="#!" id="altoContraste" title="alto contraste">
-                    <i class="fa fa-adjust"></i>
-                    <span class="legend d-none d-lg-inline-block">
-                        Alto Contraste
-                    </span>
-                </a>
-                <a rel="noreferrer" class="btn text-dark btn-sm btn-link text-decoration-none no-padding-right" href="#!" id="btnlibras" title="libras">
-                    <i class="fa fa-sign-language"></i>
-                    <span class="legend d-none d-lg-inline-block">
-                        Libras
-                    </span>
-                </a>
-            </div>
-        </nav>
+﻿@* Partial: Botões de Acessibilidade + VLibras *@
+
+<div class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark py-2 justify-content-end my-0 paddingX">
+        <div class="d-flex justify-content-between align-self-end pt-1" style="width: 40rem;">
+            <a rel="noreferrer" class="btn text-dark btn-sm btn-link" asp-controller="Home" asp-action="Contatos" title="contatos">
+                <i class="fa fa-phone" style="font-size: medium;"></i>
+                <span class="legend d-none d-lg-inline-block">Contatos</span>
+            </a>
+            <a id="zoomReset" class="btn text-dark btn-sm btn-link h4" href="#" title="zoom padrão">
+                <i class="fa fa-thin fa-a" style="font-size: larger;"></i>
+                <i class="fa fa-solid fa-equals" style="font-size: smaller;"></i>
+            </a>
+            <a id="zoomMaior" class="btn text-dark btn-sm btn-link h4" href="#" title="aumentar zoom">
+                <i class="fa fa-thin fa-a" style="font-size: larger;"></i>
+                <i class="fa fa-solid fa-plus" style="font-size: smaller;"></i>
+            </a>
+            <a id="zoomMenor" class="btn text-dark btn-sm btn-link h4" href="#" title="diminuir zoom">
+                <i class="fa fa-thin fa-a" style="font-size: larger;"></i>
+                <i class="fa fa-solid fa-minus" style="font-size: smaller;"></i>
+            </a>
+            <a id="altoContraste" class="btn text-dark btn-sm btn-link" href="#!" title="alto contraste">
+                <i class="fa fa-adjust"></i>
+                <span class="legend d-none d-lg-inline-block">Alto Contraste</span>
+            </a>
+            <a id="btnlibras" class="btn text-dark btn-sm btn-link no-padding-right" href="#!" title="Libras">
+                <i class="fa fa-sign-language"></i>
+                <span class="legend d-none d-lg-inline-block">Libras</span>
+            </a>
+        </div>
+    </nav>
 </div>
+
+@* Container VLibras, oculto inicialmente *@
+<div vw class="enabled" id="libras" style="display:none">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+    </div>
+</div>
+
+@* Scripts *@
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1) Inicializa o VLibras logo que o plugin for carregado
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
+
+      const librasEl = document.getElementById('libras');
+      const btn = document.getElementById('btnlibras');
+      if (!librasEl || !btn) return;
+
+      // 2) Só alterna visibilidade
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        librasEl.style.display = (librasEl.style.display === 'none') ? 'block' : 'none';
+      });
+    });
+</script>
+¶

@@ -1,7 +1,7 @@
 ﻿import { criarConfiguracaoTabela } from '../datatable/datatable.helpers.js';
 
 export function inicializarTabela() {
-    const tabela = $('#tabela-usuarios');
+    const tabela = $('#tabela');
     if (
         tabela.length > 0 &&
         tabela.find("tbody tr").length > 0 &&

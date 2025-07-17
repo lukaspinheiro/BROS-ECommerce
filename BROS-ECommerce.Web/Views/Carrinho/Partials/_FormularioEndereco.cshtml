@@ -1,0 +1,191 @@
+﻿<form id="form-endereco" novalidate>
+    <div class="form-grid">
+        <div class="form-group cep-group">
+            <label for="cep" class="form-label">
+                <i class="fa-solid fa-map-pin me-2"></i>
+                CEP *
+            </label>
+            <div class="input-group">
+                <input type="text"
+                       id="cep"
+                       name="cep"
+                       class="form-control"
+                       placeholder="00000-000"
+                       required
+                       data-validation="required|cep">
+                <button type="button" id="btn-buscar-cep" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                CEP válido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="logradouro" class="form-label">
+                <i class="fa-solid fa-road me-2"></i>
+                Logradouro *
+            </label>
+            <input type="text"
+                   id="logradouro"
+                   name="logradouro"
+                   class="form-control"
+                   placeholder="Nome da rua, avenida..."
+                   required
+                   data-validation="required|min:5|max:200">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                Logradouro válido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="numero" class="form-label">
+                <i class="fa-solid fa-hashtag me-2"></i>
+                Número *
+            </label>
+            <input type="text"
+                   id="numero"
+                   name="numero"
+                   class="form-control"
+                   placeholder="123"
+                   required
+                   data-validation="required|min:1|max:20">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                Número válido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="complemento" class="form-label">
+                <i class="fa-solid fa-building me-2"></i>
+                Complemento
+            </label>
+            <input type="text"
+                   id="complemento"
+                   name="complemento"
+                   class="form-control"
+                   placeholder="Apartamento, bloco, sala..."
+                   data-validation="max:100">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                Complemento válido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="bairro" class="form-label">
+                <i class="fa-solid fa-map-location-dot me-2"></i>
+                Bairro *
+            </label>
+            <input type="text"
+                   id="bairro"
+                   name="bairro"
+                   class="form-control"
+                   placeholder="Nome do bairro"
+                   required
+                   data-validation="required|min:2|max:100">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                Bairro válido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cidade" class="form-label">
+                <i class="fa-solid fa-city me-2"></i>
+                Cidade *
+            </label>
+            <input type="text"
+                   id="cidade"
+                   name="cidade"
+                   class="form-control"
+                   placeholder="Nome da cidade"
+                   required
+                   data-validation="required|min:2|max:100">
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                Cidade válida
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="estado" class="form-label">
+                <i class="fa-solid fa-flag me-2"></i>
+                Estado *
+            </label>
+            <select id="estado"
+                    name="estado"
+                    class="form-control"
+                    required
+                    data-validation="required">
+                <option value="">Selecione o estado</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+            </select>
+            <div class="invalid-feedback"></div>
+            <div class="valid-feedback">
+                <i class="fa-solid fa-check me-1"></i>
+                Estado válido
+            </div>
+        </div>
+    </div>
+
+    <div class="endereco-preview" id="endereco-preview" style="display: none;">
+        <h5>
+            <i class="fa-solid fa-eye me-2"></i>
+            Pré-visualização do Endereço
+        </h5>
+        <div class="endereco-card">
+            <div class="endereco-content">
+                <p id="endereco-completo"></p>
+                <small id="endereco-cep"></small>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="button" id="btn-voltar-contato" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Voltar ao Contato
+        </button>
+        <button type="submit" id="btn-continuar-pagamento" class="btn btn-primary btn-lg">
+            <span class="btn-text">Continuar para Pagamento</span>
+            <i class="fa-solid fa-arrow-right ms-2"></i>
+        </button>
+    </div>
+</form>
