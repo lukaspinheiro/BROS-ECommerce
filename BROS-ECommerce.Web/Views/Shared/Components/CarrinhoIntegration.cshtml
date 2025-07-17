@@ -1,0 +1,91 @@
+﻿@{
+    
+}
+
+<script>
+    
+    window.CarrinhoIntegration = {
+        atualizarContadores: function(quantidade) {
+            
+            const sidebarContador = document.querySelector('#carrinho-quantidade-items');
+            if (sidebarContador) {
+                sidebarContador.textContent = quantidade;
+            }
+
+            
+            const carrinhoTitulo = document.querySelector('.carrinho-titulo');
+            if (carrinhoTitulo) {
+                carrinhoTitulo.innerHTML = `<i class="fa-solid fa-cart-shopping me-3"></i>CARRINHO (${quantidade})`;
+            }
+        },
+
+        sincronizarCarrinho: function() {
+            
+            if (typeof CarrinhoSidebar !== 'undefined' && CarrinhoSidebar.carregarCarrinho) {
+                CarrinhoSidebar.carregarCarrinho();
+            }
+        },
+
+        mostrarFeedback: function(mensagem, tipo = 'success') {
+            
+            const toast = document.createElement('div');
+            toast.className = `toast-feedback toast-${tipo}`;
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <i class="fa-solid ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                    <span>${mensagem}</span>
+                </div>
+            `;
+
+            const backgroundColor = tipo === 'success' ? '#28a745' : '#dc3545';
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${backgroundColor};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 10001;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+                font-weight: 600;
+            `;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+    };
+</script>
+
+<style>
+    .toast-feedback {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .toast-content {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .loading-spinner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
