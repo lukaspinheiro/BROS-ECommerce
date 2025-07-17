@@ -1,0 +1,331 @@
+﻿<div class="checkout-summary">
+    <h3>
+        <i class="fa-solid fa-receipt me-2"></i>
+        Resumo do Pedido
+    </h3>
+
+    <div class="summary-loading" id="summary-loading" style="display: none;">
+        <div class="d-flex align-items-center justify-content-center py-4">
+            <i class="fa-solid fa-spinner fa-spin me-2"></i>
+            <span>Carregando dados do carrinho...</span>
+        </div>
+    </div>
+
+    <div class="summary-content" id="summary-content">
+        <!-- Lista de produtos -->
+        <div class="products-list" id="products-list">
+            <h5 class="products-title">
+                <i class="fa-solid fa-shopping-bag me-2"></i>
+                Produtos no Carrinho
+            </h5>
+            <div class="products-container" id="products-container">
+                <!-- Os produtos serão carregados aqui via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Totais -->
+        <div class="summary-totals">
+            <div class="summary-item">
+                <div class="d-flex justify-content-between">
+                    <span>Quantidade de itens:</span>
+                    <span data-resumo="quantidade" class="resumo-quantidade">-</span>
+                </div>
+            </div>
+
+            <div class="summary-item">
+                <div class="d-flex justify-content-between">
+                    <span>Subtotal:</span>
+                    <span data-resumo="subtotal" class="resumo-subtotal">R$ 0,00</span>
+                </div>
+            </div>
+
+            <div class="summary-item">
+                <div class="d-flex justify-content-between text-muted">
+                    <span>Frete:</span>
+                    <span data-resumo="frete" class="resumo-frete">A calcular</span>
+                </div>
+                <small class="text-muted">O frete será calculado após inserir o endereço</small>
+            </div>
+
+            <div class="summary-total">
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total:</span>
+                    <span data-resumo="total" class="resumo-total">R$ 0,00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-actions">
+            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="window.CheckoutCarrinho?.recarregarCarrinho()">
+                <i class="fa-solid fa-refresh me-2"></i>
+                Atualizar Carrinho
+            </button>
+        </div>
+    </div>
+
+    <div class="summary-empty" id="summary-empty" style="display: none;">
+        <div class="text-center py-4">
+            <i class="fa-solid fa-cart-shopping fa-2x text-muted mb-3"></i>
+            <p class="text-muted mb-3">Seu carrinho está vazio</p>
+            <a href="/" class="btn btn-primary">
+                <i class="fa-solid fa-arrow-left me-2"></i>
+                Continuar Comprando
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="checkout-logs">
+    <h4>
+        <i class="fa-solid fa-list-check me-2"></i>
+        Status do Pedido
+    </h4>
+    <div class="status-logs" id="logs-container">
+    </div>
+</div>
+
+<style>
+    .checkout-summary .summary-actions {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #e9ecef;
+        text-align: center;
+    }
+
+    /* Lista de produtos */
+    .products-list {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .products-title {
+        color: #333;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+
+    .products-container {
+        max-height: 300px;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+
+    .product-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 3px solid #FF4E4E;
+        transition: all 0.3s ease;
+    }
+
+        .product-item:hover {
+            background: #e9ecef;
+            transform: translateX(2px);
+        }
+
+    .product-image {
+        width: 45px;
+        height: 45px;
+        border-radius: 6px;
+        object-fit: cover;
+        margin-right: 12px;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .product-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+        margin: 0 0 4px 0;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .product-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+    .product-quantity {
+        font-weight: 500;
+    }
+
+    .product-price {
+        font-weight: 600;
+        color: #FF4E4E;
+    }
+
+    /* Totais */
+    .summary-totals {
+        margin-top: 15px;
+    }
+
+    .checkout-summary .summary-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .checkout-summary .summary-item:last-of-type {
+            border-bottom: none;
+        }
+
+    .checkout-summary .summary-total {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .checkout-summary .summary-loading,
+    .checkout-summary .summary-empty {
+        padding: 2rem 0;
+    }
+
+    /* Scrollbar customizada para a lista de produtos */
+    .products-container::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .products-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+    }
+
+    .products-container::-webkit-scrollbar-thumb {
+        background: #FF4E4E;
+        border-radius: 2px;
+    }
+
+        .products-container::-webkit-scrollbar-thumb:hover {
+            background: #e43f3f;
+        }
+
+    .checkout-logs {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0f0f0;
+    }
+
+        .checkout-logs h4 {
+            color: #333;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #FF4E4E;
+            display: flex;
+            align-items: center;
+        }
+
+    .status-logs {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .log-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+        .log-item.active {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .log-item.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+
+        .log-item.warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .log-item.info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .log-item.processing {
+            background: #e2e3e5;
+            border-left: 4px solid #6c757d;
+        }
+
+    .log-icon {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .log-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .log-title {
+        display: block;
+        font-weight: 500;
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .log-time {
+        display: block;
+        font-size: 0.75rem;
+        opacity: 0.7;
+    }
+
+    .log-item.active .log-icon {
+        color: #28a745;
+    }
+
+    .log-item.error .log-icon {
+        color: #dc3545;
+    }
+
+    .log-item.warning .log-icon {
+        color: #ffc107;
+    }
+
+    .log-item.info .log-icon {
+        color: #17a2b8;
+    }
+
+    .log-item.processing .log-icon {
+        color: #6c757d;
+    }
+
+    
+    
+</style>

@@ -4,9 +4,12 @@
 
 @section Head {
     <link href="~/css/Checkout/checkout.css" rel="stylesheet" />
+    <link href="~/css/Checkout/checkout-user-data.css" rel="stylesheet" />
 }
 
 <div class="checkout-container">
+    @Html.AntiForgeryToken()
+
     <div class="checkout-header">
         <h2>
             <i class="fa-solid fa-credit-card me-3"></i>
@@ -67,29 +70,40 @@
                                 Forma de Pagamento
                             </h3>
                             <form id="form-finalizar-pedido" method="post" action="/pagamento/iniciar">
-                                <input type="hidden" id="dados-contato" name="dadosContato" />
-                                <input type="hidden" id="dados-endereco" name="dadosEndereco" />
+                                <div class="payment-methods">
+                                    <div class="payment-option">
+                                        <input type="radio" name="metodo" id="stripe" value="stripe" class="payment-radio">
+                                        <label for="stripe" class="payment-label">
+                                            <div class="payment-icon">
+                                                <i class="fa-brands fa-stripe"></i>
+                                            </div>
+                                            <div class="payment-info">
+                                                <span class="payment-name">Stripe</span>
+                                                <small class="payment-desc">Cartão de crédito/débito</small>
+                                            </div>
+                                        </label>
+                                    </div>
 
-                                <div class="payment-option">
-                                    <label for="stripe">
-                                        <input type="radio" name="metodo" id="stripe" value="stripe" />
-                                        <span>Stripe</span>
-                                    </label>
+                                    <div class="payment-option">
+                                        <input type="radio" name="metodo" id="mercadopago" value="mercadopago" class="payment-radio">
+                                        <label for="mercadopago" class="payment-label">
+                                            <div class="payment-icon">
+                                                <i class="fa-solid fa-credit-card"></i>
+                                            </div>
+                                            <div class="payment-info">
+                                                <span class="payment-name">MercadoPago</span>
+                                                <small class="payment-desc">PIX, Cartão, Boleto</small>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
 
-                                <div class="payment-option">
-                                    <label for="mercadopago">
-                                        <input type="radio" name="metodo" id="mercadopago" value="mercadopago" />
-                                        <span>MercadoPago</span>
-                                    </label>
-                                </div>
-
-                                <div class="checkout-actions">
-                                    <button type="button" class="btn btn-outline-secondary" id="btn-voltar-endereco">
+                                <div class="form-actions">
+                                    <button type="button" id="btn-voltar-endereco" class="btn btn-outline-secondary">
                                         <i class="fa-solid fa-arrow-left me-2"></i>
                                         Voltar ao Endereço
                                     </button>
-                                    <button id="btn-finalizar" class="btn btn-success btn-lg" type="submit">
+                                    <button type="submit" id="btn-finalizar-pedido" class="btn btn-success btn-lg">
                                         <i class="fa-solid fa-lock me-2"></i>
                                         Finalizar Pedido
                                     </button>
@@ -101,48 +115,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="checkout-summary">
-                    <h3>Resumo do Pedido</h3>
-                    <div class="summary-placeholder">
-                        <div class="summary-item">
-                            <div class="d-flex justify-content-between">
-                                <span>Subtotal:</span>
-                                <span>R$ XXX,XX</span>
-                            </div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="d-flex justify-content-between">
-                                <span>Frete:</span>
-                                <span>A calcular</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="summary-total">
-                            <div class="d-flex justify-content-between fw-bold">
-                                <span>Total:</span>
-                                <span>R$ XXX,XX</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="checkout-logs">
-                    <h4>
-                        <i class="fa-solid fa-list-check me-2"></i>
-                        Status do Pedido
-                    </h4>
-                    <div id="logs-container">
-                        <div class="log-item active">
-                            <div class="log-icon">
-                                <i class="fa-solid fa-circle-check"></i>
-                            </div>
-                            <div class="log-content">
-                                <span class="log-title">Carrinho Carregado</span>
-                                <span class="log-time">Agora</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <partial name="Partials/_ResumoCheckout" />
             </div>
         </div>
     </div>
@@ -160,6 +133,8 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/Checkout/checkout.js"></script>
+    <script src="~/js/Checkout/checkout-carrinho.js"></script>
+    <script src="~/js/Checkout/checkout-user-data.js"></script>
     <script src="~/js/Checkout/checkout-frete.js"></script>
+    <script src="~/js/Checkout/checkout.js"></script>
 }

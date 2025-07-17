@@ -17,7 +17,7 @@ public class PagamentoController : Controller
     }
 
     [HttpPost("iniciar")]
-    public async Task<IActionResult> IniciarPagamento([FromForm] string metodo)
+    public async Task<IActionResult> IniciarPagamento([FromForm] string metodo, [FromForm] string dadosContato = "", [FromForm] string dadosEndereco = "")
     {
         var idUsuario = ObterIdUsuarioLogado();
         if (!idUsuario.HasValue)
@@ -27,22 +27,38 @@ public class PagamentoController : Controller
         if (carrinho == null || !carrinho.TemItens)
             return BadRequest("Carrinho vazio");
 
+        Console.WriteLine($"[PAGAMENTO] Método: {metodo}");
+        Console.WriteLine($"[PAGAMENTO] Dados Contato: {dadosContato}");
+        Console.WriteLine($"[PAGAMENTO] Dados Endereço: {dadosEndereco}");
+        Console.WriteLine($"[PAGAMENTO] Carrinho ID: {carrinho.IdCarrinho}");
+        Console.WriteLine($"[PAGAMENTO] Total: R$ {carrinho.ValorTotal:F2}");
+
         string redirectUrl;
 
-        if (metodo == "stripe")
+        try
         {
-            redirectUrl = await _stripeService.CriarSessaoCheckoutAsync(carrinho);
-        }
-        else if (metodo == "mercadopago")
-        {
-            redirectUrl = await _mercadoPagoService.CriarPreferenciaAsync(carrinho);
-        }
-        else
-        {
-            return BadRequest("Método inválido");
-        }
+            if (metodo == "stripe")
+            {
+                redirectUrl = await _stripeService.CriarSessaoCheckoutAsync(carrinho);
+            }
+            else if (metodo == "mercadopago")
+            {
+                redirectUrl = await _mercadoPagoService.CriarPreferenciaAsync(carrinho);
+            }
+            else
+            {
+                Console.WriteLine($"[PAGAMENTO] Método inválido: {metodo}");
+                return BadRequest("Método inválido");
+            }
 
-        return Redirect(redirectUrl);
+            Console.WriteLine($"[PAGAMENTO] Redirecionando para: {redirectUrl}");
+            return Redirect(redirectUrl);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[PAGAMENTO] Erro: {ex.Message}");
+            return BadRequest($"Erro ao processar pagamento: {ex.Message}");
+        }
     }
 
     private Guid? ObterIdUsuarioLogado()
