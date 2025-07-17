@@ -1,0 +1,36 @@
+﻿#modal-lista-categorias .modal-dialog {
+    max-width: 800px;
+    width: 800px;
+}
+
+#modal-lista-categorias .modal-content {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#modal-lista-categorias .modal-body {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#modal-lista-categorias .input-group {
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+    #modal-lista-categorias .input-group select,
+    #modal-lista-categorias .input-group button {
+        height: 40px;
+    }
+
+table.dataTable thead th {
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}

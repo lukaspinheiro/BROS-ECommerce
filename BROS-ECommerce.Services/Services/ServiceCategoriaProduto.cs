@@ -48,6 +48,21 @@ namespace BROS_ECommerce.Services.Services
         {
             await _repositoryCategoriaProduto.ExcluirAsync(idCategoriaProduto);
         }
-    }
+        public async Task RemoverPorCategoriaAsync(Guid idCategoria)
+        {
+            var vinculados = await _repositoryCategoriaProduto.ListarPorCategoriaAsync(idCategoria);
+            if (vinculados.Any())
+            {
+                _repositoryCategoriaProduto.RemoverTodos(vinculados);
+                await _repositoryCategoriaProduto.SalvarAsync();
+            }
+        }
 
+        public async Task RemoverPorProdutoAsync(Guid idProduto)
+        {
+            await _repositoryCategoriaProduto.RemoverVinculosPorProdutoAsync(idProduto);
+        }
+
+
+    }
 }

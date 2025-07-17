@@ -1,5 +1,6 @@
 ﻿using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
+using BROS_ECommerce.Infra.Repository;
 using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Imagem;
 using BROS_ECommerce.Services.ViewModel.Produto;
@@ -11,12 +12,15 @@ namespace BROS_ECommerce.Services.Services
         private readonly IRepositoryProduto _repositoryProduto;
         private readonly IRepositoryEstoque _repositoryEstoque;
         private readonly IServiceImagem _serviceImagem;
+        private readonly IRepositoryCategoriaProduto _repositoryCategoriaProduto;
 
-        public ProdutoService(IRepositoryProduto repositoryProduto, IRepositoryEstoque repositoryEstoque, IServiceImagem serviceImagem)
+        public ProdutoService(IRepositoryProduto repositoryProduto, IRepositoryEstoque repositoryEstoque, IServiceImagem serviceImagem, IRepositoryCategoriaProduto repositoryCategoriaProduto)
         {
             _repositoryProduto = repositoryProduto;
             _repositoryEstoque = repositoryEstoque;
+            _repositoryCategoriaProduto = repositoryCategoriaProduto;
             _serviceImagem = serviceImagem;
+            _repositoryCategoriaProduto = repositoryCategoriaProduto;
         }
 
         public async Task<List<TabelaProdutoViewModel>> ObterTabelaProdutosAsync()
@@ -267,17 +271,18 @@ namespace BROS_ECommerce.Services.Services
         {
             try
             {
-                
+                await _repositoryCategoriaProduto.RemoverVinculosPorProdutoAsync(id);
+
                 await _repositoryEstoque.ExcluirPorIdProdutoAsync(id);
 
-                
                 await _repositoryProduto.ExcluirAsync(id);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Erro ao excluir produto: {ex.Message}");
+                throw new InvalidOperationException($"Erro ao excluir produto: {ex.Message}", ex);
             }
         }
+
 
         public async Task<IEnumerable<ProdutoViewModel>> BuscarPorTermoAsync(string termo)
         {

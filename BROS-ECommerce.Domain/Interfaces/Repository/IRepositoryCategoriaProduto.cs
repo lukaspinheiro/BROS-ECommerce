@@ -7,5 +7,10 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
     {
         Task<List<CategoriaProduto>> ListarPorProdutoAsync(Guid idProduto);
         Task ExcluirAsync(Guid id);
+        Task<List<CategoriaProduto>> ListarPorCategoriaAsync(Guid idCategoria);
+        void RemoverTodos(List<CategoriaProduto> lista);
+        Task RemoverVinculosPorProdutoAsync(Guid idProduto);
+        Task SalvarAsync();
+
     }
 }

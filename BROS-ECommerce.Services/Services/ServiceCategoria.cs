@@ -13,10 +13,12 @@ namespace BROS_ECommerce.Services.Services
     public class ServiceCategoria : IServiceCategoria
     {
         private readonly IRepositoryCategoria _repositoryCategoria;
+        private readonly IServiceCategoriaProduto _serviceCategoriaProduto;
 
-        public ServiceCategoria(IRepositoryCategoria repositoryCategoria)
+        public ServiceCategoria(IRepositoryCategoria repositoryCategoria, IServiceCategoriaProduto serviceCategoriaProduto)
         {
             _repositoryCategoria = repositoryCategoria;
+            _serviceCategoriaProduto = serviceCategoriaProduto;
         }
 
 
@@ -65,6 +67,7 @@ namespace BROS_ECommerce.Services.Services
         {
             try
             {
+                await _serviceCategoriaProduto.RemoverPorCategoriaAsync(id);
                 await _repositoryCategoria.ExcluirAsync(id);
             }
             catch (Exception ex)

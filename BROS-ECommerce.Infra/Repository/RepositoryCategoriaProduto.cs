@@ -53,5 +53,34 @@ namespace BROS_ECommerce.Infra.Repository
                 .ToListAsync();
         }
 
+        public async Task<List<CategoriaProduto>> ListarPorCategoriaAsync(Guid idCategoria)
+        {
+            return await _context.CategoriaProdutos
+                .Where(cp => cp.IdCategoria == idCategoria)
+                .ToListAsync();
+        }
+
+        public void RemoverTodos(List<CategoriaProduto> lista)
+        {
+            _dbSet.RemoveRange(lista);
+        }
+
+        public async Task RemoverVinculosPorProdutoAsync(Guid idProduto)
+        {
+            var vinculos = await _dbSet.Where(cp => cp.IdProduto == idProduto).ToListAsync();
+
+            if (vinculos.Any())
+            {
+                _dbSet.RemoveRange(vinculos);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
+        public async Task SalvarAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

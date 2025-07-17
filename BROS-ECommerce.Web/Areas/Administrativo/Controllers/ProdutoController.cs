@@ -161,8 +161,10 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             try
             {
                 var imagens = await _serviceImagem.ObterImagensPorProdutoAsync(id);
-                
+
+                await _serviceCategoriaProduto.RemoverPorProdutoAsync(id);
                 await _serviceProduto.ExcluirAsync(id);
+
                 List<string> errosExclusaoImagens = new();
 
                 foreach (var imagem in imagens)
