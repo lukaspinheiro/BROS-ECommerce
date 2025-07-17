@@ -1,0 +1,45 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Categoria.IndexCategoriaViewModel
+@{
+    ViewData["Title"] = "Gerenciar Categorias";
+}
+@section Head {
+    <partial name="Css/_datatables" />
+}
+
+<div class="container">
+    <div class="card mt-0">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                    <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i></a>
+                    <div>
+                        <a class="btn btn-success pull-right text-white"
+                           id="btn-abrir-modal"
+                           data-bs-toggle="modal"
+                           data-bs-target="#modal-cadastrar-categoria">
+                            <i class="fa fa-plus"></i> Adicionar Categoria
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <h3 class="title text-center"> @ViewData["Title"]</h3>
+
+                    <div class="col-12" id="tabela-partial">
+                        <partial name="Partials\_TabelaCategoria" model="Model.Tabela" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="Partials/_CadastrarCategoria" model="Model.cadastrarCategoriaViewModel" />
+<partial name="Partials/_ExcluirCategoria" model="Model.cadastrarCategoriaViewModel" />
+<partial name="Partials/_EditarCategoria" model="Model.cadastrarCategoriaViewModel" />
+
+@section Scripts {
+    <partial name="Script/_datatables" />
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script type="module" src="~/js/Administrativo/Categoria/categoria.modal.js"></script>
+    <script type="module" src="~/js/Administrativo/Categoria/categoria.table.js"></script>
+}
