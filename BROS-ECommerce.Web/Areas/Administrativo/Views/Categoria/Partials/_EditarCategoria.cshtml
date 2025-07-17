@@ -7,7 +7,8 @@
                   asp-area="Administrativo"
                   asp-controller="Categoria"
                   asp-action="EditarCategoria"
-                  method="post">
+                  method="post"
+                  onsubmit="desabilitarBotoesEmPartials(this)">
                 @Html.AntiForgeryToken()
 
                 <input type="hidden" name="IdCategoria" id="input-id-edicao" />
@@ -39,7 +40,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                    <button type="submit" class="btn btn-success btn-disable">Salvar Alterações</button>
                 </div>
             </form>
         </div>
