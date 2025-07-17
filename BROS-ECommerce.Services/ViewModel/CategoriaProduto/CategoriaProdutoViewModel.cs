@@ -6,8 +6,10 @@
         public Guid IdCategoria { get; set; }
         public Guid IdProduto { get; set; }
         public DateTime DataAssociacao { get; set; }
-        public string NomeCategoria { get; set; } = string.Empty;
+        public string NomeCategoria { get; set; } = string.Empty;   
         public string NomeProduto { get; set; } = string.Empty;
+        public string DescricaoCategoria { get; set; } = string.Empty;
+
     }
 
 }

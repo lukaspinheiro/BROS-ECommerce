@@ -40,9 +40,83 @@
 <partial name="Partials/_Cadastrar" />
 <partial name="Partials/_ModalDetalhesProduto">
 <partial name="Partials/_ModalExclusaoProduto">
+<div id="div-modal-categorias"></div>
+
 
 @section Scripts {
     <partial name="Script\_datatables" />
     <script type="module" src="~/js/Administrativo/Produto/produto.main.js"></script>
     <script type="module" src="~/js/shared/temp-data.js"></script>
+            <script>
+                let produtoAtualId = null; // Variável global para armazenar o produto atual
+
+                function abrirModalCategorias(idProduto) {
+                    produtoAtualId = idProduto; // Guarda o Id do produto aberto na modal
+                    $.get('/Administrativo/Produto/ModalCategorias', { idProduto: idProduto }, function (html) {
+                        $('#div-modal-categorias').html(html);
+                        $('#modal-lista-categorias').modal('show');
+                    });
+                }
+
+                function fecharModalCategorias() {
+                    $('#modal-lista-categorias').modal('hide');
+                    produtoAtualId = null; // Limpa o id quando fechar modal (opcional)
+                }
+
+                function adicionarCategoriaAoProduto() {
+                    const idCategoria = $('#select-categoria-disponivel').val();
+                    const nomeCategoria = $('#select-categoria-disponivel option:selected').text();
+
+                    if (!idCategoria) {
+                        alert("Selecione uma categoria.");
+                        return;
+                    }
+
+                    if (!produtoAtualId || produtoAtualId === '00000000-0000-0000-0000-000000000000') {
+                        alert("Produto inválido.");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/Administrativo/Produto/Associar',
+                        method: 'POST',
+                        data: {
+                            idProduto: produtoAtualId,
+                            idCategoria: idCategoria
+                        },
+                        success: function (response) {
+                            const novaLinha = `
+                                <tr data-id="${response.idCategoriaProduto}">
+                                    <td>${nomeCategoria}</td>
+                                    <td>${response.descricaoCategoria ?? ''}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removerCategoria('${response.idCategoriaProduto}')">Remover</button>
+                                    </td>
+                                </tr>`;
+                            $('#tabela-categorias-produto tbody').append(novaLinha);
+                        },
+                        error: function () {
+                            alert("Erro ao associar categoria.");
+                        }
+                    });
+                }
+
+                function removerCategoria(idCategoriaProduto) {
+                    if (!confirm("Deseja realmente remover essa categoria?")) return;
+
+                    $.ajax({
+                        url: '/Administrativo/Produto/Remover',
+                        method: 'POST',
+                        data: { idCategoriaProduto: idCategoriaProduto },
+                        success: function () {
+                            $(`tr[data-id="${idCategoriaProduto}"]`).remove();
+                        },
+                        error: function () {
+                            alert("Erro ao remover categoria.");
+                        }
+                    });
+                }
+            </script>
+
+
 }

@@ -57,5 +57,12 @@ namespace BROS_ECommerce.Infra.Repository
                 .OrderBy(c => c.NomeCategoria)
                 .ToListAsync();
         }
+        public async Task<Categoria?> ObterPorIdAsync(Guid idCategoria)
+        {
+            return await _dbSet
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.IdCategoria == idCategoria);
+        }
+
     }
 }

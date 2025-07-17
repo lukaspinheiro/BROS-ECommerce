@@ -1,0 +1,120 @@
+﻿@model BROS_ECommerce.Services.ViewModel.CategoriaProduto.ProdutoCategoriasModalViewModel
+
+<style>
+    #modal-lista-categorias .modal-dialog {
+        max-width: 800px;
+        width: 800px;
+    }
+
+    #modal-lista-categorias .modal-content {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #modal-lista-categorias .modal-body {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #modal-lista-categorias .input-group {
+        margin-bottom: 15px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+        #modal-lista-categorias .input-group select,
+        #modal-lista-categorias .input-group button {
+            height: 40px;
+        }
+
+    table.dataTable thead th {
+        background-color: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+</style>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-lista-categorias" tabindex="-1" role="dialog" aria-labelledby="modalListaCategoriasLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalListaCategoriasLabel">Categorias do Produto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fecharModalCategorias()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="input-group">
+                    <select id="select-categoria-disponivel" class="form-select">
+                        <option value="">Selecione uma categoria</option>
+                        @foreach (var categoria in Model.CategoriasDisponiveis)
+                        {
+                            <option value="@categoria.Value">@categoria.Text</option>
+                        }
+                    </select>
+                    <button class="btn btn-success" type="button" onclick="adicionarCategoriaAoProduto()">Adicionar</button>
+                </div>
+                <div class="table-container">
+                    <table id="tabela-categorias-produto" class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th style="width: 80px;">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var categoria in Model.CategoriasAssociadas)
+                            {
+                                <tr data-id="@categoria.IdCategoriaProduto">
+                                    <td>@categoria.NomeCategoria</td>
+                                    <td>@categoria.DescricaoCategoria</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removerCategoria('@categoria.IdCategoriaProduto')">Remover</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+<script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+      $('#tabela-categorias-produto').DataTable({
+        paging: true,
+        pageLength: 5,
+        searching: false,
+        info: false,
+        ordering: false,
+        fixedHeader: true,
+        language: {
+          emptyTable: "Nenhuma categoria adicionada",
+          paginate: {
+            previous: "Anterior",
+            next: "Próxima"
+          }
+        }
+      });
+    });
+</script>
+
+

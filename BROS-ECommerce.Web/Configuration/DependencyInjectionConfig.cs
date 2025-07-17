@@ -32,6 +32,7 @@ namespace BROS_ECommerce.Web.Configuration
             services.AddScoped<IRepositoryCarrinho, CarrinhoRepository>();
             services.AddScoped<IRepositoryCarrinhoItem, CarrinhoItemRepository>();
             services.AddScoped<IRepositoryCategoria, CategoriaRepository>();
+            services.AddScoped<IRepositoryCategoriaProduto, RepositoryCategoriaProduto>();
             #endregion
 
             #region Serviços
@@ -42,6 +43,7 @@ namespace BROS_ECommerce.Web.Configuration
             services.AddScoped<JwtService>();
             services.AddScoped<IServiceCarrinho, ServiceCarrinho>();
             services.AddScoped<IServiceCategoria, ServiceCategoria>();
+            services.AddScoped<IServiceCategoriaProduto, ServiceCategoriaProduto>();
             #endregion
         }
     }
