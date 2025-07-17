@@ -1,56 +1,41 @@
 ﻿@model BROS_ECommerce.Services.ViewModel.Categoria.CadastrarCategoriaViewModel
 
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="modal-cadastrar-categoria">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" tabindex="-1" id="modal-cadastrar-categoria" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <form id="form-cadastrar-categoria" asp-area="Administrativo" asp-controller="Categoria" asp-action="CadastrarCategoria" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
+            <form id="form-cadastrar-categoria"
+                  asp-area="Administrativo"
+                  asp-controller="Categoria"
+                  asp-action="CadastrarCategoria"
+                  method="post"
+                  autocomplete="off"
+                  onsubmit="desabilitarBotao()">
                 @Html.AntiForgeryToken()
-                <input type="hidden" id="categoria-id-edicao" name="IdCategoria" />
 
                 <div class="modal-header">
                     <h5 class="modal-title">Cadastrar Categoria</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fecharModalCadastrar()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
 
-                <div style="overflow-x:auto;">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label asp-for="NomeCategoria" class="control-label"></label>
-                            <input asp-for="NomeCategoria"
-                                   type="text"
-                                   id="NomeCategoria"
-                                   class="form-control"
-                                   autocomplete="off"
-                                   required
-                                   maxlength="100"
-                                   style="text-transform: unset;" />
-                            <span asp-validation-for="NomeCategoria" class="text-danger"></span>
-                        </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label asp-for="NomeCategoria"></label>
+                        <input asp-for="NomeCategoria" name="cadastrarCategoriaViewModel.NomeCategoria" class="form-control" id="NomeCategoriaCadastrar" required maxlength="100" />
+                        <span asp-validation-for="NomeCategoria" class="text-danger"></span>
+                    </div>
 
-                        <div class="form-group">
-                            <label asp-for="Descricao"></label>
-                            <textarea asp-for="Descricao"
-                                      class="form-control"
-                                      rows="3"
-                                      maxlength="255"
-                                      style="resize: vertical;"></textarea>
-                            <span asp-validation-for="Descricao" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-check mt-3">
-                            <input asp-for="Ativo" class="form-check-input" />
-                            <label asp-for="Ativo" class="form-check-label"></label>
-                        </div>
+                    <div class="form-group">
+                        <label asp-for="Descricao"></label>
+                        <textarea asp-for="Descricao" name="cadastrarCategoriaViewModel.Descricao" class="form-control" id="DescCategoriaCadastrar" rows="3" required maxlength="255"></textarea>
+                        <span asp-validation-for="Descricao" class="text-danger"></span>
                     </div>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fecharModalCadastrar()">Cancelar</button>
-                    <button id="btn-disable" disabled="true" type="submit" class="btn btn-success">ADICIONAR</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="btn-disable" disabled type="submit" class="btn btn-success">Cadastrar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script src="~/js/shared/desabilitar-botao-ao-realizar-submit.js"></script>

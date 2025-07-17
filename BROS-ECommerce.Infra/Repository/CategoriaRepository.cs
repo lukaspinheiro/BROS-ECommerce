@@ -15,6 +15,16 @@ namespace BROS_ECommerce.Infra.Repository
             _dbSet.Add(categoria);
             await _context.SaveChangesAsync();
         }
+        
+        public async Task ExcluirAsync(Guid id)
+        {
+            var produto = await _dbSet.FindAsync(id);
+            if (produto != null)
+            {
+                _dbSet.Remove(produto);
+                await _context.SaveChangesAsync();
+            }
+        }
 
         public async Task AtualizarAsync(Categoria categoria)
         {
@@ -33,6 +43,11 @@ namespace BROS_ECommerce.Infra.Repository
         public async Task<List<Categoria>> EncontrarAsync(Expression<Func<Categoria, bool>> expressao)
         {
             return await _dbSet.Where(expressao).ToListAsync();
+        }
+
+        public async Task<bool> CategoriaExisteAsync(string nomeCategoria)
+        {
+            return await _dbSet.AnyAsync(c => c.NomeCategoria.ToLower() == nomeCategoria.ToLower());
         }
 
         public async Task<IEnumerable<Categoria>> ObterTodasCategorias()

@@ -6,5 +6,7 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
     public interface IRepositoryCategoria : IDisposable, IRepositoryBase<Categoria>, IAdicionarAsync<Categoria>, IAtualizarAsync<Categoria>, IBuscarPorIdAsync<Categoria>, IEncontrarAsync<Categoria>
     {
         Task<IEnumerable<Categoria>> ObterTodasCategorias();
+        Task<bool> CategoriaExisteAsync(string nomeCategoria);
+        Task ExcluirAsync(Guid id);
     }
 }
