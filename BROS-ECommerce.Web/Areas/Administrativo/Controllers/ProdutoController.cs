@@ -1,6 +1,9 @@
-﻿using BROS_ECommerce.Services.Interface.Services;
+﻿using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.ViewModel.CategoriaProduto;
 using BROS_ECommerce.Services.ViewModel.Produto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 {
@@ -10,11 +13,15 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
     {
         private readonly IServiceProduto _serviceProduto;
         private readonly IServiceImagem _serviceImagem;
+        private readonly IServiceCategoria _serviceCategoria;
+        private readonly IServiceCategoriaProduto _serviceCategoriaProduto;
 
-        public ProdutoController(IServiceProduto serviceProduto, IServiceImagem serviceImagem)
+        public ProdutoController(IServiceProduto serviceProduto, IServiceImagem serviceImagem, IServiceCategoria serviceCategoria, IServiceCategoriaProduto serviceCategoriaProduto)
         {
             _serviceProduto = serviceProduto;
             _serviceImagem = serviceImagem;
+            _serviceCategoria = serviceCategoria;
+            _serviceCategoriaProduto = serviceCategoriaProduto;
         }
 
         [HttpGet("index")]
@@ -154,8 +161,10 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             try
             {
                 var imagens = await _serviceImagem.ObterImagensPorProdutoAsync(id);
-                
+
+                await _serviceCategoriaProduto.RemoverPorProdutoAsync(id);
                 await _serviceProduto.ExcluirAsync(id);
+
                 List<string> errosExclusaoImagens = new();
 
                 foreach (var imagem in imagens)
@@ -299,5 +308,75 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 
             return RedirectToAction("GerenciarImagens", new { id = idProduto });
         }
+
+        [HttpGet("ModalCategorias")]
+        public async Task<IActionResult> ModalCategorias(Guid idProduto)
+        {
+            var produto = await _serviceProduto.ObterPorIdAsync(idProduto);
+
+            if (produto == null)
+                return NotFound();
+
+            var categoriasAssociadas = await _serviceCategoriaProduto.ListarPorProdutoAsync(idProduto);
+            var todasCategorias = await _serviceCategoria.ListarTodasAsync();
+
+            var categoriasDisponiveis = todasCategorias
+                .Where(c => !categoriasAssociadas.Any(a => a.IdCategoria == c.IdCategoria))
+                .Select(c => new SelectListItem
+                {
+                    Value = c.IdCategoria.ToString(),
+                    Text = c.NomeCategoria
+                }).ToList();
+
+            var viewModel = new ProdutoCategoriasModalViewModel
+            {
+                IdProduto = idProduto,
+                CategoriasDisponiveis = categoriasDisponiveis,
+                CategoriasAssociadas = categoriasAssociadas.Select(cp =>
+                {
+                    var categoria = todasCategorias.FirstOrDefault(c => c.IdCategoria == cp.IdCategoria);
+                    return new CategoriaProdutoViewModel
+                    {
+                        IdCategoriaProduto = cp.IdCategoriaProduto,
+                        IdCategoria = cp.IdCategoria,
+                        IdProduto = cp.IdProduto,
+                        NomeCategoria = categoria?.NomeCategoria ?? string.Empty,
+                        DescricaoCategoria = categoria?.Descricao ?? string.Empty,
+                        NomeProduto = produto.Nome
+                    };
+                }).ToList()
+            };
+
+            return PartialView("Partials/_ModalCategorias", viewModel);
+        }
+
+
+        [HttpPost("Associar")]
+        public async Task<IActionResult> Associar(Guid idProduto, Guid idCategoria)
+        {
+            var viewModel = new CategoriaProdutoViewModel
+            {
+                IdCategoria = idCategoria,
+                IdProduto = idProduto
+            };
+
+            var categoriaProduto = await _serviceCategoriaProduto.AdicionarAsync(viewModel);
+            var categoria = await _serviceCategoria.ObterPorIdAsync(idCategoria);
+
+            return Json(new
+            {
+                idCategoriaProduto = categoriaProduto.IdCategoriaProduto,
+                nomeCategoria = categoria.NomeCategoria,
+                descricaoCategoria = categoria.Descricao
+            });
+        }
+
+        [HttpPost("Remover")]
+        public async Task<IActionResult> Remover(Guid idCategoriaProduto)
+        {
+            await _serviceCategoriaProduto.RemoverAsync(idCategoriaProduto);
+            return Ok();
+        }
+
     }
 }

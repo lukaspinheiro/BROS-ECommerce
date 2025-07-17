@@ -2,7 +2,8 @@
       asp-area="Administrativo"
       asp-controller="Categoria"
       asp-action="ExcluirCategoria"
-      method="post">
+      method="post"
+      onsubmit="desabilitarBotoesEmPartials(this)">
 
     @Html.AntiForgeryToken()
     <input type="hidden" name="IdCategoria" id="input-id-exclusao" />
@@ -23,7 +24,7 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="fecharModalExclusao()">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="btn-confirmar-exclusao">Sim, Excluir</button>
+                    <button type="button" class="btn btn-danger btn-disable" id="btn-confirmar-exclusao">Sim, Excluir</button>
                 </div>
             </div>
         </div>

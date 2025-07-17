@@ -8,5 +8,7 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
         Task<IEnumerable<Categoria>> ObterTodasCategorias();
         Task<bool> CategoriaExisteAsync(string nomeCategoria);
         Task ExcluirAsync(Guid id);
+        Task<Categoria?> ObterPorIdAsync(Guid idCategoria);
+
     }
 }

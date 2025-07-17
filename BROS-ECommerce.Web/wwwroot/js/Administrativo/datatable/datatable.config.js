@@ -49,8 +49,7 @@
                 modifier: { search: 'none' },
                 columns: function (idx, data, node) {
                     const temClasseIgnorada =
-                        node.classList.contains('nao-exportar') ||
-                        node.classList.contains('img-relatorio');
+                        node.classList.contains('nao-exportar');
                     const contemSlug = node.innerText.includes('Caminho URL:');
                     return !temClasseIgnorada && !contemSlug;
                 }

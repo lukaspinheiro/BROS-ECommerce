@@ -1,0 +1,55 @@
+﻿@model BROS_ECommerce.Services.ViewModel.CategoriaProduto.ProdutoCategoriasModalViewModel
+
+<div class="modal fade" id="modal-lista-categorias" tabindex="-1" role="dialog" aria-labelledby="modalListaCategoriasLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalListaCategoriasLabel">Categorias do Produto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="fecharModalCategorias()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="input-group">
+                    <select id="select-categoria-disponivel" class="form-select">
+                        <option value="">Selecione uma categoria</option>
+                        @foreach (var categoria in Model.CategoriasDisponiveis)
+                        {
+                            <option value="@categoria.Value">@categoria.Text</option>
+                        }
+                    </select>
+                    <button class="btn btn-success" type="button" onclick="adicionarCategoriaAoProduto()">Adicionar</button>
+                </div>
+                <div class="table-container">
+                    <table id="tabela-categorias-produto" class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th style="width: 20%;">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var categoria in Model.CategoriasAssociadas)
+                            {
+                                <tr data-id="@categoria.IdCategoriaProduto">
+                                    <td>@categoria.NomeCategoria</td>
+                                    <td>@categoria.DescricaoCategoria</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="removerCategoria('@categoria.IdCategoriaProduto')">Remover</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+

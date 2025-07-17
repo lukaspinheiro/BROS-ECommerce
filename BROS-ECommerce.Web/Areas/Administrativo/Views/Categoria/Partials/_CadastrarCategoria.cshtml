@@ -9,7 +9,7 @@
                   asp-action="CadastrarCategoria"
                   method="post"
                   autocomplete="off"
-                  onsubmit="desabilitarBotao()">
+                  onsubmit="desabilitarBotoesEmPartials(this)">
                 @Html.AntiForgeryToken()
 
                 <div class="modal-header">
@@ -33,7 +33,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button id="btn-disable" disabled type="submit" class="btn btn-success">Cadastrar</button>
+                    <button type="submit" class="btn btn-success btn-disable">Cadastrar</button>
                 </div>
             </form>
         </div>

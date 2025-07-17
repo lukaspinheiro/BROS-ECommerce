@@ -4,7 +4,8 @@
 }
 @section Head {
     <partial name="Css\_datatables" />
-    <link rel="stylesheet" type="text/css" href="/css/Administrativo/Produto/produto.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/Administrativo/Produto/produto.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/Administrativo/Produto/produto.modal.css"/>
 }
 
 <partial name="PartialsLayout/_AlertasTempData" />
@@ -40,9 +41,12 @@
 <partial name="Partials/_Cadastrar" />
 <partial name="Partials/_ModalDetalhesProduto">
 <partial name="Partials/_ModalExclusaoProduto">
+<div id="div-modal-categorias"></div>
+
 
 @section Scripts {
     <partial name="Script\_datatables" />
     <script type="module" src="~/js/Administrativo/Produto/produto.main.js"></script>
     <script type="module" src="~/js/shared/temp-data.js"></script>
+    <script type="text/javascript" src="~/js/Administrativo/Produto/produto.categorias.js"></script>
 }

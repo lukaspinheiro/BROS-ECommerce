@@ -5,6 +5,7 @@ using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Categoria;
 using BROS_ECommerce.Services.ViewModel.CategoriaProduto;
 using BROS_ECommerce.Services.ViewModel.Produto;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace BROS_ECommerce.Services.Services
@@ -12,10 +13,12 @@ namespace BROS_ECommerce.Services.Services
     public class ServiceCategoria : IServiceCategoria
     {
         private readonly IRepositoryCategoria _repositoryCategoria;
+        private readonly IServiceCategoriaProduto _serviceCategoriaProduto;
 
-        public ServiceCategoria(IRepositoryCategoria repositoryCategoria)
+        public ServiceCategoria(IRepositoryCategoria repositoryCategoria, IServiceCategoriaProduto serviceCategoriaProduto)
         {
             _repositoryCategoria = repositoryCategoria;
+            _serviceCategoriaProduto = serviceCategoriaProduto;
         }
 
 
@@ -32,6 +35,12 @@ namespace BROS_ECommerce.Services.Services
                 dataAtualizacao: c.DataAtualizacao ?? DateTime.UtcNow
             )).ToList();
         }
+        public async Task<List<Categoria>> ListarTodasAsync()
+        {
+            var categorias = await _repositoryCategoria.ObterTodasCategorias();
+            return categorias.ToList();
+        }
+
 
         public async Task AdicionarCategoriaAsync(CadastrarCategoriaViewModel CategoriaVM)
         {
@@ -58,6 +67,7 @@ namespace BROS_ECommerce.Services.Services
         {
             try
             {
+                await _serviceCategoriaProduto.RemoverPorCategoriaAsync(id);
                 await _repositoryCategoria.ExcluirAsync(id);
             }
             catch (Exception ex)
@@ -79,6 +89,20 @@ namespace BROS_ECommerce.Services.Services
             categoria.DataAtualizacao = TimeHelper.AgoraPortoVelho();
 
             await _repositoryCategoria.AtualizarAsync(categoria);
+        }
+        public async Task<CategoriaViewModel?> ObterPorIdAsync(Guid idCategoria)
+        {
+            var categoria = await _repositoryCategoria.ObterPorIdAsync(idCategoria);
+
+            if (categoria == null)
+                return null;
+
+            return new CategoriaViewModel
+            {
+                IdCategoria = categoria.IdCategoria,
+                NomeCategoria = categoria.NomeCategoria,
+                Descricao = categoria.Descricao
+            };
         }
 
     }
