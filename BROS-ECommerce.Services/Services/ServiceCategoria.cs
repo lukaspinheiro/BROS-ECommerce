@@ -1,0 +1,85 @@
+﻿using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Domain.Interfaces.Repository;
+using BROS_ECommerce.Services.Helpers;
+using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.ViewModel.Categoria;
+using BROS_ECommerce.Services.ViewModel.CategoriaProduto;
+using BROS_ECommerce.Services.ViewModel.Produto;
+using System.Linq.Expressions;
+
+namespace BROS_ECommerce.Services.Services
+{
+    public class ServiceCategoria : IServiceCategoria
+    {
+        private readonly IRepositoryCategoria _repositoryCategoria;
+
+        public ServiceCategoria(IRepositoryCategoria repositoryCategoria)
+        {
+            _repositoryCategoria = repositoryCategoria;
+        }
+
+
+        public async Task<List<TabelaCategoriaViewModel>> ObterTabelaCategoriaAsync()
+        {
+            var categorias = await _repositoryCategoria.ObterTodasCategorias();
+
+            return categorias.Select(c => new TabelaCategoriaViewModel(
+                idCategoria: c.IdCategoria,
+                nomeCategoria: c.NomeCategoria,
+                descricao: c.Descricao ?? string.Empty,
+                ativo: c.Ativo,
+                dataCriacao: c.DataCriacao,
+                dataAtualizacao: c.DataAtualizacao ?? DateTime.UtcNow
+            )).ToList();
+        }
+
+        public async Task AdicionarCategoriaAsync(CadastrarCategoriaViewModel CategoriaVM)
+        {
+            var CategoriaExiste = await _repositoryCategoria.CategoriaExisteAsync(CategoriaVM.NomeCategoria);
+            if (CategoriaExiste)
+            {
+                throw new InvalidOperationException($"Já existe uma categoria com cadastrada com o nome '{CategoriaVM.NomeCategoria}'!");
+            }
+
+            var categoria = new Categoria
+            {
+                IdCategoria = Guid.NewGuid(),
+                NomeCategoria = CategoriaVM.NomeCategoria,
+                Descricao = CategoriaVM.Descricao,
+                Ativo = CategoriaVM.Ativo,
+                DataCriacao = TimeHelper.AgoraPortoVelho(),
+                DataAtualizacao = TimeHelper.AgoraPortoVelho(),
+            };
+
+            await _repositoryCategoria.AdicionarAsync(categoria);
+        }
+
+        public async Task ExcluirAsync(Guid id)
+        {
+            try
+            {
+                await _repositoryCategoria.ExcluirAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Erro ao excluir Categoria: {ex.Message}");
+            }
+        }
+
+        public async Task EditarCategoriaAsync(CadastrarCategoriaViewModel model)
+        {
+            var categoria = await _repositoryCategoria.BuscarPorIdAsync(model.IdCategoria);
+
+            if (categoria == null || categoria.IdCategoria == Guid.Empty)
+                throw new Exception("Categoria não encontrada.");
+
+            categoria.NomeCategoria = model.NomeCategoria;
+            categoria.Descricao = model.Descricao;
+            categoria.Ativo = model.Ativo;
+            categoria.DataAtualizacao = TimeHelper.AgoraPortoVelho();
+
+            await _repositoryCategoria.AtualizarAsync(categoria);
+        }
+
+    }
+}

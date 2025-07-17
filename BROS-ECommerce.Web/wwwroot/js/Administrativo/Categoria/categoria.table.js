@@ -8,7 +8,7 @@ export function inicializarTabela() {
         !tabela.find("tbody tr td[colspan]").length
     ) {
         const config = criarConfiguracaoTabela([
-            { searchable: false, targets: [0, 7] }
+            { searchable: false, targets: [0, 4] }
         ]);
         tabela.DataTable(config);
     }
