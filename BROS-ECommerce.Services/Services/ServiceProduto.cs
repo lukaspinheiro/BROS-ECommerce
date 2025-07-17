@@ -310,6 +310,31 @@ namespace BROS_ECommerce.Services.Services
             });
         }
 
+        public async Task<IEnumerable<ProdutoViewModel>> BuscarPorCategoriaAsync(string nomeCategoria)
+        {
+            if (string.IsNullOrWhiteSpace(nomeCategoria))
+                return new List<ProdutoViewModel>();
+
+            var produtos = await _repositoryProduto.BuscarPorCategoriaAsync(nomeCategoria);
+
+            return produtos.Select(p => new ProdutoViewModel
+            {
+                IdProduto = p.IdProduto,
+                Nome = p.Nome,
+                Slug = p.Slug,
+                TituloDescricao = p.TituloDescricao,
+                Descricao = p.Descricao,
+                Preco = p.Preco,
+                Imagens = p.ProdutoImagens
+                    .Where(pi => pi.Imagem.Ativo)
+                    .OrderByDescending(pi => pi.Principal)
+                    .ThenBy(pi => pi.Ordem)
+                    .Select(pi => $"{pi.Imagem.CaminhoArquivo}")
+                    .ToList()
+            });
+        }
+
+
         public async Task AdicionarComImagensAsync(IndexProdutoViewModel indexProdutoViewModel)
         {
             var vm = indexProdutoViewModel.cadastrarProdutoViewModel;

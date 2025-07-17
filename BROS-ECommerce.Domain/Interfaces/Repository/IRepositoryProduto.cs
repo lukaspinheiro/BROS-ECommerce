@@ -16,6 +16,7 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
         Task<bool> SlugExisteAsync(string slug, Guid? excluirId = null);
         Task ExcluirAsync(Guid id);
         Task<List<Produto>> BuscarPorNomeAsync(string nome);
+        Task<List<Produto>> BuscarPorCategoriaAsync(string nomeCategoria);
         Task<List<Produto>> ObterPaginadoAsync(int pagina, int tamanhoPagina);
         Task<int> ContarTotalAsync();
     }
