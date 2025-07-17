@@ -1,4 +1,205 @@
-﻿.pedido-status {
+﻿.card {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+    .card:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+
+.card-stats {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+    .card-stats:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-stats.bg-primary {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    }
+
+    .card-stats.bg-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+    }
+
+    .card-stats.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%) !important;
+    }
+
+    .card-stats.bg-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    }
+
+.filtros-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .filtros-container h5 {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+    .form-control:focus {
+        border-color: #FF4E4E;
+        box-shadow: 0 0 0 0.2rem rgba(255, 78, 78, 0.25);
+        transform: translateY(-1px);
+    }
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.75rem 1.5rem;
+}
+
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+
+.btn-primary {
+    background: linear-gradient(135deg, #FF4E4E 0%, #FF6B6B 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #e63946 0%, #f77f00 100%);
+    }
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+    border: none;
+    color: #212529;
+}
+
+    .btn-warning:hover {
+        background: linear-gradient(135deg, #ffb300 0%, #ff8f00 100%);
+    }
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    }
+
+.btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-success:hover {
+        background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+    }
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+    }
+
+.btn-outline-primary {
+    color: #FF4E4E;
+    border-color: #FF4E4E;
+    background: transparent;
+}
+
+    .btn-outline-primary:hover {
+        background: #FF4E4E;
+        border-color: #FF4E4E;
+        color: white;
+    }
+
+.btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
+    background: transparent;
+}
+
+    .btn-outline-warning:hover {
+        background: #ffc107;
+        border-color: #ffc107;
+        color: #212529;
+    }
+
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+    background: transparent;
+}
+
+    .btn-outline-danger:hover {
+        background: #dc3545;
+        border-color: #dc3545;
+        color: white;
+    }
+
+.table {
+    margin-bottom: 0;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .table thead th {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: none;
+        font-weight: 600;
+        color: #495057;
+        padding: 1rem 0.75rem;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        letter-spacing: 0.5px;
+    }
+
+    .table tbody td {
+        vertical-align: middle;
+        padding: 1rem 0.75rem;
+        border-top: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+    }
+
+        .table tbody tr:hover td {
+            color: #495057;
+        }
+
+.pedido-status {
     font-size: 0.85rem;
     font-weight: 500;
 }
@@ -6,49 +207,370 @@
 .pedido-valor {
     font-weight: 600;
     color: #28a745;
+    font-size: 1.1rem;
 }
 
 .pedido-actions {
     white-space: nowrap;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
 
     .pedido-actions .btn {
-        margin-right: 5px;
+        margin: 0;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
     }
 
-        .pedido-actions .btn:last-child {
-            margin-right: 0;
-        }
-
-.card-stats {
-    transition: transform 0.2s;
+.badge {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-    .card-stats:hover {
-        transform: translateY(-2px);
+    .badge.bg-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%) !important;
+        color: #212529;
     }
 
-.pedido-filtros .form-group {
+    .badge.bg-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+        color: white;
+    }
+
+    .badge.bg-primary {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+        color: white;
+    }
+
+    .badge.bg-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        color: white;
+    }
+
+    .badge.bg-danger {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+        color: white;
+    }
+
+    .badge.bg-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%) !important;
+        color: white;
+    }
+
+.dropdown-menu {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: none;
+    padding: 0.5rem 0;
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    z-index: 1050;
+    position: absolute !important;
+    top: auto !important;
+    bottom: 100% !important;
+    margin-bottom: 5px !important;
+}
+
+    .dropdown-menu.show {
+        background-color: #ffffff !important;
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        top: auto !important;
+        bottom: 100% !important;
+        margin-bottom: 5px !important;
+    }
+
+.dropdown-toggle::after {
+    transition: transform 0.3s ease;
+}
+
+.dropdown-toggle[aria-expanded="true"]::after {
+    transform: rotate(180deg);
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    color: #495057;
+    background-color: transparent;
+}
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa !important;
+        color: #FF4E4E;
+        transform: translateX(5px);
+    }
+
+    .dropdown-item.text-danger:hover {
+        background-color: #f8d7da !important;
+        color: #721c24;
+    }
+
+.export-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+    .export-buttons .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .export-buttons .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+.btn-excel {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-excel:hover {
+        background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+        color: white;
+    }
+
+.btn-pdf {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-pdf:hover {
+        background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+        color: white;
+    }
+
+.btn-csv {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-csv:hover {
+        background: linear-gradient(135deg, #138496 0%, #0c5460 100%);
+        color: white;
+    }
+
+.dt-buttons {
     margin-bottom: 1rem;
 }
 
-.pedido-filtros label {
+.dt-button {
+    margin-right: 0.5rem !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    border: none !important;
+}
+
+    .dt-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+.pedido-valor::before {
+    content: "R$ ";
     font-weight: 500;
-    margin-bottom: 0.5rem;
 }
 
-.badge {
-    font-size: 0.75rem;
+.stat-number::before {
+    content: "R$ ";
+    font-weight: 600;
 }
 
-.table td {
-    vertical-align: middle;
-}
-
-.btn-group .dropdown-toggle::after {
-    margin-left: 0.5rem;
+.stat-number.count::before {
+    content: "";
 }
 
 .modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #FF4E4E 0%, #FF6B6B 100%);
+    color: white;
+    border-bottom: none;
+    padding: 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    background: #f8f9fa;
+}
+
+.modal-footer {
+    background: white;
+    border-top: 1px solid #e9ecef;
+    padding: 1.5rem;
+}
+
+.alert {
     border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    color: #856404;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    color: #0c5460;
+}
+
+.title {
+    color: #495057;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+    .title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(135deg, #FF4E4E 0%, #FF6B6B 100%);
+        border-radius: 2px;
+    }
+
+.pull-left {
+    color: #FF4E4E;
+    transition: all 0.3s ease;
+}
+
+    .pull-left:hover {
+        color: #e63946;
+        transform: translateX(-5px);
+    }
+
+.statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    padding: 1.5rem;
+    border-radius: 12px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(30px, -30px);
+    }
+
+    .stat-card .stat-icon {
+        font-size: 2.5rem;
+        opacity: 0.8;
+    }
+
+    .stat-card .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0.5rem 0;
+    }
+
+    .stat-card .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+.filtros-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filtros-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .statistics-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .filtros-row {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .pedido-actions {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
 }

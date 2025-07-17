@@ -33,7 +33,7 @@ namespace BROS_ECommerce.Services.Services
                 pedidos = pedidos.Where(p => p.Status == filtro.Status).ToList();
 
             if (!string.IsNullOrEmpty(filtro.NomeCliente))
-                pedidos = pedidos.Where(p => p.Usuario.Nome.Contains(filtro.NomeCliente)).ToList();
+                pedidos = pedidos.Where(p => p.Usuario != null && p.Usuario.Nome.Contains(filtro.NomeCliente)).ToList();
 
             if (filtro.DataInicio.HasValue)
                 pedidos = pedidos.Where(p => p.DataPedido >= filtro.DataInicio.Value).ToList();
@@ -67,21 +67,21 @@ namespace BROS_ECommerce.Services.Services
                 DataAtualizacao = pedido.DataAtualizacao,
                 Cliente = new ClientePedidoViewModel
                 {
-                    IdUsuario = pedido.Usuario.IdUser,
-                    Nome = pedido.Usuario.Nome,
-                    Email = pedido.Usuario.Email,
-                    Cpf = pedido.Usuario.Cpf
+                    IdUsuario = pedido.Usuario?.IdUser ?? Guid.Empty,
+                    Nome = pedido.Usuario?.Nome ?? "Usuário não encontrado",
+                    Email = pedido.Usuario?.Email ?? "",
+                    Cpf = pedido.Usuario?.Cpf ?? ""
                 },
-                Itens = pedido.PedidoItens.Select(item => new ItemPedidoViewModel
+                Itens = pedido.PedidoItens?.Select(item => new ItemPedidoViewModel
                 {
                     IdPedidoItem = item.IdPedidoItem,
                     IdProduto = item.IdProduto,
-                    NomeProduto = item.Produto.Nome,
+                    NomeProduto = item.Produto?.Nome ?? "Produto não encontrado",
                     Quantidade = item.Quantidade,
                     PrecoUnitario = item.PrecoUnitario,
                     ValorDesconto = item.ValorDesconto,
                     ValorTotal = item.ValorTotal
-                }).ToList()
+                }).ToList() ?? new List<ItemPedidoViewModel>()
             };
         }
 
@@ -164,7 +164,7 @@ namespace BROS_ECommerce.Services.Services
                 IdPedido = p.IdPedido,
                 NumeroPedido = p.NumeroPedido,
                 DataPedido = p.DataPedido,
-                NomeCliente = p.Usuario.Nome,
+                NomeCliente = p.Usuario?.Nome ?? "Usuário não encontrado",
                 Status = p.Status,
                 QuantidadeItens = p.PedidoItens?.Count ?? 0,
                 ValorTotal = p.ValorTotal,

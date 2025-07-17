@@ -46,6 +46,7 @@ namespace BROS_ECommerce.Infra.Repository
         {
             return await _dbSet
                 .Include(p => p.Usuario)
+                .Include(p => p.PedidoItens)
                 .OrderByDescending(p => p.DataPedido)
                 .ToListAsync();
         }
@@ -53,6 +54,7 @@ namespace BROS_ECommerce.Infra.Repository
         public async Task<List<Pedido>> ObterPedidosPorUsuarioAsync(Guid idUsuario)
         {
             return await _dbSet
+                .Include(p => p.Usuario)
                 .Include(p => p.PedidoItens)
                 .ThenInclude(pi => pi.Produto)
                 .Where(p => p.IdUsuario == idUsuario)
@@ -124,15 +126,24 @@ namespace BROS_ECommerce.Infra.Repository
 
         public async Task<bool> AtualizarStatusAsync(Guid idPedido, string novoStatus)
         {
-            var pedido = await ObterPorIdAsync(idPedido);
-            if (pedido == null) return false;
+            try
+            {
+                var pedido = await _dbSet.FirstOrDefaultAsync(p => p.IdPedido == idPedido);
+                if (pedido == null)
+                    return false;
 
-            pedido.Status = novoStatus;
-            pedido.DataAtualizacao = DateTime.UtcNow;
+                pedido.Status = novoStatus;
+                pedido.DataAtualizacao = DateTime.UtcNow;
 
-            _dbSet.Update(pedido);
-            var resultado = await _context.SaveChangesAsync();
-            return resultado;
+                _dbSet.Update(pedido);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task ExcluirAsync(Guid id)

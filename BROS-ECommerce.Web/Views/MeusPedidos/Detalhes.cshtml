@@ -7,6 +7,7 @@
 
 @section Head {
     <link rel="stylesheet" type="text/css" href="/css/MeusPedidos/meus-pedidos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
 
 <div class="container mt-4">
@@ -22,12 +23,30 @@
         </div>
     </div>
 
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-check-circle me-2"></i>@TempData["Sucesso"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-exclamation-triangle me-2"></i>@TempData["Erro"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div>
-                        <h4 class="mb-0">Pedido @Model.NumeroPedido</h4>
+                        <h4 class="mb-0">
+                            <i class="fa-solid fa-shopping-bag me-2"></i>Pedido @Model.NumeroPedido
+                        </h4>
                         <small class="text-muted">Realizado em @Model.DataPedidoFormatada</small>
                     </div>
                     <div>
@@ -39,7 +58,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8">
-                            <h5>Itens do Pedido</h5>
+                            <h5><i class="fa-solid fa-list me-2"></i>Itens do Pedido (@Model.Itens.Count itens)</h5>
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead class="table-light">
@@ -54,10 +73,10 @@
                                         @foreach (var item in Model.Itens)
                                         {
                                             <tr>
-                                                <td>@item.NomeProduto</td>
+                                                <td><strong>@item.NomeProduto</strong></td>
                                                 <td>@item.Quantidade</td>
-                                                <td>@item.PrecoUnitario.ToString("C")</td>
-                                                <td class="fw-bold">@item.ValorTotal.ToString("C")</td>
+                                                <td><span class="valor-formatado">@item.PrecoUnitario.ToString("0.00")</span></td>
+                                                <td class="fw-bold"><span class="valor-formatado">@item.ValorTotal.ToString("0.00")</span></td>
                                             </tr>
                                         }
                                     </tbody>
@@ -68,26 +87,28 @@
                         <div class="col-md-4">
                             <div class="card bg-light">
                                 <div class="card-body">
-                                    <h6 class="card-title">Resumo do Pedido</h6>
+                                    <h6 class="card-title">
+                                        <i class="fa-solid fa-calculator me-2"></i>Resumo do Pedido
+                                    </h6>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Subtotal:</span>
-                                        <span>@Model.ValorSubtotal.ToString("C")</span>
+                                        <span class="valor-formatado">@Model.ValorSubtotal.ToString("0.00")</span>
                                     </div>
                                     @if (Model.ValorDesconto > 0)
                                     {
                                         <div class="d-flex justify-content-between mb-2 text-success">
                                             <span>Desconto:</span>
-                                            <span>-@Model.ValorDesconto.ToString("C")</span>
+                                            <span>-<span class="valor-formatado">@Model.ValorDesconto.ToString("0.00")</span></span>
                                         </div>
                                     }
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Frete:</span>
-                                        <span>@Model.ValorFrete.ToString("C")</span>
+                                        <span class="valor-formatado">@Model.ValorFrete.ToString("0.00")</span>
                                     </div>
                                     <hr>
                                     <div class="d-flex justify-content-between">
                                         <strong>Total:</strong>
-                                        <strong class="text-success">@Model.ValorTotalFormatado</strong>
+                                        <strong class="text-success valor-formatado">@Model.ValorTotal.ToString("0.00")</strong>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +120,7 @@
                                             class="btn btn-outline-danger w-100 cancelar-pedido"
                                             data-id="@Model.IdPedido"
                                             data-numero="@Model.NumeroPedido">
-                                        <i class="fa-solid fa-times"></i> Cancelar Pedido
+                                        <i class="fa-solid fa-times me-2"></i>Cancelar Pedido
                                     </button>
                                 </div>
                             }
@@ -112,9 +133,30 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h6 class="card-title">Observações</h6>
-                                        <p class="text-muted mb-0">@Model.ObservacoesPedido</p>
+                                        <div class="observacoes-titulo">
+                                            <i class="fa-solid fa-comment-dots"></i>
+                                            Observações do Pedido
+                                        </div>
+                                        <div class="observacoes-container">
+                                            <p class="observacoes-texto">@Model.ObservacoesPedido</p>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.DataCancelamento.HasValue)
+                    {
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="alert alert-danger">
+                                    <h6><i class="fa-solid fa-ban me-2"></i>Informações do Cancelamento</h6>
+                                    <p class="mb-1"><strong>Data:</strong> @Model.DataCancelamento.Value.ToString("dd/MM/yyyy HH:mm")</p>
+                                    @if (!string.IsNullOrEmpty(Model.MotivoCancelamento))
+                                    {
+                                        <p class="mb-0"><strong>Motivo:</strong> @Model.MotivoCancelamento</p>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -124,10 +166,10 @@
                         <div class="col-12">
                             <div class="d-flex justify-content-between">
                                 <a href="/MeusPedidos" class="btn btn-secondary">
-                                    <i class="fa-solid fa-arrow-left"></i> Voltar para Meus Pedidos
+                                    <i class="fa-solid fa-arrow-left me-2"></i>Voltar para Meus Pedidos
                                 </a>
                                 <a href="/" class="btn btn-primary">
-                                    <i class="fa-solid fa-shopping-cart"></i> Continuar Comprando
+                                    <i class="fa-solid fa-shopping-cart me-2"></i>Continuar Comprando
                                 </a>
                             </div>
                         </div>
@@ -185,7 +227,6 @@
                 }
             });
 
-            
             document.querySelector('#modalCancelarPedido form').addEventListener('submit', function(e) {
                 const motivo = document.getElementById('motivoCancelamento').value.trim();
                 if (!motivo) {
@@ -198,3 +239,9 @@
         });
     </script>
 }
+
+<style>
+    .text-success.valor-formatado::before {
+        color: #28a745;
+    }
+</style>
