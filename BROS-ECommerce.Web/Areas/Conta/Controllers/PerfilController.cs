@@ -56,5 +56,47 @@ namespace BROS_ECommerce.Web.Areas.Conta.Controllers
 
             return Json(new { nome, email });
         }
+
+        [HttpGet]
+        [Route("/Conta/Perfil/DadosCheckout")]
+        public async Task<IActionResult> DadosCheckout()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity == null || !identity.IsAuthenticated)
+                return Json(new { authenticated = false });
+
+            try
+            {
+                var email = identity.FindFirst(ClaimTypes.Email)?.Value;
+
+                if (string.IsNullOrEmpty(email))
+                    return Json(new { authenticated = false });
+
+                var usuario = await _serviceUser.GetByEmailAsync(email);
+
+                if (usuario == null)
+                    return Json(new { authenticated = false });
+
+                return Json(new
+                {
+                    authenticated = true,
+                    nomeCompleto = usuario.Nome,
+                    nome = usuario.Nome,
+                    email = usuario.Email,
+                    cpf = usuario.Cpf,
+                    genero = usuario.Genero,
+                    nascimento = usuario.Nascimento.ToString("yyyy-MM-dd")
+                });
+            }
+            catch (Exception)
+            {
+                return Json(new
+                {
+                    authenticated = false,
+                    error = "Erro ao carregar dados do usuário"
+                });
+            }
+        }
     }
 }

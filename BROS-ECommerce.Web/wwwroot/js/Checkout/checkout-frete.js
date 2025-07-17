@@ -1,11 +1,12 @@
 ﻿class FreteCalculator {
     constructor() {
         this.freteRules = {
-            mesmaRegiao: { prefixo: '76', valor: 5.00, descricao: 'Mesma região' },
-            mesmoEstado: { estado: 'RO', valor: 10.00, descricao: 'Mesmo estado' },
-            outroEstado: { valor: 20.00, descricao: 'Outro estado' }
+            mesmaRegiao: { prefixo: '76', valor: 5.00, descricao: 'Entrega local' },
+            mesmoEstado: { estado: 'RO', valor: 10.00, descricao: 'Entrega estadual' },
+            outroEstado: { valor: 20.00, descricao: 'Entrega nacional' }
         };
 
+        this.valorFreteAtual = 0;
         this.init();
     }
 
@@ -18,17 +19,29 @@
         const estadoSelect = document.getElementById('estado');
 
         if (cepInput) {
-            cepInput.addEventListener('blur', () => this.calculateFrete());
-            cepInput.addEventListener('input', () => {
+            cepInput.addEventListener('blur', () => {
                 const cep = cepInput.value.replace(/\D/g, '');
                 if (cep.length === 8) {
-                    setTimeout(() => this.calculateFrete(), 1000);
+                    setTimeout(() => this.calculateFrete(), 500);
                 }
             });
         }
 
         if (estadoSelect) {
-            estadoSelect.addEventListener('change', () => this.calculateFrete());
+            estadoSelect.addEventListener('change', () => {
+                setTimeout(() => this.calculateFrete(), 200);
+            });
+        }
+
+        const observer = new MutationObserver(() => {
+            setTimeout(() => this.calculateFrete(), 300);
+        });
+
+        if (estadoSelect) {
+            observer.observe(estadoSelect, {
+                attributes: true,
+                attributeFilter: ['value']
+            });
         }
     }
 
@@ -36,8 +49,8 @@
         const cep = document.getElementById('cep')?.value.replace(/\D/g, '');
         const estado = document.getElementById('estado')?.value;
 
-        if (!cep || cep.length !== 8) {
-            this.updateFreteDisplay('A calcular', 0);
+        if (!cep || cep.length !== 8 || !estado) {
+            this.resetFrete();
             return;
         }
 
@@ -51,40 +64,100 @@
         } else if (estado === this.freteRules.mesmoEstado.estado) {
             freteValue = this.freteRules.mesmoEstado.valor;
             freteDescription = this.freteRules.mesmoEstado.descricao;
-        } else if (estado && estado !== this.freteRules.mesmoEstado.estado) {
+        } else {
             freteValue = this.freteRules.outroEstado.valor;
             freteDescription = this.freteRules.outroEstado.descricao;
         }
 
-        this.updateFreteDisplay(freteDescription, freteValue);
-        this.updateTotalDisplay(freteValue);
+        this.valorFreteAtual = freteValue;
+        this.updateFreteDisplay(freteValue, freteDescription);
+    }
 
-        if (window.checkoutManager) {
-            window.checkoutManager.addLog(`Frete calculado: R$ ${freteValue.toFixed(2)} (${freteDescription})`, 'active');
+    updateFreteDisplay(freteValue, description) {
+        if (window.CheckoutCarrinho) {
+            window.CheckoutCarrinho.calcularTotalComFrete(freteValue);
+        } else {
+            this.fallbackUpdateDisplay(freteValue, description);
+        }
+
+        if (window.CheckoutManager) {
+            const valorFormatado = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(freteValue);
+
+            window.CheckoutManager.addLog(
+                `Frete calculado: ${valorFormatado} (${description})`,
+                'active'
+            );
         }
     }
 
-    updateFreteDisplay(description, value) {
-        const freteElement = document.querySelector('.summary-item:nth-child(2) .d-flex span:last-child');
-        if (freteElement) {
-            freteElement.textContent = value > 0 ? `R$ ${value.toFixed(2)}` : description;
+    fallbackUpdateDisplay(freteValue, description) {
+        const freteElements = document.querySelectorAll('[data-resumo="frete"], .resumo-frete');
+        const valorFreteFormatado = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(freteValue);
+
+        freteElements.forEach(element => {
+            if (element) element.textContent = valorFreteFormatado;
+        });
+
+        const subtotalText = document.querySelector('[data-resumo="subtotal"], .resumo-subtotal')?.textContent || 'R$ 0,00';
+        const subtotalValue = this.parseMoneyString(subtotalText);
+        const novoTotal = subtotalValue + freteValue;
+
+        const totalElements = document.querySelectorAll('[data-resumo="total"], .resumo-total');
+        const valorTotalFormatado = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(novoTotal);
+
+        totalElements.forEach(element => {
+            if (element) element.textContent = valorTotalFormatado;
+        });
+    }
+
+    parseMoneyString(moneyStr) {
+        return parseFloat(
+            moneyStr.replace(/[R$\s]/g, '')
+                .replace(/\./g, '')
+                .replace(',', '.')
+        ) || 0;
+    }
+
+    resetFrete() {
+        this.valorFreteAtual = 0;
+
+        if (window.CheckoutCarrinho) {
+            window.CheckoutCarrinho.calcularTotalComFrete(0);
+        } else {
+            const freteElements = document.querySelectorAll('[data-resumo="frete"], .resumo-frete');
+            freteElements.forEach(element => {
+                if (element) element.textContent = 'A calcular';
+            });
+
+            const subtotalText = document.querySelector('[data-resumo="subtotal"], .resumo-subtotal')?.textContent || 'R$ 0,00';
+            const totalElements = document.querySelectorAll('[data-resumo="total"], .resumo-total');
+
+            totalElements.forEach(element => {
+                if (element) element.textContent = subtotalText;
+            });
         }
     }
 
-    updateTotalDisplay(freteValue) {
-        const subtotalElement = document.querySelector('.summary-item:first-child .d-flex span:last-child');
-        const totalElement = document.querySelector('.summary-total .d-flex span:last-child');
+    getFreteAtual() {
+        return this.valorFreteAtual;
+    }
 
-        if (subtotalElement && totalElement) {
-            const subtotalText = subtotalElement.textContent.replace('R$ ', '').replace(',', '.');
-            const subtotal = parseFloat(subtotalText) || 400.00;
-
-            const total = subtotal + freteValue;
-            totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        }
+    recalcularFrete() {
+        this.calculateFrete();
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new FreteCalculator();
+    if (document.querySelector('.checkout-container')) {
+        window.FreteCalculator = new FreteCalculator();
+    }
 });
