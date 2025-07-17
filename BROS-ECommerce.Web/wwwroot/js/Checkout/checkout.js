@@ -20,19 +20,19 @@
     }
 
     setupEventListeners() {
-        // Formulário de contato
+        
         document.getElementById('form-contato')?.addEventListener('submit', (e) => {
             e.preventDefault();
             this.handleContatoSubmit();
         });
 
-        // Formulário de endereço
+        
         document.getElementById('form-endereco')?.addEventListener('submit', (e) => {
             e.preventDefault();
             this.handleEnderecoSubmit();
         });
 
-        // Botões de navegação
+        
         document.getElementById('btn-voltar-contato')?.addEventListener('click', () => {
             this.goToStep(1);
         });
@@ -49,12 +49,12 @@
             window.location.href = '/Carrinho';
         });
 
-        // Buscar CEP
+        
         document.getElementById('btn-buscar-cep')?.addEventListener('click', () => {
             this.buscarCEP();
         });
 
-        // Auto buscar CEP quando completar 8 dígitos
+        
         document.getElementById('cep')?.addEventListener('input', (e) => {
             const cep = e.target.value.replace(/\D/g, '');
             if (cep.length === 8) {
@@ -62,10 +62,10 @@
             }
         });
 
-        // Validação em tempo real
+        
         this.setupRealTimeValidation();
 
-        // Máscaras
+        
         this.setupMasks();
     }
 
@@ -83,7 +83,7 @@
     }
 
     setupMasks() {
-        // Máscara para telefone
+        
         const telefoneInput = document.getElementById('telefone');
         if (telefoneInput) {
             telefoneInput.addEventListener('input', (e) => {
@@ -99,7 +99,7 @@
             });
         }
 
-        // Máscara para CPF
+        
         const cpfInput = document.getElementById('cpf');
         if (cpfInput) {
             cpfInput.addEventListener('input', (e) => {
@@ -109,7 +109,7 @@
             });
         }
 
-        // Máscara para CEP
+        
         const cepInput = document.getElementById('cep');
         if (cepInput) {
             cepInput.addEventListener('input', (e) => {
@@ -230,7 +230,7 @@
         try {
             this.showLoading('Carregando dados do usuário...');
 
-            // Simular carregamento dos dados do usuário
+            
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             const userData = {
@@ -239,12 +239,12 @@
                 cpf: '12345678901'
             };
 
-            // Preencher campos com dados do usuário
+            
             document.getElementById('nome-completo').value = userData.nome;
             document.getElementById('email').value = userData.email;
             document.getElementById('cpf').value = userData.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
 
-            // Validar campos preenchidos
+            
             this.validateField(document.getElementById('nome-completo'));
             this.validateField(document.getElementById('email'));
             this.validateField(document.getElementById('cpf'));
@@ -335,13 +335,13 @@
                 throw new Error('CEP não encontrado');
             }
 
-            // Preencher campos com dados do CEP
+            
             document.getElementById('logradouro').value = data.logradouro || '';
             document.getElementById('bairro').value = data.bairro || '';
             document.getElementById('cidade').value = data.localidade || '';
             document.getElementById('estado').value = data.uf || '';
 
-            // Validar campos preenchidos
+            
             this.validateField(document.getElementById('logradouro'));
             this.validateField(document.getElementById('bairro'));
             this.validateField(document.getElementById('cidade'));
@@ -350,7 +350,7 @@
             this.hideLoading();
             this.addLog('Endereço encontrado com sucesso', 'active');
 
-            // Focar no campo número
+            
             document.getElementById('numero').focus();
 
         } catch (error) {
@@ -363,7 +363,7 @@
     goToStep(step) {
         if (step < 1 || step > this.maxStep) return;
 
-        // Validar passos anteriores
+        
         if (step > 1 && !this.isValid.contato) {
             this.addLog('Complete os dados de contato primeiro', 'error');
             return;
@@ -389,7 +389,7 @@
     }
 
     updateUI() {
-        // Atualizar progress steps
+        
         document.querySelectorAll('.progress-step').forEach((step, index) => {
             const stepNumber = index + 1;
             step.classList.remove('active', 'completed');
@@ -401,7 +401,7 @@
             }
         });
 
-        // Atualizar conteúdo das abas
+        
         document.querySelectorAll('.tab-content').forEach(tab => {
             tab.classList.remove('active');
         });
@@ -448,7 +448,7 @@
             </div>
         `;
 
-        // Remover logs antigos (manter apenas os últimos 5)
+        
         const existingLogs = logsContainer.querySelectorAll('.log-item');
         if (existingLogs.length >= 5) {
             existingLogs[0].remove();
@@ -456,7 +456,7 @@
 
         logsContainer.appendChild(logItem);
 
-        // Scroll para o último log
+        
         logItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
@@ -485,7 +485,7 @@
     }
 
     initializeValidation() {
-        // Configurar validação do formulário final
+        
         const finalForm = document.getElementById('form-finalizar-pedido');
         if (finalForm) {
             finalForm.addEventListener('submit', (e) => {
@@ -496,7 +496,7 @@
                     return;
                 }
 
-                // Adicionar dados aos campos ocultos
+                
                 document.getElementById('dados-contato').value = JSON.stringify(this.userData.contato);
                 document.getElementById('dados-endereco').value = JSON.stringify(this.userData.endereco);
 
@@ -507,7 +507,7 @@
     }
 }
 
-// Inicializar o checkout quando a página carregar
+
 document.addEventListener('DOMContentLoaded', () => {
     new CheckoutManager();
 });
