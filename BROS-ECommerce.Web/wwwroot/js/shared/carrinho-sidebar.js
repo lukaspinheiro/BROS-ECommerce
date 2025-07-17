@@ -1,395 +1,482 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    console.log('Carrinho Page - JavaScript inicializado');
-    inicializarCarrinho();
+﻿const CarrinhoSidebar = {
+    sidebar: null,
+    overlay: null,
+    emptyState: null,
+    itemsState: null,
+    itemsList: null,
+    totalElement: null,
+    quantidadeElement: null,
+    isOpen: false,
+    carrinho: null,
 
-    if (window.location.pathname.includes('/Carrinho')) {
-        desabilitarEventosSidebar();
+    init() {
+        console.log('[SIDEBAR] Inicializando CarrinhoSidebar...');
+
+        this.sidebar = document.getElementById('carrinho-sidebar');
+        this.overlay = document.getElementById('carrinho-sidebar-overlay');
+        this.emptyState = document.getElementById('carrinho-sidebar-empty');
+        this.itemsState = document.getElementById('carrinho-sidebar-items');
+        this.itemsList = document.getElementById('carrinho-items-list');
+        this.totalElement = document.getElementById('carrinho-total-preco');
+        this.quantidadeElement = document.getElementById('carrinho-quantidade-items');
+
+        if (!this.sidebar) {
+            console.error('[SIDEBAR] Elemento carrinho-sidebar não encontrado');
+            return;
+        }
+
+        this.configurarEventos();
+        this.carregarContadorInicial();
+
+        console.log('[SIDEBAR] CarrinhoSidebar inicializado com sucesso');
+    },
+
+    configurarEventos() {
+        if (this.overlay) {
+            this.overlay.addEventListener('click', () => this.fechar());
+        }
+
+        const closeBtn = document.getElementById('carrinho-sidebar-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.fechar());
+        }
+
+        const carrinhoLink = document.querySelector('a[href="/Carrinho"]');
+        if (carrinhoLink) {
+            carrinhoLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.toggle();
+            });
+        }
+
+        const carrinhoIcon = document.querySelector('.fa-cart-shopping');
+        if (carrinhoIcon) {
+            carrinhoIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggle();
+            });
+        }
+    },
+
+    abrir() {
+        if (!this.sidebar || !this.overlay) return;
+
+        this.isOpen = true;
+        this.sidebar.classList.add('active');
+        this.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        console.log('[SIDEBAR] Sidebar aberta');
+    },
+
+    async abrirECarregar() {
+        if (!this.sidebar || !this.overlay) return;
+
+        this.isOpen = true;
+        this.sidebar.classList.add('active');
+        this.overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        console.log('[SIDEBAR] Sidebar aberta - carregando carrinho do servidor');
+        await this.carregarCarrinho();
+    },
+
+    fechar() {
+        if (!this.sidebar || !this.overlay) return;
+
+        this.isOpen = false;
+        this.sidebar.classList.remove('active');
+        this.overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    },
+
+    toggle() {
+        if (this.isOpen) {
+            this.fechar();
+        } else {
+            this.abrirECarregar();
+        }
+    },
+
+    async carregarCarrinho() {
+        try {
+            console.log('[SIDEBAR] Carregando carrinho do servidor...');
+
+            const response = await fetch('/Carrinho/ObterCarrinhoSidebar', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const carrinhoData = await response.json();
+            console.log('[SIDEBAR] Dados do carrinho recebidos:', carrinhoData);
+
+            this.atualizarCarrinho(carrinhoData);
+        } catch (error) {
+            console.error('[SIDEBAR] Erro ao carregar carrinho:', error);
+            this.mostrarEstadoVazio();
+        }
+    },
+
+    async adicionarProduto(produtoId, quantidade = 1) {
+        try {
+            console.log('[SIDEBAR] Adicionando produto:', produtoId, 'quantidade:', quantidade);
+
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+            const response = await fetch('/Carrinho/AdicionarProduto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `produtoId=${produtoId}&quantidade=${quantidade}` +
+                    (token ? `&__RequestVerificationToken=${token}` : '')
+            });
+
+            const result = await response.json();
+            console.log('[SIDEBAR] Resposta do servidor:', result);
+
+            if (result.sucesso) {
+                this.mostrarFeedback('Adicionado ao carrinho!', 'success');
+                this.atualizarCarrinho(result.carrinho);
+                this.abrir();
+            } else {
+                if (result.redirectToLogin) {
+                    this.mostrarFeedback('Redirecionando...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '/Autenticacao/Login';
+                    }, 800);
+                } else {
+                    this.mostrarFeedback(result.mensagem || 'Erro ao adicionar produto', 'error');
+                }
+            }
+
+            return result;
+        } catch (error) {
+            console.error('[SIDEBAR] Erro ao adicionar produto:', error);
+            this.mostrarFeedback('Erro ao adicionar produto ao carrinho', 'error');
+            throw error;
+        }
+    },
+
+    async alterarQuantidade(produtoId, novaQuantidade) {
+        if (novaQuantidade < 0) return;
+
+        try {
+            const response = await fetch('/Carrinho/AtualizarQuantidadeSidebar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: JSON.stringify({
+                    produtoId: produtoId,
+                    quantidade: novaQuantidade
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.sucesso) {
+                this.mostrarFeedback('Quantidade atualizada', 'success');
+                this.atualizarCarrinho(result.carrinho);
+            } else {
+                this.mostrarFeedback(result.mensagem || 'Erro ao atualizar quantidade', 'error');
+            }
+        } catch (error) {
+            console.error('[SIDEBAR] Erro ao alterar quantidade:', error);
+            this.mostrarFeedback('Erro ao atualizar quantidade', 'error');
+        }
+    },
+
+    async removerItem(produtoId) {
+        try {
+            const response = await fetch('/Carrinho/RemoverProdutoSidebar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: JSON.stringify({
+                    produtoId: produtoId
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.sucesso) {
+                this.mostrarFeedback('Removido do carrinho', 'success');
+                this.atualizarCarrinho(result.carrinho);
+            } else {
+                this.mostrarFeedback(result.mensagem || 'Erro ao remover produto', 'error');
+            }
+        } catch (error) {
+            console.error('[SIDEBAR] Erro ao remover produto:', error);
+            this.mostrarFeedback('Erro ao remover produto', 'error');
+        }
+    },
+
+    atualizarCarrinho(carrinhoData) {
+        console.log('[SIDEBAR] =================================');
+        console.log('[SIDEBAR] INÍCIO - Atualizando carrinho');
+        console.log('[SIDEBAR] Dados recebidos:', carrinhoData);
+
+        if (!carrinhoData || !carrinhoData.itens || carrinhoData.itens.length === 0) {
+            console.log('[SIDEBAR] Carrinho vazio - mostrando estado vazio');
+            this.mostrarEstadoVazio();
+            return;
+        }
+
+        console.log('[SIDEBAR] Carrinho com itens:', carrinhoData.itens.length);
+
+        this.carrinho = carrinhoData;
+        this.mostrarEstadoComItens();
+        this.renderizarItens();
+        this.atualizarTotais();
+        this.atualizarContadores();
+
+        console.log('[SIDEBAR] Carrinho atualizado com sucesso');
+        console.log('[SIDEBAR] =================================');
+    },
+
+    mostrarEstadoVazio() {
+        console.log('[SIDEBAR] Mostrando estado vazio');
+        if (this.emptyState && this.itemsState) {
+            this.emptyState.style.display = 'flex';
+            this.itemsState.style.display = 'none';
+        }
+        this.atualizarContadores(0);
+    },
+
+    mostrarEstadoComItens() {
+        console.log('[SIDEBAR] Mostrando estado com itens');
+        if (this.emptyState && this.itemsState) {
+            this.emptyState.style.display = 'none';
+            this.itemsState.style.display = 'flex';
+        }
+    },
+
+    renderizarItens() {
+        console.log('[SIDEBAR] =================================');
+        console.log('[SIDEBAR] INÍCIO - Renderizando itens');
+
+        if (!this.itemsList) {
+            console.error('[SIDEBAR] itemsList não encontrado');
+            return;
+        }
+
+        if (!this.carrinho.itens) {
+            console.error('[SIDEBAR] carrinho.itens não encontrado');
+            return;
+        }
+
+        const template = document.getElementById('carrinho-item-template');
+        if (!template) {
+            console.error('[SIDEBAR] Template carrinho-item-template não encontrado');
+            return;
+        }
+
+        console.log('[SIDEBAR] Limpando lista e renderizando', this.carrinho.itens.length, 'itens');
+        this.itemsList.innerHTML = '';
+
+        this.carrinho.itens.forEach(item => {
+            console.log('[SIDEBAR] Renderizando item:', item.nome);
+            const itemElement = this.criarElementoItem(item);
+            this.itemsList.appendChild(itemElement);
+        });
+
+        console.log('[SIDEBAR] =================================');
+    },
+
+    criarElementoItem(item) {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'carrinho-item';
+        itemDiv.innerHTML = `
+            <div class="item-imagem">
+                <img src="${item.imagemUrl || '/images/produto-sem-imagem.png'}" alt="${item.nome}">
+            </div>
+            <div class="item-info">
+                <h4 class="item-nome">${item.nome}</h4>
+                <p class="item-preco">R$ ${item.precoUnitario.toFixed(2).replace('.', ',')}</p>
+                <div class="item-quantidade">
+                    <button onclick="CarrinhoSidebar.alterarQuantidade('${item.idProduto}', ${item.quantidade - 1})" 
+                            class="btn-quantidade" ${item.quantidade <= 1 ? 'disabled' : ''}>
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="quantidade">${item.quantidade}</span>
+                    <button onclick="CarrinhoSidebar.alterarQuantidade('${item.idProduto}', ${item.quantidade + 1})" 
+                            class="btn-quantidade">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="item-subtotal">
+                    Subtotal: R$ ${item.subtotal.toFixed(2).replace('.', ',')}
+                </div>
+            </div>
+            <button onclick="CarrinhoSidebar.removerItem('${item.idProduto}')" class="btn-remover">
+                <i class="fas fa-trash"></i>
+            </button>
+        `;
+        return itemDiv;
+    },
+
+    atualizarTotais() {
+        if (this.totalElement && this.carrinho) {
+            this.totalElement.textContent = `R$ ${this.carrinho.total.toFixed(2).replace('.', ',')}`;
+        }
+    },
+
+    atualizarContadores(quantidade = null) {
+        const qtd = quantidade !== null ? quantidade : (this.carrinho?.quantidadeTotal || 0);
+
+        if (this.quantidadeElement) {
+            this.quantidadeElement.textContent = qtd;
+        }
+
+        const contadorCarrinho = document.getElementById('contador-carrinho');
+        if (contadorCarrinho) {
+            contadorCarrinho.textContent = qtd;
+            contadorCarrinho.style.display = qtd > 0 ? 'inline' : 'none';
+        }
+
+        console.log('[SIDEBAR] Contadores atualizados para:', qtd);
+    },
+
+    mostrarFeedback(mensagem, tipo = 'info') {
+        let toast = document.querySelector('.carrinho-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.className = 'carrinho-toast';
+            document.body.appendChild(toast);
+        }
+
+        toast.innerHTML = `
+            <div class="toast-content">
+                <div class="toast-icon">
+                    <i class="${this.obterIconeFeedback(tipo)}"></i>
+                </div>
+                <div class="toast-message">${mensagem}</div>
+            </div>
+            <button class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        toast.className = `carrinho-toast ${tipo} show`;
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+
+        const closeBtn = toast.querySelector('.toast-close');
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                toast.classList.remove('show');
+            };
+        }
+    },
+
+    obterIconeFeedback(tipo) {
+        switch (tipo) {
+            case 'success': return 'fas fa-check-circle';
+            case 'error': return 'fas fa-exclamation-circle';
+            default: return 'fas fa-info-circle';
+        }
+    },
+
+    carregarContadorInicial() {
+        fetch('/Carrinho/QuantidadeItens')
+            .then(response => response.json())
+            .then(data => {
+                this.atualizarContadores(data.quantidade || 0);
+                console.log('[SIDEBAR] Contador inicial carregado:', data.quantidade || 0);
+            })
+            .catch(error => {
+                console.error('[SIDEBAR] Erro ao carregar contador inicial:', error);
+                this.atualizarContadores(0);
+            });
+    },
+
+    adicionarCupom() {
+        this.mostrarFeedback('Funcionalidade de cupom em desenvolvimento', 'info');
+    },
+
+    async irParaCarrinho() {
+        try {
+            const response = await fetch('/Carrinho/ValidarEstoqueCompleto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                }
+            });
+
+            if (response.status === 401) {
+                this.mostrarFeedback('Redirecionando...', 'info');
+                setTimeout(() => {
+                    window.location.href = '/Autenticacao/Login';
+                }, 800);
+                return;
+            }
+
+            const result = await response.json();
+
+            if (!result.sucesso && result.carrinho) {
+                this.atualizarCarrinho(result.carrinho);
+                this.mostrarFeedback(result.mensagem, 'error');
+            }
+
+            window.location.href = '/Carrinho';
+        } catch (error) {
+            console.error('[SIDEBAR] Erro ao validar estoque:', error);
+            window.location.href = '/Carrinho';
+        }
+    },
+
+    async finalizarCompra() {
+        try {
+            const response = await fetch('/Carrinho/ValidarEstoqueCompleto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                }
+            });
+
+            if (response.status === 401) {
+                this.mostrarFeedback('Redirecionando...', 'info');
+                setTimeout(() => {
+                    window.location.href = '/Autenticacao/Login';
+                }, 800);
+                return;
+            }
+
+            const result = await response.json();
+
+            if (result.sucesso) {
+                window.location.href = '/Carrinho/Checkout';
+            } else {
+                this.mostrarFeedback(result.mensagem, 'error');
+
+                if (result.carrinho) {
+                    this.atualizarCarrinho(result.carrinho);
+                }
+            }
+        } catch (error) {
+            console.error('[SIDEBAR] Erro ao validar estoque:', error);
+            this.mostrarFeedback('Erro ao validar estoque. Tente novamente.', 'error');
+        }
     }
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    CarrinhoSidebar.init();
 });
 
-function desabilitarEventosSidebar() {
-    const carrinhoIcon = document.querySelector('.fa-cart-shopping');
-    if (carrinhoIcon) {
-        carrinhoIcon.removeEventListener('click', function () { });
-    }
-}
-
-function inicializarCarrinho() {
-    const carrinhoItems = document.querySelectorAll('.carrinho-item');
-    console.log(`Carrinho inicializado com ${carrinhoItems.length} itens`);
-
-    carrinhoItems.forEach(item => {
-        const produtoId = item.dataset.produtoId;
-        console.log(`Item inicializado: ${produtoId}`);
-    });
-}
-
-let processandoRequest = false;
-
-async function alterarQuantidadeSegura(produtoId, operacao) {
-    if (processandoRequest) {
-        console.log('Já está processando uma requisição, aguarde...');
-        return;
-    }
-
-    processandoRequest = true;
-
-    try {
-        const itemElement = document.querySelector(`[data-produto-id="${produtoId}"]`);
-        const quantidadeAtual = parseInt(itemElement?.querySelector('.quantidade-valor')?.textContent || '0');
-
-        let novaQuantidade;
-        if (operacao === 'mais') {
-            novaQuantidade = quantidadeAtual + 1;
-        } else if (operacao === 'menos') {
-            novaQuantidade = quantidadeAtual - 1;
-        } else {
-            novaQuantidade = parseInt(operacao);
-        }
-
-        console.log(`Operação: ${operacao}, Quantidade atual: ${quantidadeAtual}, Nova quantidade: ${novaQuantidade}`);
-
-        await alterarQuantidade(produtoId, novaQuantidade);
-    } finally {
-        processandoRequest = false;
-    }
-}
-
-async function alterarQuantidade(produtoId, novaQuantidade) {
-    if (!produtoId) {
-        console.error('ID do produto não informado');
-        mostrarFeedback('Erro: ID do produto não informado', 'error');
-        return;
-    }
-
-    if (novaQuantidade < 0) {
-        console.warn('Quantidade não pode ser negativa');
-        return;
-    }
-
-    if (novaQuantidade === 0) {
-        await removerItem(produtoId);
-        return;
-    }
-
-    try {
-        console.log(`Alterando quantidade do produto ${produtoId} para ${novaQuantidade}`);
-
-        mostrarLoading(produtoId);
-
-        const formData = new FormData();
-        formData.append('produtoId', produtoId);
-        formData.append('quantidade', novaQuantidade);
-
-        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
-        if (token) {
-            formData.append('__RequestVerificationToken', token);
-        }
-
-        const response = await fetch('/Carrinho/AtualizarQuantidadePage', {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-
-        if (result.sucesso) {
-            console.log('Quantidade alterada com sucesso:', result);
-
-            const itemAtualizado = result.carrinho.itens.find(i => i.idProduto === produtoId);
-            if (itemAtualizado) {
-                atualizarItemInterface(produtoId, itemAtualizado.quantidade, itemAtualizado.subtotal);
-            }
-
-            atualizarTotaisCompletos(result.carrinho);
-
-            mostrarFeedback('Quantidade atualizada!', 'success');
-        } else {
-            console.error('Erro ao alterar quantidade:', result.mensagem);
-            mostrarFeedback(result.mensagem || 'Erro ao alterar quantidade', 'error');
-        }
-    } catch (error) {
-        console.error('Erro na requisição:', error);
-        mostrarFeedback('Erro de conexão. Tente novamente.', 'error');
-    } finally {
-        ocultarLoading(produtoId);
-    }
-}
-
-async function removerItem(produtoId) {
-    if (!produtoId) {
-        console.error('ID do produto não informado');
-        mostrarFeedback('Erro: ID do produto não informado', 'error');
-        return;
-    }
-
-    if (!confirm('Tem certeza que deseja remover este item do carrinho?')) {
-        return;
-    }
-
-    try {
-        console.log(`Removendo produto ${produtoId} do carrinho`);
-
-        mostrarLoading(produtoId);
-
-        const formData = new FormData();
-        formData.append('produtoId', produtoId);
-
-        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
-        if (token) {
-            formData.append('__RequestVerificationToken', token);
-        }
-
-        const response = await fetch('/Carrinho/RemoverProdutoPage', {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-
-        if (result.sucesso) {
-            console.log('Item removido com sucesso:', result);
-
-            removerItemDaInterface(produtoId);
-
-            if (result.carrinho && result.carrinho.itens.length > 0) {
-                atualizarTotaisCompletos(result.carrinho);
-            } else {
-                setTimeout(() => {
-                    location.reload();
-                }, 500);
-            }
-
-            mostrarFeedback('Item removido do carrinho!', 'success');
-        } else {
-            console.error('Erro ao remover item:', result.mensagem);
-            mostrarFeedback(result.mensagem || 'Erro ao remover item', 'error');
-        }
-    } catch (error) {
-        console.error('Erro na requisição:', error);
-        mostrarFeedback('Erro de conexão. Tente novamente.', 'error');
-    } finally {
-        ocultarLoading(produtoId);
-    }
-}
-
-function atualizarItemInterface(produtoId, novaQuantidade, novoSubtotal) {
-    const itemElement = document.querySelector(`[data-produto-id="${produtoId}"]`);
-    if (!itemElement) return;
-
-    const quantidadeElement = itemElement.querySelector('.quantidade-valor');
-    const subtotalElement = itemElement.querySelector('.item-subtotal');
-    const btnMenos = itemElement.querySelector('.btn-menos');
-
-    if (quantidadeElement) {
-        quantidadeElement.textContent = novaQuantidade;
-    }
-
-    if (subtotalElement && novoSubtotal) {
-        subtotalElement.textContent = `R$ ${novoSubtotal.toFixed(2)}`;
-    }
-
-    if (btnMenos) {
-        btnMenos.disabled = novaQuantidade <= 1;
-    }
-
-    itemElement.style.animation = 'fadeIn 0.3s ease-out';
-}
-
-function removerItemDaInterface(produtoId) {
-    const itemElement = document.querySelector(`[data-produto-id="${produtoId}"]`);
-    if (itemElement) {
-        itemElement.style.animation = 'slideOutLeft 0.3s ease-in';
-        setTimeout(() => {
-            itemElement.remove();
-        }, 300);
-    }
-}
-
-function atualizarTotaisCompletos(carrinho) {
-    const resumoQuantidade = document.querySelector('#resumo-quantidade');
-    const resumoTotal = document.querySelector('#resumo-total');
-    const carrinhoTitulo = document.querySelector('.carrinho-titulo');
-    const resumoSubtotal = document.querySelector('#resumo-subtotal');
-
-    if (resumoQuantidade) {
-        resumoQuantidade.textContent = carrinho.quantidadeTotal;
-    }
-
-    if (resumoTotal) {
-        resumoTotal.textContent = `R$ ${carrinho.total.toFixed(2)}`;
-    }
-
-    if (resumoSubtotal) {
-        resumoSubtotal.textContent = `R$ ${carrinho.total.toFixed(2)}`;
-    }
-
-    if (carrinhoTitulo) {
-        carrinhoTitulo.innerHTML = `<i class="fa-solid fa-cart-shopping me-3"></i>CARRINHO (${carrinho.quantidadeTotal})`;
-    }
-
-    carrinho.itens.forEach(item => {
-        const itemElement = document.querySelector(`[data-produto-id="${item.idProduto}"]`);
-        if (itemElement) {
-            const subtotalElement = itemElement.querySelector('.item-subtotal');
-            if (subtotalElement) {
-                subtotalElement.textContent = `R$ ${item.subtotal.toFixed(2)}`;
-            }
-        }
-    });
-}
-
-function mostrarLoading(produtoId) {
-    const itemElement = document.querySelector(`[data-produto-id="${produtoId}"]`);
-    if (itemElement) {
-        itemElement.style.opacity = '0.6';
-        itemElement.style.pointerEvents = 'none';
-
-        const botoes = itemElement.querySelectorAll('.btn-quantidade');
-        botoes.forEach(btn => {
-            btn.disabled = true;
-            btn.style.cursor = 'not-allowed';
-        });
-
-        let loadingSpinner = itemElement.querySelector('.loading-spinner');
-        if (!loadingSpinner) {
-            loadingSpinner = document.createElement('div');
-            loadingSpinner.className = 'loading-spinner';
-            loadingSpinner.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-            loadingSpinner.style.cssText = `
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                z-index: 1000;
-                color: #FF4E4E;
-                font-size: 1.5rem;
-                background: rgba(255, 255, 255, 0.8);
-                padding: 1rem;
-                border-radius: 50%;
-            `;
-
-            itemElement.style.position = 'relative';
-            itemElement.appendChild(loadingSpinner);
-        }
-    }
-}
-
-function ocultarLoading(produtoId) {
-    const itemElement = document.querySelector(`[data-produto-id="${produtoId}"]`);
-    if (itemElement) {
-        itemElement.style.opacity = '1';
-        itemElement.style.pointerEvents = 'auto';
-
-        const botoes = itemElement.querySelectorAll('.btn-quantidade');
-        botoes.forEach(btn => {
-            btn.disabled = false;
-            btn.style.cursor = 'pointer';
-        });
-
-        const quantidadeAtual = parseInt(itemElement.querySelector('.quantidade-valor')?.textContent || '0');
-        const btnMenos = itemElement.querySelector('.btn-menos');
-        if (btnMenos && quantidadeAtual <= 1) {
-            btnMenos.disabled = true;
-        }
-
-        const loadingSpinner = itemElement.querySelector('.loading-spinner');
-        if (loadingSpinner) {
-            loadingSpinner.remove();
-        }
-    }
-}
-
-function mostrarFeedback(mensagem, tipo = 'info') {
-    if (window.ToastManager) {
-        window.ToastManager.mostrarFeedback(mensagem, tipo);
-        return;
-    }
-
-    const existingToast = document.querySelector('.toast-feedback');
-    if (existingToast) {
-        existingToast.remove();
-    }
-
-    const toast = document.createElement('div');
-    toast.className = `toast-feedback toast-${tipo}`;
-    toast.innerHTML = `
-        <div class="toast-content">
-            <i class="fa-solid ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-            <span>${mensagem}</span>
-        </div>
-    `;
-
-    const backgroundColor = tipo === 'success' ? '#28a745' : '#dc3545';
-    toast.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${backgroundColor};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 10001;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transform: translateX(100%);
-        transition: all 0.3s ease;
-        font-weight: 600;
-        min-width: 250px;
-    `;
-
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.style.transform = 'translateX(0)';
-    }, 100);
-
-    setTimeout(() => {
-        toast.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.remove();
-            }
-        }, 300);
-    }, 4000);
-}
-
-function finalizarCompra() {
-    const resumoQuantidade = document.querySelector('#resumo-quantidade');
-    if (!resumoQuantidade || resumoQuantidade.textContent === '0') {
-        mostrarFeedback('Seu carrinho está vazio!', 'error');
-        return;
-    }
-
-    window.location.href = '/Carrinho/Checkout';
-}
-
-async function verificarEstoque() {
-    try {
-        const response = await fetch('/Carrinho/ValidarEstoqueCompleto', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
-            }
-        });
-
-        const result = await response.json();
-
-        if (!result.sucesso) {
-            mostrarFeedback(result.mensagem, 'error');
-            if (result.carrinho) {
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-            }
-        }
-
-        return result.sucesso;
-    } catch (error) {
-        console.error('Erro ao verificar estoque:', error);
-        return false;
-    }
-}
+window.CarrinhoSidebar = CarrinhoSidebar;

@@ -218,7 +218,7 @@ function atualizarTotaisCompletos(carrinho) {
     const resumoTotal = document.querySelector('#resumo-total');
     const carrinhoTitulo = document.querySelector('.carrinho-titulo');
 
-    // Encontrar o elemento do subtotal no resumo
+    /
     const resumoSubtotal = document.querySelector('#resumo-subtotal');
 
     if (resumoQuantidade) {
@@ -229,7 +229,7 @@ function atualizarTotaisCompletos(carrinho) {
         resumoTotal.textContent = `R$ ${carrinho.total.toFixed(2)}`;
     }
 
-    // Atualizar o subtotal no resumo (mesmo valor que o total)
+    
     if (resumoSubtotal) {
         resumoSubtotal.textContent = `R$ ${carrinho.total.toFixed(2)}`;
     }
