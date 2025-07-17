@@ -3,7 +3,7 @@
 namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 {
     [Area("Administrativo")]
-    public class HomeController : Controller
+    public class HomeController : BaseAdminController
     {
         public IActionResult Index()
         {
