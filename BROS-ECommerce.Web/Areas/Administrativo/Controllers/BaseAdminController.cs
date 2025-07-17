@@ -11,7 +11,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var email = User.Identity?.Name;
-            var emailAdmin = "admin@gymbros.com";
+            var emailAdmin = "admin@bros.com";
 
             if (email != emailAdmin)
             {
