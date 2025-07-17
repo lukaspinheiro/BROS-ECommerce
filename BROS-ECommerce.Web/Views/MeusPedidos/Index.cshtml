@@ -1,0 +1,196 @@
+﻿@using BROS_ECommerce.Services.ViewModel.Pedido
+@model List<TabelaPedidoViewModel>
+
+@{
+    ViewData["Title"] = "Meus Pedidos";
+}
+
+@section Head {
+    <link rel="stylesheet" type="text/css" href="/css/MeusPedidos/meus-pedidos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Meus Pedidos</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-check-circle me-2"></i>@TempData["Sucesso"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-exclamation-triangle me-2"></i>@TempData["Erro"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fa-solid fa-shopping-bag me-2"></i>Meus Pedidos
+                    </h4>
+                    <span class="badge bg-primary fs-6">@Model.Count pedidos</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Pedido</th>
+                                        <th>Data</th>
+                                        <th>Status</th>
+                                        <th>Itens</th>
+                                        <th>Total</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var pedido in Model.OrderByDescending(p => p.DataPedido))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@pedido.NumeroPedido</strong>
+                                            </td>
+                                            <td>
+                                                @pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var statusClass = pedido.Status.ToLower() switch
+                                                    {
+                                                        "pendente" => "warning",
+                                                        "confirmado" => "info",
+                                                        "processando" => "primary",
+                                                        "enviado" => "success",
+                                                        "entregue" => "success",
+                                                        "cancelado" => "danger",
+                                                        _ => "secondary"
+                                                    };
+                                                }
+                                                <span class="badge bg-@statusClass">@pedido.Status</span>
+                                            </td>
+                                            <td>
+                                                @pedido.QuantidadeItens @(pedido.QuantidadeItens == 1 ? "item" : "itens")
+                                            </td>
+                                            <td>
+                                                <strong class="valor-formatado">@pedido.ValorTotal.ToString("0.00")</strong>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a href="@Url.Action("Detalhes", "MeusPedidos", new { idPedido = pedido.IdPedido })"
+                                                       class="btn btn-sm btn-outline-primary"
+                                                       title="Ver Detalhes">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </a>
+                                                    @if (pedido.Status == "Pendente" || pedido.Status == "Confirmado")
+                                                    {
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-danger cancelar-pedido"
+                                                                title="Cancelar Pedido"
+                                                                data-id="@pedido.IdPedido"
+                                                                data-numero="@pedido.NumeroPedido">
+                                                            <i class="fa-solid fa-times"></i>
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fa-solid fa-shopping-bag fa-4x text-muted mb-4"></i>
+                            <h4>Nenhum pedido encontrado</h4>
+                            <p class="text-muted mb-4">Você ainda não fez nenhum pedido em nossa loja.</p>
+                            <a href="/" class="btn btn-primary">
+                                <i class="fa-solid fa-shopping-cart me-2"></i>Começar a Comprar
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalCancelarPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancelar Pedido</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja cancelar o pedido <strong id="numeroPedidoCancelar"></strong>?</p>
+                <div class="form-group mt-3">
+                    <label for="motivoCancelamento">Motivo do cancelamento:</label>
+                    <textarea id="motivoCancelamento" class="form-control" rows="3" placeholder="Descreva o motivo do cancelamento..." required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                <form method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idPedido" id="idPedidoCancelar" />
+                    <input type="hidden" name="motivoCancelamento" id="motivoCancelamentoHidden" />
+                    <button type="submit" class="btn btn-danger" formaction="@Url.Action("CancelarPedido", "MeusPedidos")">
+                        Confirmar Cancelamento
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.cancelar-pedido')) {
+                    const button = e.target.closest('.cancelar-pedido');
+                    const idPedido = button.getAttribute('data-id');
+                    const numeroPedido = button.getAttribute('data-numero');
+
+                    document.getElementById('idPedidoCancelar').value = idPedido;
+                    document.getElementById('numeroPedidoCancelar').textContent = numeroPedido;
+
+                    const modal = new bootstrap.Modal(document.getElementById('modalCancelarPedido'));
+                    modal.show();
+                }
+            });
+
+            document.querySelector('#modalCancelarPedido form').addEventListener('submit', function(e) {
+                const motivo = document.getElementById('motivoCancelamento').value.trim();
+                if (!motivo) {
+                    e.preventDefault();
+                    alert('Por favor, informe o motivo do cancelamento.');
+                    return;
+                }
+                document.getElementById('motivoCancelamentoHidden').value = motivo;
+            });
+        });
+    </script>
+}

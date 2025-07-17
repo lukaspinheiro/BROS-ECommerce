@@ -1,0 +1,284 @@
+﻿@using BROS_ECommerce.Services.ViewModel.Pedido
+@model IndexPedidoViewModel
+
+@{
+    ViewData["Title"] = "Gerenciar Pedidos";
+}
+
+@section Head {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/Administrativo/tabela.css" />
+    <link rel="stylesheet" type="text/css" href="/css/Administrativo/estatisticas.css" />
+    <link rel="stylesheet" type="text/css" href="/css/Administrativo/Pedido/Pedido.css" />
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 mt-3">
+                            <a href="javascript:history.back()" class="pull-left">
+                                <i class="fa-solid fa-arrow-left fa-xl"></i>
+                            </a>
+                        </div>
+
+                        <div class="col-12 text-center mb-4">
+                            <h3 class="title">@ViewData["Title"]</h3>
+                        </div>
+
+                        @if (TempData["Sucesso"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fa-solid fa-check-circle me-2"></i>@TempData["Sucesso"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        @if (TempData["Erro"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fa-solid fa-exclamation-triangle me-2"></i>@TempData["Erro"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <div class="col-12">
+                            <div class="statistics-grid">
+                                <div class="stat-card bg-primary">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="stat-label">Total de Pedidos</div>
+                                            <div class="stat-number">@Model.TotalPedidos</div>
+                                        </div>
+                                        <div class="stat-icon">
+                                            <i class="fa-solid fa-shopping-cart"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="stat-card bg-warning">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="stat-label">Pedidos Pendentes</div>
+                                            <div class="stat-number">@Model.PedidosPendentes</div>
+                                        </div>
+                                        <div class="stat-icon">
+                                            <i class="fa-solid fa-clock"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="stat-card bg-success">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="stat-label">Pedidos Entregues</div>
+                                            <div class="stat-number">@Model.PedidosEntregues</div>
+                                        </div>
+                                        <div class="stat-icon">
+                                            <i class="fa-solid fa-check"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="stat-card bg-info">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="stat-label">Valor Total</div>
+                                            <div class="stat-number">@Model.ValorTotalPedidos.ToString("C")</div>
+                                        </div>
+                                        <div class="stat-icon">
+                                            <i class="fa-solid fa-dollar-sign"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="filtros-container">
+                                <h5><i class="fa-solid fa-filter me-2"></i>Filtros de Pesquisa</h5>
+                                <div class="filtros-row">
+                                    <div class="form-group">
+                                        <label asp-for="Filtro.NumeroPedido">Número do Pedido</label>
+                                        <input asp-for="Filtro.NumeroPedido" class="form-control filtro-input" placeholder="Ex: P-0001" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Filtro.Status">Status</label>
+                                        <select asp-for="Filtro.Status" class="form-control">
+                                            <option value="">Todos</option>
+                                            <option value="Pendente">Pendente</option>
+                                            <option value="Confirmado">Confirmado</option>
+                                            <option value="Processando">Processando</option>
+                                            <option value="Enviado">Enviado</option>
+                                            <option value="Entregue">Entregue</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Filtro.NomeCliente">Nome do Cliente</label>
+                                        <input asp-for="Filtro.NomeCliente" class="form-control filtro-input" placeholder="Digite o nome do cliente" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Filtro.DataInicio">Data Início</label>
+                                        <input asp-for="Filtro.DataInicio" class="form-control" type="date" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Filtro.DataFim">Data Fim</label>
+                                        <input asp-for="Filtro.DataFim" class="form-control" type="date" />
+                                    </div>
+                                </div>
+                                <div class="filtros-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="pedidoAdmin.limparFiltros()">
+                                        <i class="fa-solid fa-eraser me-2"></i>Limpar Filtros
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="pedidoAdmin.aplicarFiltros()">
+                                        <i class="fa-solid fa-search me-2"></i>Aplicar Filtros
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        <i class="fa-solid fa-list me-2"></i>Lista de Pedidos
+                                    </h5>
+                                    <span class="badge bg-primary">@Model.TotalPedidos pedidos</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="tabela" class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pedido</th>
+                                                    <th>Data</th>
+                                                    <th>Cliente</th>
+                                                    <th>Status</th>
+                                                    <th>Total</th>
+                                                    <th>Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var pedido in Model.Tabela)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <strong>@pedido.NumeroPedido</strong>
+                                                        </td>
+                                                        <td>
+                                                            @pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")
+                                                        </td>
+                                                        <td>
+                                                            @pedido.NomeCliente
+                                                        </td>
+                                                        <td>
+                                                            @{
+                                                                var statusClass = pedido.Status.ToLower() switch
+                                                                {
+                                                                    "pendente" => "warning",
+                                                                    "confirmado" => "info",
+                                                                    "processando" => "primary",
+                                                                    "enviado" => "success",
+                                                                    "entregue" => "success",
+                                                                    "cancelado" => "danger",
+                                                                    _ => "secondary"
+                                                                };
+                                                            }
+                                                            <span class="badge bg-@statusClass">@pedido.Status</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="pedido-valor">@pedido.ValorTotal.ToString("C")</span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="pedido-actions">
+                                                                <a href="@Url.Action("Detalhes", "Pedido", new { area = "Administrativo", idPedido = pedido.IdPedido })"
+                                                                   class="btn btn-sm btn-outline-primary"
+                                                                   title="Ver Detalhes">
+                                                                    <i class="fa-solid fa-eye"></i>
+                                                                </a>
+
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-sm btn-outline-warning dropdown-toggle"
+                                                                            type="button"
+                                                                            data-bs-toggle="dropdown"
+                                                                            title="Alterar Status">
+                                                                        <i class="fa-solid fa-edit"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Pendente">Pendente</a></li>
+                                                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Confirmado">Confirmado</a></li>
+                                                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Processando">Processando</a></li>
+                                                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Enviado">Enviado</a></li>
+                                                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Entregue">Entregue</a></li>
+                                                                        <li><hr class="dropdown-divider"></li>
+                                                                        <li><a class="dropdown-item status-action text-danger" href="#" data-id="@pedido.IdPedido" data-status="Cancelado">Cancelado</a></li>
+                                                                    </ul>
+                                                                </div>
+
+                                                                <button type="button"
+                                                                        class="btn btn-sm btn-outline-danger excluir-pedido"
+                                                                        title="Excluir"
+                                                                        data-id="@pedido.IdPedido"
+                                                                        data-numero="@pedido.NumeroPedido">
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalExcluirPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o pedido <strong id="numeroPedidoExcluir"></strong>?</p>
+                <p class="text-danger">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idPedido" id="idPedidoExcluir" />
+                    <button type="submit" class="btn btn-danger" formaction="@Url.Action("ExcluirPedido", "Pedido", new { area = "Administrativo" })">
+                        Confirmar Exclusão
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="~/js/Administrativo/Pedido/pedido.js"></script>
+}

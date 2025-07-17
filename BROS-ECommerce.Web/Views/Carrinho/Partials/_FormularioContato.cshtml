@@ -68,28 +68,35 @@
                    class="form-control"
                    placeholder="000.000.000-00"
                    required
-                   readonly
                    data-validation="required|cpf">
             <div class="invalid-feedback"></div>
             <div class="valid-feedback">
                 <i class="fa-solid fa-check me-1"></i>
-                CPF validado automaticamente
+                CPF válido
             </div>
-            <small class="form-text text-muted">
-                <i class="fa-solid fa-info-circle me-1"></i>
-                CPF preenchido automaticamente da sua conta
-            </small>
         </div>
     </div>
 
     <div class="form-actions">
-        <button type="button" id="btn-voltar-carrinho-contato" class="btn btn-outline-secondary">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Voltar ao Carrinho
+        <button type="button"
+                class="btn-recarregar-dados"
+                onclick="window.CheckoutUserData?.recarregarDados()"
+                title="Recarregar dados do perfil">
+            <i class="fa-solid fa-refresh me-2"></i>
+            Recarregar Dados
         </button>
-        <button type="submit" id="btn-continuar-endereco" class="btn btn-primary btn-lg">
-            <span class="btn-text">Continuar para Endereço</span>
-            <i class="fa-solid fa-arrow-right ms-2"></i>
+
+        <button type="button"
+                class="btn-limpar-formulario"
+                onclick="window.CheckoutUserData?.limparFormulario()"
+                title="Limpar todos os campos">
+            <i class="fa-solid fa-trash me-2"></i>
+            Limpar
+        </button>
+
+        <button type="button" id="btn-continuar-endereco" class="btn btn-primary">
+            <i class="fa-solid fa-arrow-right me-2"></i>
+            Continuar para Endereço
         </button>
     </div>
 </form>

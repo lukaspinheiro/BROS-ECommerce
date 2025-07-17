@@ -2,261 +2,308 @@
     constructor() {
         this.currentStep = 1;
         this.maxStep = 3;
-        this.userData = {};
+        this.userData = {
+            contato: {},
+            endereco: {}
+        };
         this.isValid = {
             contato: false,
-            endereco: false,
-            pagamento: false
+            endereco: false
         };
 
         this.init();
     }
 
     init() {
-        this.setupEventListeners();
+        this.initializeElements();
         this.initializeValidation();
-        this.loadUserData();
-        this.addLog('Checkout iniciado', 'active');
+        this.setupEventListeners();
+        this.setupMasks();
+        this.updateUI();
+        this.addLog('Preencha as informações de Contato', 'info');
+    }
+
+    initializeElements() {
+        this.progressSteps = document.querySelectorAll('.progress-step');
+        this.tabContents = document.querySelectorAll('.tab-content');
+        this.logsContainer = document.querySelector('.status-logs');
     }
 
     setupEventListeners() {
-        // Formulário de contato
-        document.getElementById('form-contato')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleContatoSubmit();
-        });
+        const btnContinuarEndereco = document.getElementById('btn-continuar-endereco');
+        if (btnContinuarEndereco) {
+            btnContinuarEndereco.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleContatoSubmit();
+            });
+        }
 
-        // Formulário de endereço
-        document.getElementById('form-endereco')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleEnderecoSubmit();
-        });
+        const btnContinuarPagamento = document.getElementById('btn-continuar-pagamento');
+        if (btnContinuarPagamento) {
+            btnContinuarPagamento.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleEnderecoSubmit();
+            });
+        }
 
-        // Botões de navegação
-        document.getElementById('btn-voltar-contato')?.addEventListener('click', () => {
-            this.goToStep(1);
-        });
+        const btnVoltarContato = document.getElementById('btn-voltar-contato');
+        if (btnVoltarContato) {
+            btnVoltarContato.addEventListener('click', () => {
+                this.goToStep(1);
+            });
+        }
 
-        document.getElementById('btn-voltar-endereco')?.addEventListener('click', () => {
-            this.goToStep(2);
-        });
+        const btnVoltarEndereco = document.getElementById('btn-voltar-endereco');
+        if (btnVoltarEndereco) {
+            btnVoltarEndereco.addEventListener('click', () => {
+                this.goToStep(2);
+            });
+        }
 
-        document.getElementById('btn-voltar-carrinho-contato')?.addEventListener('click', () => {
-            window.location.href = '/Carrinho';
-        });
+        const btnVoltarCarrinhoContato = document.getElementById('btn-voltar-carrinho-contato');
+        if (btnVoltarCarrinhoContato) {
+            btnVoltarCarrinhoContato.addEventListener('click', () => {
+                window.location.href = '/Carrinho';
+            });
+        }
 
-        document.getElementById('btn-voltar-carrinho')?.addEventListener('click', () => {
-            window.location.href = '/Carrinho';
-        });
+        const btnVoltarCarrinho = document.getElementById('btn-voltar-carrinho');
+        if (btnVoltarCarrinho) {
+            btnVoltarCarrinho.addEventListener('click', () => {
+                window.location.href = '/Carrinho';
+            });
+        }
 
-        // Buscar CEP
-        document.getElementById('btn-buscar-cep')?.addEventListener('click', () => {
-            this.buscarCEP();
-        });
-
-        // Auto buscar CEP quando completar 8 dígitos
-        document.getElementById('cep')?.addEventListener('input', (e) => {
-            const cep = e.target.value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                setTimeout(() => this.buscarCEP(), 500);
-            }
-        });
-
-        // Validação em tempo real
-        this.setupRealTimeValidation();
-
-        // Máscaras
-        this.setupMasks();
-    }
-
-    setupRealTimeValidation() {
-        const inputs = document.querySelectorAll('input[data-validation], select[data-validation]');
-
-        inputs.forEach(input => {
-            input.addEventListener('blur', () => this.validateField(input));
-            input.addEventListener('input', () => {
-                if (input.classList.contains('is-invalid')) {
-                    this.validateField(input);
+        const cepInput = document.getElementById('cep');
+        if (cepInput) {
+            cepInput.addEventListener('blur', () => {
+                if (cepInput.value.replace(/\D/g, '').length === 8) {
+                    this.buscarCEP();
                 }
+            });
+        }
+
+        document.querySelectorAll('.progress-step').forEach(step => {
+            step.addEventListener('click', (e) => {
+                const stepNumber = parseInt(e.currentTarget.dataset.step);
+                this.goToStep(stepNumber);
             });
         });
     }
 
     setupMasks() {
-        // Máscara para telefone
         const telefoneInput = document.getElementById('telefone');
         if (telefoneInput) {
             telefoneInput.addEventListener('input', (e) => {
                 let value = e.target.value.replace(/\D/g, '');
-                if (value.length >= 11) {
-                    value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-                } else if (value.length >= 6) {
-                    value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-                } else if (value.length >= 2) {
-                    value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+
+                if (value.length <= 11) {
+                    if (value.length >= 11) {
+                        value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                    } else if (value.length >= 7) {
+                        value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+                    } else if (value.length >= 3) {
+                        value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+                    } else if (value.length >= 1) {
+                        value = value.replace(/(\d{0,2})/, '($1');
+                    }
+                }
+
+                e.target.value = value;
+            });
+        }
+
+        const cepInput = document.getElementById('cep');
+        if (cepInput) {
+            cepInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 8) {
+                    if (value.length > 5) {
+                        value = value.replace(/(\d{5})(\d{0,3})/, '$1-$2');
+                    }
                 }
                 e.target.value = value;
             });
         }
 
-        // Máscara para CPF
         const cpfInput = document.getElementById('cpf');
         if (cpfInput) {
             cpfInput.addEventListener('input', (e) => {
                 let value = e.target.value.replace(/\D/g, '');
-                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-                e.target.value = value;
-            });
-        }
-
-        // Máscara para CEP
-        const cepInput = document.getElementById('cep');
-        if (cepInput) {
-            cepInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, '');
-                value = value.replace(/(\d{5})(\d{3})/, '$1-$2');
+                if (value.length <= 11) {
+                    value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                }
                 e.target.value = value;
             });
         }
     }
 
     validateField(input) {
-        const validations = input.dataset.validation?.split('|') || [];
+        if (!input) return false;
+
+        const validationRules = input.dataset.validation;
+        if (!validationRules) return true;
+
+        const rules = validationRules.split('|');
         const value = input.value.trim();
 
-        let isValid = true;
-        let errorMessage = '';
-
-        for (const validation of validations) {
-            const [rule, param] = validation.split(':');
-
-            switch (rule) {
-                case 'required':
-                    if (!value) {
-                        isValid = false;
-                        errorMessage = 'Este campo é obrigatório';
-                    }
-                    break;
-
-                case 'email':
-                    if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-                        isValid = false;
-                        errorMessage = 'Digite um e-mail válido';
-                    }
-                    break;
-
-                case 'phone':
-                    if (value && !/^\(\d{2}\) \d{4,5}-\d{4}$/.test(value)) {
-                        isValid = false;
-                        errorMessage = 'Digite um telefone válido';
-                    }
-                    break;
-
-                case 'cpf':
-                    if (value && !this.validateCPF(value)) {
-                        isValid = false;
-                        errorMessage = 'CPF inválido';
-                    }
-                    break;
-
-                case 'cep':
-                    if (value && !/^\d{5}-\d{3}$/.test(value)) {
-                        isValid = false;
-                        errorMessage = 'CEP deve ter o formato 00000-000';
-                    }
-                    break;
-
-                case 'min':
-                    if (value && value.length < parseInt(param)) {
-                        isValid = false;
-                        errorMessage = `Mínimo de ${param} caracteres`;
-                    }
-                    break;
-
-                case 'max':
-                    if (value && value.length > parseInt(param)) {
-                        isValid = false;
-                        errorMessage = `Máximo de ${param} caracteres`;
-                    }
-                    break;
+        for (const rule of rules) {
+            if (rule === 'required' && !value) {
+                this.showFieldError(input, 'Este campo é obrigatório');
+                this.addLogTemporario('Erro no campo ' + this.obterNomeCampo(input.id), 'error');
+                return false;
             }
 
-            if (!isValid) break;
+            if (rule.startsWith('min:')) {
+                const minLength = parseInt(rule.split(':')[1]);
+                if (value.length < minLength) {
+                    this.showFieldError(input, `Mínimo ${minLength} caracteres`);
+                    this.addLogTemporario('Erro no campo ' + this.obterNomeCampo(input.id), 'error');
+                    return false;
+                }
+            }
+
+            if (rule.startsWith('max:')) {
+                const maxLength = parseInt(rule.split(':')[1]);
+                if (value.length > maxLength) {
+                    this.showFieldError(input, `Máximo ${maxLength} caracteres`);
+                    this.addLogTemporario('Erro no campo ' + this.obterNomeCampo(input.id), 'error');
+                    return false;
+                }
+            }
+
+            if (rule === 'email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    this.showFieldError(input, 'E-mail inválido');
+                    this.addLogTemporario('Erro no campo E-mail', 'error');
+                    return false;
+                }
+            }
+
+            if (rule === 'cpf') {
+                if (!this.validarCPF(value)) {
+                    this.showFieldError(input, 'CPF inválido');
+                    this.addLogTemporario('Erro no campo CPF', 'error');
+                    return false;
+                }
+            }
+
+            if (rule === 'phone') {
+                const phoneRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
+                if (!phoneRegex.test(value)) {
+                    this.showFieldError(input, 'Telefone inválido');
+                    this.addLogTemporario('Erro no campo Telefone', 'error');
+                    return false;
+                }
+            }
         }
 
-        this.updateFieldValidation(input, isValid, errorMessage);
-        return isValid;
-    }
-
-    updateFieldValidation(input, isValid, errorMessage) {
-        const invalidFeedback = input.parentElement.querySelector('.invalid-feedback');
-
-        if (isValid) {
-            input.classList.remove('is-invalid');
-            input.classList.add('is-valid');
-            if (invalidFeedback) invalidFeedback.textContent = '';
-        } else {
-            input.classList.remove('is-valid');
-            input.classList.add('is-invalid');
-            if (invalidFeedback) invalidFeedback.textContent = errorMessage;
-        }
-    }
-
-    validateCPF(cpf) {
-        cpf = cpf.replace(/\D/g, '');
-
-        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-
-        let sum = 0;
-        for (let i = 0; i < 9; i++) {
-            sum += parseInt(cpf.charAt(i)) * (10 - i);
-        }
-        let remainder = (sum * 10) % 11;
-        if (remainder === 10 || remainder === 11) remainder = 0;
-        if (remainder !== parseInt(cpf.charAt(9))) return false;
-
-        sum = 0;
-        for (let i = 0; i < 10; i++) {
-            sum += parseInt(cpf.charAt(i)) * (11 - i);
-        }
-        remainder = (sum * 10) % 11;
-        if (remainder === 10 || remainder === 11) remainder = 0;
-        if (remainder !== parseInt(cpf.charAt(10))) return false;
-
+        this.showFieldSuccess(input);
         return true;
     }
 
-    async loadUserData() {
-        try {
-            this.showLoading('Carregando dados do usuário...');
+    obterNomeCampo(campoId) {
+        const nomes = {
+            'nome-completo': 'Nome',
+            'email': 'E-mail',
+            'telefone': 'Telefone',
+            'cpf': 'CPF',
+            'cep': 'CEP',
+            'logradouro': 'Logradouro',
+            'numero': 'Número',
+            'bairro': 'Bairro',
+            'cidade': 'Cidade',
+            'estado': 'Estado'
+        };
+        return nomes[campoId] || campoId;
+    }
 
-            // Simular carregamento dos dados do usuário
-            await new Promise(resolve => setTimeout(resolve, 1000));
+    validarCPF(cpf) {
+        cpf = cpf.replace(/\D/g, '');
 
-            const userData = {
-                nome: 'João Silva Santos',
-                email: 'joao.silva@gmail.com',
-                cpf: '12345678901'
-            };
-
-            // Preencher campos com dados do usuário
-            document.getElementById('nome-completo').value = userData.nome;
-            document.getElementById('email').value = userData.email;
-            document.getElementById('cpf').value = userData.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-
-            // Validar campos preenchidos
-            this.validateField(document.getElementById('nome-completo'));
-            this.validateField(document.getElementById('email'));
-            this.validateField(document.getElementById('cpf'));
-
-            this.hideLoading();
-            this.addLog('Dados do usuário carregados', 'active');
-
-        } catch (error) {
-            this.hideLoading();
-            this.addLog('Erro ao carregar dados do usuário', 'error');
-            console.error('Erro ao carregar dados do usuário:', error);
+        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
+            return false;
         }
+
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf.charAt(i)) * (10 - i);
+        }
+        let resto = 11 - (soma % 11);
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(cpf.charAt(9))) return false;
+
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf.charAt(i)) * (11 - i);
+        }
+        resto = 11 - (soma % 11);
+        if (resto === 10 || resto === 11) resto = 0;
+        return resto === parseInt(cpf.charAt(10));
+    }
+
+    showFieldError(input, message) {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+
+        const feedback = input.parentNode.querySelector('.invalid-feedback');
+        if (feedback) {
+            feedback.textContent = message;
+        }
+    }
+
+    showFieldSuccess(input) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    }
+
+    addLog(message, type = 'info', temporary = false) {
+        if (!this.logsContainer) return;
+
+        const timeString = new Date().toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const logItem = document.createElement('div');
+        logItem.className = `log-item ${type}`;
+
+        const iconClass =
+            type === 'error' ? 'fa-circle-exclamation' :
+                type === 'active' ? 'fa-circle-check' :
+                    type === 'processing' ? 'fa-spinner fa-spin' :
+                        'fa-circle-info';
+
+        logItem.innerHTML = `
+            <div class="log-icon">
+                <i class="fa-solid ${iconClass}"></i>
+            </div>
+            <div class="log-content">
+                <span class="log-title">${message}</span>
+                <span class="log-time">${timeString}</span>
+            </div>
+        `;
+
+        const existingLogs = this.logsContainer.querySelectorAll('.log-item');
+        if (existingLogs.length >= 3) {
+            existingLogs[0].remove();
+        }
+
+        this.logsContainer.appendChild(logItem);
+        logItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        if (temporary) {
+            setTimeout(() => {
+                if (logItem.parentNode) {
+                    logItem.remove();
+                }
+            }, 4000);
+        }
+    }
+
+    addLogTemporario(message, type = 'info') {
+        this.addLog(message, type, true);
     }
 
     validateForm(formId) {
@@ -277,21 +324,26 @@
 
     handleContatoSubmit() {
         if (!this.validateForm('form-contato')) {
-            this.addLog('Corrija os erros no formulário de contato', 'error');
+            this.addLogTemporario('Preencha todos os dados de Contato', 'error');
+            return;
+        }
+
+        if (window.CheckoutCarrinho && !window.CheckoutCarrinho.validarCarrinhoParaCheckout()) {
+            this.addLogTemporario('Verifique os dados do carrinho antes de continuar', 'error');
             return;
         }
 
         const formData = new FormData(document.getElementById('form-contato'));
         this.userData.contato = Object.fromEntries(formData);
 
-        this.addLog('Dados de contato validados', 'active');
+        this.addLogTemporario('Dados de Contato preenchidos', 'active');
         this.isValid.contato = true;
         this.goToStep(2);
     }
 
     handleEnderecoSubmit() {
         if (!this.validateForm('form-endereco')) {
-            this.addLog('Corrija os erros no formulário de endereço', 'error');
+            this.addLogTemporario('Preencha todos os dados de Endereço', 'error');
             return;
         }
 
@@ -299,7 +351,7 @@
         this.userData.endereco = Object.fromEntries(formData);
 
         this.updateEnderecoPreview();
-        this.addLog('Endereço de entrega confirmado', 'active');
+        this.addLogTemporario('Dados de Endereço preenchidos', 'active');
         this.isValid.endereco = true;
         this.goToStep(3);
     }
@@ -310,24 +362,28 @@
 
         const enderecoCompleto = `${endereco.logradouro}, ${endereco.numero}${endereco.complemento ? `, ${endereco.complemento}` : ''} - ${endereco.bairro}, ${endereco.cidade}/${endereco.estado}`;
 
-        document.getElementById('endereco-completo').textContent = enderecoCompleto;
-        document.getElementById('endereco-cep').textContent = `CEP: ${endereco.cep}`;
-        document.getElementById('endereco-preview').style.display = 'block';
+        const enderecoElement = document.getElementById('endereco-completo');
+        const cepElement = document.getElementById('endereco-cep');
+
+        if (enderecoElement) enderecoElement.textContent = enderecoCompleto;
+        if (cepElement) cepElement.textContent = `CEP: ${endereco.cep}`;
+
+        const previewElement = document.getElementById('endereco-preview');
+        if (previewElement) previewElement.style.display = 'block';
     }
 
     async buscarCEP() {
         const cepInput = document.getElementById('cep');
+        if (!cepInput) return;
+
         const cep = cepInput.value.replace(/\D/g, '');
 
         if (cep.length !== 8) {
-            this.addLog('CEP deve ter 8 dígitos', 'error');
+            this.addLogTemporario('CEP deve ter 8 dígitos', 'error');
             return;
         }
 
         try {
-            this.showLoading('Buscando endereço...');
-            this.addLog('Consultando CEP...', 'processing');
-
             const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
             const data = await response.json();
 
@@ -335,27 +391,33 @@
                 throw new Error('CEP não encontrado');
             }
 
-            // Preencher campos com dados do CEP
-            document.getElementById('logradouro').value = data.logradouro || '';
-            document.getElementById('bairro').value = data.bairro || '';
-            document.getElementById('cidade').value = data.localidade || '';
-            document.getElementById('estado').value = data.uf || '';
+            const logradouroInput = document.getElementById('logradouro');
+            const bairroInput = document.getElementById('bairro');
+            const cidadeInput = document.getElementById('cidade');
+            const estadoInput = document.getElementById('estado');
 
-            // Validar campos preenchidos
-            this.validateField(document.getElementById('logradouro'));
-            this.validateField(document.getElementById('bairro'));
-            this.validateField(document.getElementById('cidade'));
-            this.validateField(document.getElementById('estado'));
+            if (logradouroInput) logradouroInput.value = data.logradouro || '';
+            if (bairroInput) bairroInput.value = data.bairro || '';
+            if (cidadeInput) cidadeInput.value = data.localidade || '';
+            if (estadoInput) estadoInput.value = data.uf || '';
 
-            this.hideLoading();
-            this.addLog('Endereço encontrado com sucesso', 'active');
+            [logradouroInput, bairroInput, cidadeInput, estadoInput].forEach(input => {
+                if (input) this.validateField(input);
+            });
 
-            // Focar no campo número
-            document.getElementById('numero').focus();
+            this.addLogTemporario('Endereço preenchido com sucesso', 'active');
+
+            setTimeout(() => {
+                if (window.FreteCalculator) {
+                    window.FreteCalculator.recalcularFrete();
+                }
+            }, 500);
+
+            const numeroInput = document.getElementById('numero');
+            if (numeroInput) numeroInput.focus();
 
         } catch (error) {
-            this.hideLoading();
-            this.addLog('Erro ao buscar CEP', 'error');
+            this.addLogTemporario('Revise os seus dados', 'error');
             console.error('Erro ao buscar CEP:', error);
         }
     }
@@ -363,20 +425,26 @@
     goToStep(step) {
         if (step < 1 || step > this.maxStep) return;
 
-        // Validar passos anteriores
         if (step > 1 && !this.isValid.contato) {
-            this.addLog('Complete os dados de contato primeiro', 'error');
+            this.addLogTemporario('Preencha todos os dados de Contato primeiro', 'error');
             return;
         }
 
         if (step > 2 && !this.isValid.endereco) {
-            this.addLog('Complete o endereço de entrega primeiro', 'error');
+            this.addLogTemporario('Preencha todos os dados de Endereço primeiro', 'error');
             return;
         }
 
         this.currentStep = step;
         this.updateUI();
-        this.addLog(`Navegando para: ${this.getStepName(step)}`, 'active');
+
+        if (step === 1) {
+            this.addLog('Preencha as informações de Contato', 'info');
+        } else if (step === 2) {
+            this.addLog('Preencha as informações de Endereço', 'info');
+        } else if (step === 3) {
+            this.addLog('Selecione a forma de pagamento', 'info');
+        }
     }
 
     getStepName(step) {
@@ -389,75 +457,16 @@
     }
 
     updateUI() {
-        // Atualizar progress steps
-        document.querySelectorAll('.progress-step').forEach((step, index) => {
+        this.progressSteps.forEach((step, index) => {
             const stepNumber = index + 1;
-            step.classList.remove('active', 'completed');
-
-            if (stepNumber === this.currentStep) {
-                step.classList.add('active');
-            } else if (stepNumber < this.currentStep) {
-                step.classList.add('completed');
-            }
+            step.classList.toggle('active', stepNumber <= this.currentStep);
+            step.classList.toggle('completed', stepNumber < this.currentStep);
         });
 
-        // Atualizar conteúdo das abas
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
+        this.tabContents.forEach((tab, index) => {
+            const stepNumber = index + 1;
+            tab.classList.toggle('active', stepNumber === this.currentStep);
         });
-
-        const activeTab = document.getElementById(`tab-${this.getTabName(this.currentStep)}`);
-        if (activeTab) {
-            activeTab.classList.add('active');
-        }
-    }
-
-    getTabName(step) {
-        const names = {
-            1: 'contato',
-            2: 'endereco',
-            3: 'pagamento'
-        };
-        return names[step] || 'contato';
-    }
-
-    addLog(message, type = 'active') {
-        const logsContainer = document.getElementById('logs-container');
-        if (!logsContainer) return;
-
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('pt-BR', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        const logItem = document.createElement('div');
-        logItem.className = `log-item ${type}`;
-
-        const iconClass = type === 'error' ? 'fa-circle-exclamation' :
-            type === 'processing' ? 'fa-spinner fa-spin' :
-                'fa-circle-check';
-
-        logItem.innerHTML = `
-            <div class="log-icon">
-                <i class="fa-solid ${iconClass}"></i>
-            </div>
-            <div class="log-content">
-                <span class="log-title">${message}</span>
-                <span class="log-time">${timeString}</span>
-            </div>
-        `;
-
-        // Remover logs antigos (manter apenas os últimos 5)
-        const existingLogs = logsContainer.querySelectorAll('.log-item');
-        if (existingLogs.length >= 5) {
-            existingLogs[0].remove();
-        }
-
-        logsContainer.appendChild(logItem);
-
-        // Scroll para o último log
-        logItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     showLoading(message = 'Carregando...') {
@@ -485,29 +494,71 @@
     }
 
     initializeValidation() {
-        // Configurar validação do formulário final
+        window.CheckoutManager = this;
+
         const finalForm = document.getElementById('form-finalizar-pedido');
         if (finalForm) {
             finalForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
                 const selectedPayment = document.querySelector('input[name="metodo"]:checked');
                 if (!selectedPayment) {
-                    e.preventDefault();
-                    this.addLog('Selecione uma forma de pagamento', 'error');
+                    this.addLogTemporario('Selecione uma forma de pagamento', 'error');
                     return;
                 }
 
-                // Adicionar dados aos campos ocultos
-                document.getElementById('dados-contato').value = JSON.stringify(this.userData.contato);
-                document.getElementById('dados-endereco').value = JSON.stringify(this.userData.endereco);
+                if (window.CheckoutCarrinho && !window.CheckoutCarrinho.validarCarrinhoParaCheckout()) {
+                    this.addLogTemporario('Dados do carrinho inválidos para finalização', 'error');
+                    return;
+                }
 
-                this.addLog('Finalizando pedido...', 'processing');
-                this.showLoading('Processando seu pedido...');
+                
+                this.enviarFormularioPagamento(selectedPayment.value);
             });
         }
     }
+
+    enviarFormularioPagamento(metodo) {
+        this.addLogTemporario('Finalizando pedido...', 'processing');
+
+        const form = document.getElementById('form-finalizar-pedido');
+        if (!form) {
+            this.addLogTemporario('Erro: formulário não encontrado', 'error');
+            return;
+        }
+
+        
+        const existingInputs = form.querySelectorAll('input[type="hidden"]');
+        existingInputs.forEach(input => {
+            if (input.name !== '__RequestVerificationToken') {
+                input.remove();
+            }
+        });
+
+        
+        const inputContato = document.createElement('input');
+        inputContato.type = 'hidden';
+        inputContato.name = 'dadosContato';
+        inputContato.value = JSON.stringify(this.userData.contato);
+        form.appendChild(inputContato);
+
+        
+        const inputEndereco = document.createElement('input');
+        inputEndereco.type = 'hidden';
+        inputEndereco.name = 'dadosEndereco';
+        inputEndereco.value = JSON.stringify(this.userData.endereco);
+        form.appendChild(inputEndereco);
+
+     
+        console.log('Dados de contato:', this.userData.contato);
+        console.log('Dados de endereço:', this.userData.endereco);
+        console.log('Método:', metodo);
+
+        
+        form.submit();
+    }
 }
 
-// Inicializar o checkout quando a página carregar
 document.addEventListener('DOMContentLoaded', () => {
     new CheckoutManager();
 });
