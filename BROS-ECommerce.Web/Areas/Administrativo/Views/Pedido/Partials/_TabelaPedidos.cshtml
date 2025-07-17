@@ -1,0 +1,171 @@
+﻿@using BROS_ECommerce.Services.ViewModel.Pedido
+@model IEnumerable<TabelaPedidoViewModel>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table id="tabela" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Vendedor</th>
+                    <th>Itens</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Tipo</th>
+                    <th class="nao-exportar">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pedido in Model)
+                {
+                    <tr>
+                        <td>@pedido.NumeroPedido</td>
+                        <td>@pedido.DataPedidoFormatada</td>
+                        <td>@pedido.NomeCliente</td>
+                        <td>Catalogo</td>
+                        <td>@pedido.QuantidadeItens itens</td>
+                        <td>@pedido.ValorTotalFormatado</td>
+                        <td>
+                            <span class="badge bg-@pedido.StatusCor">
+                                @pedido.StatusFormatado
+                            </span>
+                        </td>
+                        <td>Produto</td>
+                        <td class="nao-exportar">
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("Detalhes", "Pedido", new { area = "Administrativo", idPedido = pedido.IdPedido })"
+                                   class="btn btn-sm btn-outline-info"
+                                   title="Ver Detalhes">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+
+                                <div class="btn-group" role="group">
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-warning dropdown-toggle"
+                                            data-bs-toggle="dropdown"
+                                            title="Alterar Status">
+                                        <i class="fa-solid fa-edit"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Pendente">Pendente</a></li>
+                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Confirmado">Confirmado</a></li>
+                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Processando">Processando</a></li>
+                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Enviado">Enviado</a></li>
+                                        <li><a class="dropdown-item status-action" href="#" data-id="@pedido.IdPedido" data-status="Entregue">Entregue</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item status-action text-danger" href="#" data-id="@pedido.IdPedido" data-status="Cancelado">Cancelado</a></li>
+                                    </ul>
+                                </div>
+
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-danger excluir-pedido"
+                                        title="Excluir"
+                                        data-id="@pedido.IdPedido"
+                                        data-numero="@pedido.NumeroPedido">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <small class="text-muted">
+                <i class="fa-solid fa-info-circle"></i>
+                Total de pedidos: <strong>@Model.Count()</strong>
+            </small>
+        </div>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Vendedor</th>
+                    <th>Itens</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Tipo</th>
+                    <th class="nao-exportar">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="9" class="text-center py-4">
+                        <div class="text-muted">
+                            <i class="fa-solid fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            <strong>Nenhum pedido encontrado</strong>
+                            <br>
+                            <small>Não há pedidos no sistema ainda.</small>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+
+
+<div class="modal fade" id="modalExcluirPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o pedido <strong id="numeroPedidoExcluir"></strong>?</p>
+                <p class="text-danger">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idPedido" id="idPedidoExcluir" />
+                    <button type="submit" class="btn btn-danger" formaction="@Url.Action("ExcluirPedido", "Pedido", new { area = "Administrativo" })">
+                        Confirmar Exclusão
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalAlterarStatus" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Alterar Status do Pedido</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Alterar status do pedido para: <strong id="novoStatusText"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idPedido" id="idPedidoStatus" />
+                    <input type="hidden" name="novoStatus" id="novoStatus" />
+                    <button type="submit" class="btn btn-primary" formaction="@Url.Action("AtualizarStatus", "Pedido", new { area = "Administrativo" })">
+                        Confirmar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

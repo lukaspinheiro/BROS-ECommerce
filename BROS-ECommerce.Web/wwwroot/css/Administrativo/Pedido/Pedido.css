@@ -1,0 +1,54 @@
+﻿.pedido-status {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.pedido-valor {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.pedido-actions {
+    white-space: nowrap;
+}
+
+    .pedido-actions .btn {
+        margin-right: 5px;
+    }
+
+        .pedido-actions .btn:last-child {
+            margin-right: 0;
+        }
+
+.card-stats {
+    transition: transform 0.2s;
+}
+
+    .card-stats:hover {
+        transform: translateY(-2px);
+    }
+
+.pedido-filtros .form-group {
+    margin-bottom: 1rem;
+}
+
+.pedido-filtros label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.btn-group .dropdown-toggle::after {
+    margin-left: 0.5rem;
+}
+
+.modal-content {
+    border-radius: 8px;
+}

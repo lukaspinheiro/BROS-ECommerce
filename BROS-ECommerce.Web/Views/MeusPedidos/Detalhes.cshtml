@@ -1,0 +1,200 @@
+﻿@using BROS_ECommerce.Services.ViewModel.Pedido
+@model DetalhesPedidoViewModel
+
+@{
+    ViewData["Title"] = $"Detalhes do Pedido {Model.NumeroPedido}";
+}
+
+@section Head {
+    <link rel="stylesheet" type="text/css" href="/css/MeusPedidos/meus-pedidos.css" />
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/MeusPedidos">Meus Pedidos</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.NumeroPedido</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="mb-0">Pedido @Model.NumeroPedido</h4>
+                        <small class="text-muted">Realizado em @Model.DataPedidoFormatada</small>
+                    </div>
+                    <div>
+                        <span class="badge bg-@Model.StatusCor fs-6">
+                            @Model.StatusFormatado
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>Itens do Pedido</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Quantidade</th>
+                                            <th>Preço Unitário</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Itens)
+                                        {
+                                            <tr>
+                                                <td>@item.NomeProduto</td>
+                                                <td>@item.Quantidade</td>
+                                                <td>@item.PrecoUnitario.ToString("C")</td>
+                                                <td class="fw-bold">@item.ValorTotal.ToString("C")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Resumo do Pedido</h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Subtotal:</span>
+                                        <span>@Model.ValorSubtotal.ToString("C")</span>
+                                    </div>
+                                    @if (Model.ValorDesconto > 0)
+                                    {
+                                        <div class="d-flex justify-content-between mb-2 text-success">
+                                            <span>Desconto:</span>
+                                            <span>-@Model.ValorDesconto.ToString("C")</span>
+                                        </div>
+                                    }
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Frete:</span>
+                                        <span>@Model.ValorFrete.ToString("C")</span>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                        <strong>Total:</strong>
+                                        <strong class="text-success">@Model.ValorTotalFormatado</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (Model.Status == "Pendente" || Model.Status == "Confirmado")
+                            {
+                                <div class="mt-3">
+                                    <button type="button"
+                                            class="btn btn-outline-danger w-100 cancelar-pedido"
+                                            data-id="@Model.IdPedido"
+                                            data-numero="@Model.NumeroPedido">
+                                        <i class="fa-solid fa-times"></i> Cancelar Pedido
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.ObservacoesPedido))
+                    {
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Observações</h6>
+                                        <p class="text-muted mb-0">@Model.ObservacoesPedido</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <a href="/MeusPedidos" class="btn btn-secondary">
+                                    <i class="fa-solid fa-arrow-left"></i> Voltar para Meus Pedidos
+                                </a>
+                                <a href="/" class="btn btn-primary">
+                                    <i class="fa-solid fa-shopping-cart"></i> Continuar Comprando
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Cancelar Pedido -->
+<div class="modal fade" id="modalCancelarPedido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancelar Pedido</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja cancelar o pedido <strong id="numeroPedidoCancelar"></strong>?</p>
+                <div class="form-group mt-3">
+                    <label for="motivoCancelamento">Motivo do cancelamento:</label>
+                    <textarea id="motivoCancelamento" class="form-control" rows="3" placeholder="Descreva o motivo do cancelamento..." required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                <form method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idPedido" id="idPedidoCancelar" />
+                    <input type="hidden" name="motivoCancelamento" id="motivoCancelamentoHidden" />
+                    <button type="submit" class="btn btn-danger" formaction="@Url.Action("CancelarPedido", "MeusPedidos")">
+                        Confirmar Cancelamento
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.cancelar-pedido')) {
+                    const button = e.target.closest('.cancelar-pedido');
+                    const idPedido = button.getAttribute('data-id');
+                    const numeroPedido = button.getAttribute('data-numero');
+
+                    document.getElementById('idPedidoCancelar').value = idPedido;
+                    document.getElementById('numeroPedidoCancelar').textContent = numeroPedido;
+
+                    const modal = new bootstrap.Modal(document.getElementById('modalCancelarPedido'));
+                    modal.show();
+                }
+            });
+
+            
+            document.querySelector('#modalCancelarPedido form').addEventListener('submit', function(e) {
+                const motivo = document.getElementById('motivoCancelamento').value.trim();
+                if (!motivo) {
+                    e.preventDefault();
+                    alert('Por favor, informe o motivo do cancelamento.');
+                    return;
+                }
+                document.getElementById('motivoCancelamentoHidden').value = motivo;
+            });
+        });
+    </script>
+}

@@ -1,0 +1,210 @@
+﻿@using BROS_ECommerce.Services.ViewModel.Pedido
+@model DetalhesPedidoViewModel
+
+@{
+    ViewData["Title"] = $"Detalhes do Pedido {Model.NumeroPedido}";
+}
+
+@section Head {
+    <link rel="stylesheet" type="text/css" href="/css/Administrativo/Pedido/Pedido.css" />
+}
+
+<div class="container">
+    <div class="card mt-0">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mt-3">
+                    <a href="@Url.Action("Index", "Pedido", new { area = "Administrativo" })" class="pull-left">
+                        <i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i>
+                    </a>
+                </div>
+
+                <div class="col-12 text-center">
+                    <h3 class="title">@ViewData["Title"]</h3>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Informações do Pedido</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>Número:</strong></td>
+                                            <td>@Model.NumeroPedido</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Data:</strong></td>
+                                            <td>@Model.DataPedidoFormatada</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Status:</strong></td>
+                                            <td>
+                                                <span class="badge bg-@Model.StatusCor">
+                                                    @Model.StatusFormatado
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Subtotal:</strong></td>
+                                            <td>@Model.ValorSubtotal.ToString("C")</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Desconto:</strong></td>
+                                            <td>@Model.ValorDesconto.ToString("C")</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Frete:</strong></td>
+                                            <td>@Model.ValorFrete.ToString("C")</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Total:</strong></td>
+                                            <td class="h5 text-success">@Model.ValorTotalFormatado</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Dados do Cliente</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>Nome:</strong></td>
+                                            <td>@Model.Cliente.Nome</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email:</strong></td>
+                                            <td>@Model.Cliente.Email</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>CPF:</strong></td>
+                                            <td>@Model.Cliente.Cpf</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Itens do Pedido</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Quantidade</th>
+                                            <th>Preço Unitário</th>
+                                            <th>Desconto</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Itens)
+                                        {
+                                            <tr>
+                                                <td>@item.NomeProduto</td>
+                                                <td>@item.Quantidade</td>
+                                                <td>@item.PrecoUnitario.ToString("C")</td>
+                                                <td>@item.ValorDesconto.ToString("C")</td>
+                                                <td>@item.ValorTotal.ToString("C")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ObservacoesPedido))
+                {
+                    <div class="col-12 mt-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Observações do Pedido</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>@Model.ObservacoesPedido</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.ObservacoesInternas))
+                {
+                    <div class="col-12 mt-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Observações Internas</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>@Model.ObservacoesInternas</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="col-12 mt-4">
+                    <div class="d-flex justify-content-between">
+                        <a href="@Url.Action("Index", "Pedido", new { area = "Administrativo" })" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Voltar
+                        </a>
+                        <div>
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalAlterarStatus">
+                                <i class="fa-solid fa-edit"></i> Alterar Status
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalAlterarStatus" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Alterar Status do Pedido</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="AtualizarStatus">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idPedido" value="@Model.IdPedido" />
+                    <div class="form-group">
+                        <label>Novo Status:</label>
+                        <select name="novoStatus" class="form-control" required>
+                            <option value="">Selecione...</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Confirmado">Confirmado</option>
+                            <option value="Processando">Processando</option>
+                            <option value="Enviado">Enviado</option>
+                            <option value="Entregue">Entregue</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
