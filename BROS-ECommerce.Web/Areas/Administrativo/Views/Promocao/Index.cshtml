@@ -1,0 +1,158 @@
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Promocao.PromocaoViewModel>
+
+@{
+    ViewData["Title"] = "Gerenciar Promoções";
+    var produtos = ViewBag.Produtos as List<BROS_ECommerce.Services.ViewModel.Produto.ProdutoViewModel>;
+}
+
+@section Head {
+    <link rel="stylesheet" href="~/lib/DataTables/datatables.min.css" />
+    <link rel="stylesheet" href="~/css/Administrativo/Promocao/promocao.css" />
+}
+
+<partial name="PartialsLayout/_AlertasTempData" />
+
+<div class="container">
+    <div class="card mt-0">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="javascript:history.back()" class="btn btn-sm text-danger">
+                    <i class="fas fa-arrow-left fa-lg"></i>
+                </a>
+                <h4 class="text-center flex-grow-1 m-0 fw-bold">Gerenciar Promoções</h4>
+                <a href="#" class="btn btn-success btn-sm" id="btnCadastrarPromocao" data-toggle="modal" data-target="#modalCadastrarPromocao">
+                    <i class="fas fa-plus"></i> Cadastrar
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table id="tabela-promocoes" class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Produto</th>
+                            <th>Desconto</th>
+                            <th>De</th>
+                            <th>Por</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var promo in Model)
+                        {
+                            <tr>
+                                <td>@promo.NomeProduto</td>
+                                <td>@promo.PercentualDesconto.ToString("F0")%</td>
+                                <td>R$ @promo.PrecoOriginal.ToString("F2")</td>
+                                <td class="text-success font-weight-bold">R$ @promo.PrecoPromocional.ToString("F2")</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-warning btnEditarPromocao"
+                                                data-id="@promo.IdPromocao"
+                                                data-nome="@promo.Nome"
+                                                data-descricao="@promo.Descricao"
+                                                data-idproduto="@promo.IdProduto"
+                                                data-desconto="@promo.PercentualDesconto"
+                                                data-toggle="modal"
+                                                data-target="#modalCadastrarPromocao">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <form asp-action="Excluir" asp-route-id="@promo.IdPromocao" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta promoção?');">
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CADASTRAR / EDITAR -->
+<div class="modal fade" id="modalCadastrarPromocao" tabindex="-1" role="dialog" aria-labelledby="modalCadastrarLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-area="Administrativo" asp-controller="Promocao" asp-action="Cadastrar" method="post" id="formPromocao">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cadastro de Promoção</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" name="IdPromocao" id="IdPromocao" />
+
+                    <div class="form-group">
+                        <label for="Nome">Nome</label>
+                        <input type="text" name="Nome" id="Nome" class="form-control" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Descricao">Descrição</label>
+                        <textarea name="Descricao" id="Descricao" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="IdProduto">Produto</label>
+                        <select name="IdProduto" id="IdProduto" class="form-control" required>
+                            <option value="">Selecione</option>
+                            @foreach (var p in produtos)
+                            {
+                                <option value="@p.IdProduto">@p.Nome</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="PercentualDesconto">% Desconto</label>
+                        <input type="number" name="PercentualDesconto" id="PercentualDesconto" class="form-control" min="1" max="100" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DataInicio">Data de Início</label>
+                        <input type="date" name="DataInicio" id="DataInicio" class="form-control" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="DataFim">Data de Fim (opcional)</label>
+                        <input type="date" name="DataFim" id="DataFim" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tabela-promocoes').DataTable();
+
+            $('.btnEditarPromocao').click(function () {
+                const btn = $(this);
+                $('#formPromocao').attr('action', '/Administrativo/Promocao/Atualizar');
+                $('#IdPromocao').val(btn.data('id'));
+                $('#Nome').val(btn.data('nome'));
+                $('#Descricao').val(btn.data('descricao'));
+                $('#IdProduto').val(btn.data('idproduto'));
+                $('#PercentualDesconto').val(btn.data('desconto'));
+            });
+
+            $('#modalCadastrarPromocao').on('hidden.bs.modal', function () {
+                $('#formPromocao').trigger('reset');
+                $('#formPromocao').attr('action', '/Administrativo/Promocao/Cadastrar');
+            });
+        });
+    </script>
+}
