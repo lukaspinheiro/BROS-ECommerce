@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Pagamento Cancelado";
+}
+
+@section Head {
+    <style>
+        .cancel-container {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .cancel-icon {
+            color: #dc3545;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .cancel-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card cancel-card">
+                <div class="card-body cancel-container">
+                    <div class="cancel-icon">
+                        <i class="fa-solid fa-times-circle"></i>
+                    </div>
+
+                    <h1 class="text-danger mb-3">Pagamento Cancelado</h1>
+                    <p class="lead text-muted">Seu pagamento foi cancelado e nenhuma cobrança foi realizada.</p>
+
+                    <div class="alert alert-warning mt-4">
+                        <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                        <strong>Não se preocupe!</strong><br>
+                        Seus itens continuam no carrinho. Você pode tentar novamente quando quiser.
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="/Carrinho" class="btn btn-primary btn-lg me-3">
+                            <i class="fa-solid fa-cart-shopping me-2"></i>
+                            Voltar ao Carrinho
+                        </a>
+                        <a href="/" class="btn btn-outline-primary btn-lg">
+                            <i class="fa-solid fa-home me-2"></i>
+                            Continuar Comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

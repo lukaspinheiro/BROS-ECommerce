@@ -28,10 +28,12 @@ namespace BROS_ECommerce.Web.Configuration
             services.AddScoped<IRepositoryUser, UserRepository>();
             services.AddScoped<IRepositoryEstoque, EstoqueRepository>();
             services.AddScoped<IRepositoryImagem, ImagemRepository>();
-            services.AddScoped<IRepositoryProdutoImagem, ProdutoImagemRepository>();     
+            services.AddScoped<IRepositoryProdutoImagem, ProdutoImagemRepository>();
             services.AddScoped<IRepositoryCarrinho, CarrinhoRepository>();
             services.AddScoped<IRepositoryCarrinhoItem, CarrinhoItemRepository>();
             services.AddScoped<IRepositoryCategoria, CategoriaRepository>();
+            services.AddScoped<IRepositoryPedido, PedidoRepository>();
+            services.AddScoped<IRepositoryPedidoItem, PedidoItemRepository>();
             #endregion
 
             #region Serviços
@@ -42,6 +44,13 @@ namespace BROS_ECommerce.Web.Configuration
             services.AddScoped<JwtService>();
             services.AddScoped<IServiceCarrinho, ServiceCarrinho>();
             services.AddScoped<IServiceCategoria, ServiceCategoria>();
+            services.AddScoped<IServicePedido, ServicePedido>();
+            services.AddScoped<IServicePedidoIntegracao, ServicePedidoIntegracao>();
+            #endregion
+
+            #region Serviços de Pagamento
+            services.AddScoped<IStripeService, StripeService>();
+            services.AddScoped<IMercadoPagoService, MercadoPagoService>();
             #endregion
         }
     }

@@ -1,5 +1,4 @@
-﻿
-using BROS_ECommerce.Domain.Entities;
+﻿using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Crud;
 using BROS_ECommerce.Infra.EntityConfig;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +21,6 @@ namespace BROS_ECommerce.Infra.Context
         public DbSet<Estoque> Estoque { get; set; }
         public DbSet<Imagem> Imagens { get; set; }
         public DbSet<ProdutoImagem> ProdutoImagens { get; set; }
-
-        
         public DbSet<Carrinho> Carrinhos { get; set; }
         public DbSet<CarrinhoItem> CarrinhoItens { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
@@ -31,9 +28,9 @@ namespace BROS_ECommerce.Infra.Context
         public DbSet<Promocao> Promocoes { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<PedidoItem> PedidoItens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
             modelBuilder.ApplyConfiguration(new ProdutoMap());
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new EstoqueMap());
@@ -44,7 +41,6 @@ namespace BROS_ECommerce.Infra.Context
             modelBuilder.ApplyConfiguration(new PromocaoMap());
             modelBuilder.ApplyConfiguration(new PedidoMap());
             modelBuilder.ApplyConfiguration(new PedidoItemMap());
-
             modelBuilder.ApplyConfiguration(new CarrinhoMap());
             modelBuilder.ApplyConfiguration(new CarrinhoItemMap());
 
@@ -61,7 +57,7 @@ namespace BROS_ECommerce.Infra.Context
                 minimumLevel: LogLevel.Information);
         }
 
-        public new async Task<bool> SaveChangesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
             return await base.SaveChangesAsync() > 0;
         }
@@ -98,7 +94,7 @@ namespace BROS_ECommerce.Infra.Context
 
         private void SeedEstoque(ModelBuilder modelBuilder)
         {
-           
+
         }
     }
 }

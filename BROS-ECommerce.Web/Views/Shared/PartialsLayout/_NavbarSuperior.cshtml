@@ -1,8 +1,9 @@
-﻿@using System.Security.Claims
+@using System.Security.Claims
+@using BROS_ECommerce.Web.Configuration
 
 @{
     var email = User.Identity?.Name;
-    var emailAdmin = "admin@gymbros.com";
+    var emailAdmin = Constants.ADMIN_EMAIL;
 }
 
 <nav class="navbar navbar-expand-lg" style="background-color: #FF4E4E; color: white; height: 90px;">
@@ -24,7 +25,7 @@
             </div>
 
             <div class="col justify-content-end">
-                <div class="d-flex align-items-center justify-content-end gap-4" style="margin-right: -1.5rem;">
+                <div class="d-flex align-items-center justify-content-between gap-4" style="padding-left: 20%; margin-right: -1.5rem;">
 
                     @if (User.Identity?.IsAuthenticated == true && email == emailAdmin)
                     {
@@ -48,7 +49,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="/Conta/Perfil"><i class="fa fa-user me-2"></i>Meu Perfil</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-shopping-bag me-2"></i>Meus Pedidos</a></li>
+                                <li><a class="dropdown-item" href="/MeusPedidos"><i class="fa fa-shopping-bag me-2"></i>Meus Pedidos</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li>
                                     <form method="post" action="/Autenticacao/Logout">
@@ -71,6 +72,8 @@
                             <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
                         </a>
                     }
+
+                    <i class="fa-solid fa-heart fa-2xl" style="color: #ffffff;"></i>
 
                     <div class="position-relative">
                         <a href="/Carrinho" class="text-white text-decoration-none">

@@ -10,7 +10,7 @@ namespace BROS_ECommerce.Infra.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Criar tabela Promocoes
+           
             migrationBuilder.CreateTable(
                 name: "Promocoes",
                 columns: table => new
@@ -38,7 +38,7 @@ namespace BROS_ECommerce.Infra.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            // Criar índices para Promocoes
+           
             migrationBuilder.CreateIndex(
                 name: "IX_Promocoes_Ativo",
                 table: "Promocoes",
