@@ -15,53 +15,89 @@
         <p>Complete os dados abaixo para finalizar sua compra</p>
     </div>
 
+    <div class="checkout-progress">
+        <div class="progress-step active" data-step="1">
+            <div class="step-icon">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <span>Contato</span>
+        </div>
+        <div class="progress-step" data-step="2">
+            <div class="step-icon">
+                <i class="fa-solid fa-map-marker-alt"></i>
+            </div>
+            <span>Endereço</span>
+        </div>
+        <div class="progress-step" data-step="3">
+            <div class="step-icon">
+                <i class="fa-solid fa-credit-card"></i>
+            </div>
+            <span>Pagamento</span>
+        </div>
+    </div>
+
     <div class="checkout-content">
         <div class="row">
             <div class="col-lg-8">
-                <div class="checkout-section">
-                    <h3>Dados de Entrega</h3>
-                    <div class="implementation-placeholder">
-                        <div class="placeholder-icon">
-                            <i class="fa-solid fa-code"></i>
+                <div class="checkout-tabs">
+                    <div class="tab-content active" id="tab-contato">
+                        <div class="checkout-section">
+                            <h3>
+                                <i class="fa-solid fa-user me-2"></i>
+                                Dados de Contato
+                            </h3>
+                            <partial name="Partials/_FormularioContato" />
                         </div>
-                        <h4>Zona de pagamento</h4>
-                        <p>Área de pagamento.</p>
-                        <ul class="implementation-list">
-                            <li>Formulário de endereço</li>
-                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="tab-endereco">
+                        <div class="checkout-section">
+                            <h3>
+                                <i class="fa-solid fa-map-marker-alt me-2"></i>
+                                Endereço de Entrega
+                            </h3>
+                            <partial name="Partials/_FormularioEndereco" />
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-pagamento">
+                        <div class="checkout-section">
+                            <h3>
+                                <i class="fa-solid fa-credit-card me-2"></i>
+                                Forma de Pagamento
+                            </h3>
+                            <form id="form-finalizar-pedido" method="post" action="/pagamento/iniciar">
+                                <input type="hidden" id="dados-contato" name="dadosContato" />
+                                <input type="hidden" id="dados-endereco" name="dadosEndereco" />
+
+                                <div class="payment-option">
+                                    <label for="stripe">
+                                        <input type="radio" name="metodo" id="stripe" value="stripe" />
+                                        <span>Stripe</span>
+                                    </label>
+                                </div>
+
+                                <div class="payment-option">
+                                    <label for="mercadopago">
+                                        <input type="radio" name="metodo" id="mercadopago" value="mercadopago" />
+                                        <span>MercadoPago</span>
+                                    </label>
+                                </div>
+
+                                <div class="checkout-actions">
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-voltar-endereco">
+                                        <i class="fa-solid fa-arrow-left me-2"></i>
+                                        Voltar ao Endereço
+                                    </button>
+                                    <button id="btn-finalizar" class="btn btn-success btn-lg" type="submit">
+                                        <i class="fa-solid fa-lock me-2"></i>
+                                        Finalizar Pedido
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-
-                <form id="form-finalizar-pedido" method="post" action="/pagamento/iniciar">
-                    <div class="checkout-section">
-                        <h3>Forma de Pagamento</h3>
-
-                        <div class="payment-option">
-                            <label for="stripe">
-                                <input type="radio" name="metodo" id="stripe" value="stripe" />
-                                <span>Stripe</span>
-                            </label>
-                        </div>
-
-                        <div class="payment-option">
-                            <label for="mercadopago">
-                                <input type="radio" name="metodo" id="mercadopago" value="mercadopago" />
-                                <span>MercadoPago</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="checkout-actions">
-                        <a href="/Carrinho" class="btn btn-outline-secondary">
-                            <i class="fa-solid fa-arrow-left me-2"></i>
-                            Voltar ao Carrinho
-                        </a>
-                        <button id="btn-finalizar" class="btn btn-success btn-lg" type="submit">
-                            <i class="fa-solid fa-lock me-2"></i>
-                            Finalizar Pedido
-                        </button>
-                    </div>
-                </form>
             </div>
 
             <div class="col-lg-4">
@@ -89,19 +125,41 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="checkout-logs">
+                    <h4>
+                        <i class="fa-solid fa-list-check me-2"></i>
+                        Status do Pedido
+                    </h4>
+                    <div id="logs-container">
+                        <div class="log-item active">
+                            <div class="log-icon">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div class="log-content">
+                                <span class="log-title">Carrinho Carregado</span>
+                                <span class="log-time">Agora</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+
+    <div class="checkout-actions-mobile">
+        <button id="btn-voltar-carrinho" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Voltar ao Carrinho
+        </button>
+        <button id="btn-proximo-passo" class="btn btn-primary btn-lg">
+            <span class="btn-text">Próximo Passo</span>
+            <i class="fa-solid fa-arrow-right ms-2"></i>
+        </button>
     </div>
 </div>
 
 @section Scripts {
-    <script>
-        document.getElementById("form-finalizar-pedido").addEventListener("submit", function (e) {
-            const selected = document.querySelector('input[name="metodo"]:checked');
-            if (!selected) {
-                e.preventDefault();
-                alert("Selecione uma forma de pagamento antes de continuar.");
-            }
-        });
-    </script>
+    <script src="~/js/Checkout/checkout.js"></script>
+    <script src="~/js/Checkout/checkout-frete.js"></script>
 }
