@@ -2,11 +2,12 @@
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class Pedido : IAggregateRoot
+    public class Pedido : IAggregateRoot, ITemTenant
     {
         public Pedido() { }
 
         public Guid IdPedido { get; set; }
+        public string TenantId { get; set; }
         public Guid IdUsuario { get; set; }
         public string NumeroPedido { get; set; } = string.Empty;
         public DateTime DataPedido { get; set; }

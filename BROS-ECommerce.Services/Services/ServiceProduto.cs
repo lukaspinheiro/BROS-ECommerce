@@ -1,6 +1,5 @@
 ﻿using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
-using BROS_ECommerce.Infra.Repository;
 using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Imagem;
 using BROS_ECommerce.Services.ViewModel.Produto;

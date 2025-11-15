@@ -2,7 +2,7 @@
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class Produto : IAggregateRoot
+    public class Produto : IAggregateRoot, ITemTenant
     {
         public Produto() { }
 
@@ -12,6 +12,7 @@ namespace BROS_ECommerce.Domain.Entities
         public string TituloDescricao { get; set; } = string.Empty;
         public string Descricao { get; set; } = string.Empty;
         public decimal Preco { get; set; }
+        public string TenantId { get; set; }
 
         public virtual ICollection<ProdutoImagem> ProdutoImagens { get; set; } = new List<ProdutoImagem>();
         public virtual ICollection<CategoriaProduto> CategoriaProdutos { get; set; } = new List<CategoriaProduto>();

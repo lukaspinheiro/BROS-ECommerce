@@ -6,12 +6,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class User : IAggregateRoot
+    public class User : IAggregateRoot, ITemTenant
     {
         public User() { }
 
         [Key]
         public Guid IdUser { get; set; } = Guid.NewGuid();
+        
+        public string TenantId { get; set; }
 
         [Required]
         [StringLength(255)]

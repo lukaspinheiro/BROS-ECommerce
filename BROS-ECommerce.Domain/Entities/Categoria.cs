@@ -2,7 +2,7 @@
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class Categoria : IAggregateRoot
+    public class Categoria : IAggregateRoot, ITemTenant
     {
         public Categoria() { }
 
@@ -18,6 +18,7 @@ namespace BROS_ECommerce.Domain.Entities
         }
 
         public Guid IdCategoria { get; set; }
+        public string TenantId { get; set; }
         public string NomeCategoria { get; set; } = string.Empty;
         public string? Descricao { get; set; }
         public bool Ativo { get; set; } = true;

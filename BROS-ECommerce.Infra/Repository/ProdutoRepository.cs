@@ -2,11 +2,7 @@
 using BROS_ECommerce.Domain.Interfaces.Repository;
 using BROS_ECommerce.Infra.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace BROS_ECommerce.Infra.Repository
 {
@@ -16,10 +12,11 @@ namespace BROS_ECommerce.Infra.Repository
      
         public async Task<List<Produto>> ObterTodosComImagensAsync()
         {
-            return await _dbSet
+            var produto = await _dbSet
                 .Include(p => p.ProdutoImagens)
                 .ThenInclude(pi => pi.Imagem)
                 .ToListAsync();
+            return produto;
         }
 
         

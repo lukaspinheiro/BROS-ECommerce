@@ -2,11 +2,12 @@
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class Imagem : IAggregateRoot
+    public class Imagem : IAggregateRoot, ITemTenant
     {
         public Imagem() { }
 
         public Guid IdImagem { get; set; }
+        public string TenantId { get; set; }
         public string NomeArquivo { get; set; } = string.Empty;
         public string CaminhoArquivo { get; set; } = string.Empty;
         public long TamanhoArquivo { get; set; }

@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BROS-ECommerce.Core\BROS-ECommerce.Core.csproj" />
     <ProjectReference Include="..\BROS-ECommerce.Infra\BROS-ECommerce.Infra.csproj" />
   </ItemGroup>
 

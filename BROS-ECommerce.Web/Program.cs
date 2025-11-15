@@ -1,9 +1,11 @@
-﻿using BROS_ECommerce.Web.Configuration;
+﻿using BROS_ECommerce.Core.Interfaces;
 using BROS_ECommerce.Infra.Context;
 using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.Services;
+using BROS_ECommerce.Web.Configuration;
 using BROS_ECommerce.Web.Middleware;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -14,6 +16,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.RegisterServices(builder.Configuration);
 builder.Services.AddScoped<IStripeService, StripeService>();
 builder.Services.AddScoped<IMercadoPagoService, MercadoPagoService>();
+builder.Services.AddScoped<ITenantAtualService, TenantAtualService>();
 
 // Autenticação JWT + leitura do cookie BrosToken
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -81,6 +84,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseMiddleware<TenantResolver>();
 
 app.UseSession();
 
