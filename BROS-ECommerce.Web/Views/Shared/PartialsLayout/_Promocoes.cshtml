@@ -1,7 +1,12 @@
-﻿<section class="promocao-section">
-    <h2 class="text-center extra-bold mb-4">EM PROMOÇÃO</h2>
+﻿@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+@{
+    var corTextoFundo = tenantService.TenantAtual?.CorTexto;
+    var corSeta = tenantService.TenantAtual?.CorFundo;
+}
+<section class="promocao-section">
+    <h2 class="text-center extra-bold mb-4" style="color: @corTextoFundo;">EM PROMOÇÃO</h2>
     <div class="carousel-wrapper">
-        <button class="scroll-btn left" id="btn-left">‹</button>
+        <button class="scroll-btn left" id="btn-left" style="background-color: @corTextoFundo; color: @corSeta;">‹</button>
         <div class="produtos-container d-flex justify-content-between gap-5" id="carousel">
 
             <div class="card d-flex justify-content-between">
@@ -83,6 +88,6 @@
             </div>
 
         </div>
-        <button class="scroll-btn right" id="btn-right">›</button>
+        <button class="scroll-btn right" id="btn-right" style="background-color: @corTextoFundo; color: @corSeta;">›</button>
     </div>
 </section>

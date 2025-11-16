@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BROS-ECommerce.Domain\BROS-ECommerce.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

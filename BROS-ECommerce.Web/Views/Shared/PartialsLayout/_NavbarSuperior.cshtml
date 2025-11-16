@@ -1,18 +1,29 @@
 @using System.Security.Claims
 @using BROS_ECommerce.Web.Configuration
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
 
 @{
     var email = User.Identity?.Name;
     var emailAdmin = Constants.ADMIN_EMAIL;
+
+    var corMenu = tenantService.TenantAtual?.CorMenu;
+    var corTextoMenu = tenantService.TenantAtual?.CorTextoMenu;
 }
 
-<nav class="navbar navbar-expand-lg" style="background-color: #FF4E4E; color: white; height: 90px;">
+<style>
+    .carrinho-tenant {
+        color: @corTextoMenu !important;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg" style="background-color: @corMenu; height: 90px;">
+
     <div class="container-fluid py-2 w-100 paddingX">
         <div class="row w-100 align-items-center">
 
             <div class="col-2 d-flex flex-column">
-                <a class="fw-bold fst-italic text-white" style="font-size: 1.5rem; font-weight: 900 !important;" href="/">GymBros</a>
-                <a class="fw-bold fst-italic text-white" style="margin-top: -5px;" href="/">Supplements</a>
+                <a class="fw-bold fst-italic" style="color: @corTextoMenu; font-size: 1.5rem; font-weight: 900 !important;" href="/">GymBros</a>
+                <a class="fw-bold fst-italic" style="color: @corTextoMenu; margin-top: -5px;" href="/">Supplements</a>
             </div>
 
             <div class="col-5" style="padding-left: 0.50rem !important; padding-right: unset !important; max-width: 37%;">
@@ -25,7 +36,7 @@
             </div>
 
             <div class="col justify-content-end">
-                <div class="d-flex align-items-center justify-content-end gap-4" style="margin-right: -1.5rem;">
+                <div class="d-flex align-items-center justify-content-end gap-4" style="margin-right: -1.5rem; color: @corTextoMenu;">
 
                     @if (User.Identity?.IsAuthenticated == true && email == emailAdmin)
                     {
@@ -39,13 +50,13 @@
                         var nome = User.Claims.FirstOrDefault(c => c.Type == "nome")?.Value ?? "Usuário";
 
                         <div class="dropdown">
-                            <a href="#" class="d-flex align-items-center gap-3 text-white text-decoration-none dropdown-toggle"
+                            <a href="#" class="d-flex align-items-center gap-3 text-decoration-none dropdown-toggle" style="color: @corTextoMenu;"
                                id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="text-start">
                                     <span class="d-block">Olá, @nome</span>
                                     <span style="font-size: 0.8rem; opacity: 0.8;">Minha Conta</span>
                                 </div>
-                                <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
+                                <i class="fa-solid fa-user fa-2xl"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="/Conta/Perfil"><i class="fa fa-user me-2"></i>Meu Perfil</a></li>
@@ -64,18 +75,18 @@
                     }
                     else
                     {
-                        <a href="/Autenticacao/Login" class="d-flex align-items-center gap-3 text-white text-decoration-none">
+                        <a href="/Autenticacao/Login" class="d-flex align-items-center gap-3 text-decoration-none" style="color: @corTextoMenu;">
                             <div class="text-start">
                                 <span class="d-block">Cadastre-se</span>
                                 <span>ou Faça Login</span>
                             </div>
-                            <i class="fa-solid fa-user fa-2xl" style="color: #ffffff;"></i>
+                            <i class="fa-solid fa-user fa-2xl"></i>
                         </a>
                     }
 
                     <div class="position-relative">
-                        <a href="/Carrinho" class="text-white text-decoration-none">
-                            <i class="fa-solid fa-cart-shopping fa-2xl" style="color: #ffffff;"></i>
+                        <a href="/Carrinho" class="text-decoration-none" >
+                            <i class="fa-solid fa-cart-shopping fa-2xl carrinho-tenant" style="color: @corTextoMenu !important;"></i>
                             <span id="contador-carrinho" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark" style="font-size: 0.7rem; display: none;">0</span>
                         </a>
                     </div>

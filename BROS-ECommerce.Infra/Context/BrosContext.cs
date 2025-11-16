@@ -123,7 +123,7 @@ namespace BROS_ECommerce.Infra.Context
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true,
-                    TenantId = "bros"
+                    TenantId = "admin"
                 },
                 new User
                 {

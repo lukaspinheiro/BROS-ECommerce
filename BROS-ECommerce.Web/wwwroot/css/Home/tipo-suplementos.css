@@ -1,5 +1,5 @@
 ﻿.suplemento-card {
-    border: 2px solid #f44336;
+    border: 2px solid;
     border-radius: 10px;
     text-align: center;
     padding: 2rem 1rem;
@@ -14,12 +14,10 @@
 
     .suplemento-card i {
         font-size: clamp(40px, 5vw, 70px);
-        color: #f44336;
         margin-bottom: 1.25rem;
     }
 
 .suplemento-title {
     font-weight: 700;
-    color: #f44336;
     font-size: clamp(14px, 1.5vw, 18px);
 }
