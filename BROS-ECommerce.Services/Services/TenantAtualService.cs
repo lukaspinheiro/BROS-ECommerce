@@ -21,15 +21,12 @@ public  class TenantAtualService : ITenantAtualService
     public async Task<bool> SetTenant(string tenant)
     {
         var tenantInfo = await _context.Tenants.Where(x => x.Id == tenant).FirstOrDefaultAsync();
-        if (tenantInfo != null)
-        {
-            TenantId = tenantInfo.Id;
-            TenantAtual = tenantInfo;
-            return true;
-        }
-        else
-        {
-            throw new Exception("Tenant Inválido");
-        }
+        
+        if (tenantInfo == null)
+            return false;
+
+        TenantId = tenantInfo.Id;
+        TenantAtual = tenantInfo;
+        return true;
     }
 }

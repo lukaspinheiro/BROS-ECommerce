@@ -1,10 +1,12 @@
 @using System.Security.Claims
+@using BROS_ECommerce.Domain.Enums;
 @using BROS_ECommerce.Web.Configuration
 @inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
 
 @{
-    var email = User.Identity?.Name;
-    var emailAdmin = Constants.ADMIN_EMAIL;
+    var perfil = User.Claims.FirstOrDefault(c => c.Type == "perfil")?.Value;
+    var ehSuperAdmin = perfil == ((int)EPerfil.SuperAdmin).ToString();
+    var ehTenantAdmin = perfil == ((int)EPerfil.TenantAdmin).ToString();
 
     var corMenu = tenantService.TenantAtual?.CorMenu;
     var corTextoMenu = tenantService.TenantAtual?.CorTextoMenu;
@@ -38,7 +40,7 @@
             <div class="col justify-content-end">
                 <div class="d-flex align-items-center justify-content-end gap-4" style="margin-right: -1.5rem; color: @corTextoMenu;">
 
-                    @if (User.Identity?.IsAuthenticated == true && email == emailAdmin)
+                    @if (User.Identity?.IsAuthenticated == true && (ehSuperAdmin || ehTenantAdmin))
                     {
                         <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="nav-link hvr-bob">
                             Administrativo

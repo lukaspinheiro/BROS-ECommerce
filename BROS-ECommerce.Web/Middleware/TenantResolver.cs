@@ -23,9 +23,28 @@ public class TenantResolver
         if (reservados.Contains(tenant.ToLower()))
             tenant = "default";
 
-       await tenantAtualService.SetTenant(tenant);
+        var valido = await tenantAtualService.SetTenant(tenant);
+
+        if (!valido)
+        {
+            var pathAndQuery = context.Request.Path + context.Request.QueryString;
+            var redirectUrl = $"https://ecommerce.bros.localhost:8081{pathAndQuery}";
+
+            // resposta “limpa” e completa para evitar ERR_EMPTY_RESPONSE
+            context.Response.Clear();
+            context.Response.StatusCode = StatusCodes.Status302Found;
+            context.Response.Headers["Location"] = redirectUrl;
+            context.Response.Headers["Connection"] = "close";
+            context.Response.ContentLength = 0;
+
+            // completa a resposta e encerra pipeline
+            await context.Response.CompleteAsync();
+            return;
+
+        }
 
         await _next(context);
+
     }
 
 
