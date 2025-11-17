@@ -28,6 +28,7 @@
 
         .imagem-info {
             padding: 10px;
+            background: #f8f9fa;
         }
 
         .upload-area {
@@ -60,13 +61,7 @@
     </style>
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Gerenciar Imagens</h2>
-    <div>
-        <span class="badge badge-info">@Model.TotalItens imagens</span>
-        <span class="badge badge-secondary">@Model.TamanhoTotalFormatado</span>
-    </div>
-</div>
+
 
 @if (TempData["Sucesso"] != null)
 {
@@ -86,6 +81,22 @@
 
 
 <div class="card mb-4">
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left pl-2"><i class="fa-solid fa-arrow-left fa-xl" style="color: #535353;"></i></a>
+                <div>
+                    <span class="badge badge-info">@Model.TotalItens imagens</span>
+                    <span class="badge badge-secondary">@Model.TamanhoTotalFormatado</span>
+                </div>
+            </div>
+            <div class="col-12">
+                <h3 class="title text-center"> @ViewData["Title"]</h3>
+            </div>
+        </div>
+    </div>
+
     <div class="card-header">
         <h5><i class="fas fa-upload"></i> Fazer Upload de Imagens</h5>
     </div>

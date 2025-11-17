@@ -1,19 +1,27 @@
-﻿using BROS_ECommerce.Domain.Entities;
+﻿using BROS_ECommerce.Core.Interfaces;
+using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Domain.Enums;
+using BROS_ECommerce.Domain.Interfaces;
 using BROS_ECommerce.Domain.Interfaces.Crud;
 using BROS_ECommerce.Infra.EntityConfig;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+
 namespace BROS_ECommerce.Infra.Context
 {
     public class BrosContext : DbContext, IUnitOfWork
     {
-        public IConfiguration _configuration { get; }
+        private readonly IConfiguration _configuration; 
+        private readonly ITenantAtualService _tenantAtualService;
+        public string? TenantAtualId { get; set; }
 
-        public BrosContext(DbContextOptions<BrosContext> options, IConfiguration configuration) : base(options)
+        public BrosContext(DbContextOptions<BrosContext> options, IConfiguration configuration, ITenantAtualService tenantAtualService) : base(options)
         {
             _configuration = configuration;
+            _tenantAtualService = tenantAtualService;
+            TenantAtualId = _tenantAtualService?.TenantId;
         }
 
         public DbSet<Produto> Produtos { get; set; }
@@ -28,6 +36,7 @@ namespace BROS_ECommerce.Infra.Context
         public DbSet<Promocao> Promocoes { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<PedidoItem> PedidoItens { get; set; }
+        public DbSet<Tenant> Tenants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,6 +57,19 @@ namespace BROS_ECommerce.Infra.Context
             SeedEstoque(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Produto>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<User>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<Estoque>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<Imagem>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<ProdutoImagem>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<Carrinho>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<CarrinhoItem>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<Categoria>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<CategoriaProduto>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<Promocao>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<Pedido>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<PedidoItem>().HasQueryFilter(a => a.TenantId == TenantAtualId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -57,9 +79,35 @@ namespace BROS_ECommerce.Infra.Context
                 minimumLevel: LogLevel.Information);
         }
 
+        private void ApplyTenantFilter()
+        {
+            foreach (var entrada in ChangeTracker.Entries<ITemTenant>().ToList())
+            {
+                switch (entrada.State)
+                {
+                    case EntityState.Added:
+                    case EntityState.Modified:
+                        entrada.Entity.TenantId = TenantAtualId;
+                        break;
+                }
+            }
+        }
+
+        public override int SaveChanges()
+        {
+            ApplyTenantFilter();
+            return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ApplyTenantFilter();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
-            return await base.SaveChangesAsync() > 0;
+            return await SaveChangesAsync(default) > 0;
         }
 
         private void SeedUsers(ModelBuilder modelBuilder)
@@ -75,7 +123,9 @@ namespace BROS_ECommerce.Infra.Context
                     Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=",
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                    Ativo = true
+                    Ativo = true,
+                    TenantId = "admin",
+                    Perfil = EPerfil.SuperAdmin
                 },
                 new User
                 {
@@ -87,7 +137,9 @@ namespace BROS_ECommerce.Infra.Context
                     Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=",
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-                    Ativo = true
+                    Ativo = true,
+                    TenantId = "gamma",
+                    Perfil = EPerfil.TenantUser
                 }
             );
         }

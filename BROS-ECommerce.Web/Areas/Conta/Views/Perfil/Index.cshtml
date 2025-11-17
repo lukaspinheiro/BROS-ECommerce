@@ -1,5 +1,15 @@
 ﻿@model BROS_ECommerce.Services.ViewModel.Usuario.PerfilUsuarioViewModel
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+
 @{
+    var corBarraCarrinho = tenantService.TenantAtual?.CorMenu;
+    var corTextoBarraCarrinho = tenantService.TenantAtual?.CorTextoMenu;
+    <style>
+        :root {
+            --cor-principal: @corBarraCarrinho;
+            --cor-secundaria: @corTextoBarraCarrinho;
+        }
+    </style>
     ViewData["Title"] = "Meu Perfil";
     Layout = "_LoginLayout";
 }

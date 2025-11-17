@@ -6,7 +6,7 @@
     z-index: 0;
     overflow: hidden;
     position: relative;
-    background-color: white;
+    background-color: var(--cor-secundaria);
     border: none;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     border-radius: 1rem;
@@ -14,7 +14,7 @@
 }
 
     .card-scale i, .card-scale h4 {
-        color: #FF4E4E;
+        color: var(--cor-principal);
         transition: color 0.3s ease;
     }
 
@@ -23,7 +23,7 @@
         position: absolute;
         z-index: -1;
         top: -20px;
-        background: #FF4E4E;
+        background: var(--cor-principal);
         height: 32px;
         width: 100%;
         transform: scale(1);
@@ -42,5 +42,5 @@
     }
 
         .card-scale:hover i, .card-scale:hover h4 {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--cor-secundaria);
         }

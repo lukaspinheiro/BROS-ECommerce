@@ -1,6 +1,17 @@
-﻿@{
+﻿@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+
+@{
 	ViewData["Title"] = "Login";
 	Layout = "_LoginLayout";
+
+	var corPrincipal = tenantService.TenantAtual?.CorMenu;
+	var corSecundaria= tenantService.TenantAtual?.CorTextoMenu;
+	<style>
+		:root {
+			--cor-principal: @corPrincipal;
+			--cor-secundaria: @corSecundaria;
+		}
+	</style>
 }
 <link rel="stylesheet"
 	  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -48,9 +59,9 @@
 
 			<form id="loginForm">
 				<div class="form-group">
-					<label for="usuario">Email</label>
+					<label class="label-icon" for="usuario">Email</label>
 					<div class="input-wrapper">
-						<i class="fa-solid fa-envelope input-icon"></i>
+						<i class="fa-solid fa-envelope input-icon label-icon"></i>
 						<input type="email"
 							   name="usuario"
 							   id="usuario"
@@ -59,9 +70,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="senha">Senha</label>
+					<label class="label-icon" for="senha">Senha</label>
 					<div class="input-wrapper">
-						<i class="fa-solid fa-lock input-icon"></i>
+						<i class="fa-solid fa-lock input-icon label-icon"></i>
 						<input type="password"
 							   name="senha"
 							   id="senha"
@@ -70,7 +81,7 @@
 						<button type="button"
 								class="password-toggle"
 								onclick="togglePassword()">
-							<i id="eyeIcon" class="fa-solid fa-eye"></i>
+							<i id="eyeIcon" class="fa-solid fa-eye label-icon"></i>
 						</button>
 					</div>
 				</div>
@@ -78,7 +89,7 @@
 					<input type="checkbox"
 						   id="lembrarSenha"
 						   name="lembrarSenha" />
-					<label for="lembrarSenha">Lembrar senha</label>
+					<label for="lembrarSenha" class="label-icon">Lembrar senha</label>
 				</div>
 				<div class="forgot-password">
 					<a asp-controller="Autenticacao" asp-action="EsqueciSenha">Esqueceu sua senha?</a>
@@ -86,7 +97,7 @@
 
 				<button type="submit" class="btn-login" id="btnLogin">Entrar</button>
 			</form>
-			<div class="register-link">
+			<div class="register-link label-icon">
 				Não tem uma conta?
 				<a asp-controller="Autenticacao" asp-action="Cadastro">Cadastre-se</a>
 			</div>

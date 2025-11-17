@@ -47,6 +47,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasDefaultValue("Aberto")
                         .HasColumnName("Status");
 
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IdCarrinho");
 
                     b.HasIndex("DataCriacao")
@@ -85,6 +89,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1)
                         .HasColumnName("Quantidade");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdCarrinhoItem");
 
@@ -135,6 +143,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("NomeCategoria");
 
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IdCategoria");
 
                     b.HasIndex("Ativo")
@@ -170,6 +182,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("IdProduto");
 
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IdCategoriaProduto");
 
                     b.HasIndex("DataAssociacao")
@@ -204,6 +220,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0)
                         .HasColumnName("Quantidade");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UltimaAtualizacao")
                         .ValueGeneratedOnAdd()
@@ -269,6 +289,10 @@ namespace BROS_ECommerce.Infra.Migrations
                     b.Property<long>("TamanhoArquivo")
                         .HasColumnType("bigint")
                         .HasColumnName("TamanhoArquivo");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TipoMime")
                         .IsRequired()
@@ -351,6 +375,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasDefaultValue("Pendente")
                         .HasColumnName("Status");
 
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("ValorDesconto")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18,2)")
@@ -418,6 +446,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Quantidade");
 
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("ValorDesconto")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(18,2)")
@@ -471,6 +503,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("varchar(30)")
                         .HasColumnName("Slug");
 
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TituloDescricao")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -521,6 +557,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnName("Principal");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdProdutoImagem");
 
@@ -590,6 +630,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("decimal(5,2)")
                         .HasColumnName("PercentualDesconto");
 
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("ValorDesconto")
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("ValorDesconto");
@@ -612,6 +656,56 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasDatabaseName("IX_Promocoes_ProdutoVigencia");
 
                     b.ToTable("Promocoes", (string)null);
+                });
+
+            modelBuilder.Entity("BROS_ECommerce.Domain.Entities.Tenant", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CorFundo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CorMenu")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CorMenuInferior")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CorTexto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CorTextoMenu")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CorTextoMenuInferior")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("IdFavicon")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IdLogo")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("BROS_ECommerce.Domain.Entities.User", b =>
@@ -656,10 +750,17 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("Perfil")
+                        .HasColumnType("int");
+
                     b.Property<string>("Senha")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdUser");
 
@@ -690,7 +791,9 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Masculino",
                             Nascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Administrador Sistema",
-                            Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF="
+                            Perfil = 1,
+                            Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=",
+                            TenantId = "admin"
                         },
                         new
                         {
@@ -702,7 +805,9 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Masculino",
                             Nascimento = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "João Silva Santos",
-                            Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF="
+                            Perfil = 3,
+                            Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=",
+                            TenantId = "gamma"
                         });
                 });
 

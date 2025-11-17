@@ -1,18 +1,35 @@
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+@using BROS_ECommerce.Domain.Enums;
+
 @{
     ViewData["Title"] = "Painel administrativo";
+    var corPrincipal = tenantService.TenantAtual?.CorMenu;
+    var corTextoMenu = tenantService.TenantAtual?.CorTextoMenu;
+    
+    var perfil = User.Claims.FirstOrDefault(c => c.Type == "perfil")?.Value;
+    var ehSuperAdmin = perfil == ((int)EPerfil.SuperAdmin).ToString();
+    var ehTenantAdmin = perfil == ((int)EPerfil.TenantAdmin).ToString();
+
 }
 
 @section Head {
+    <style>
+        :root {
+            --cor-principal: @corPrincipal;
+            --cor-secundaria: @corTextoMenu;
+        }
+    </style>
     <link rel="stylesheet" type="text/css" href="/css/Home/home-adm.css" />
 }
 
 <div class="container">
     <div class="card mt-0">
         <div class="card-body">
-            <div class="row">
-
-                <div class="col-12 mt-3">
-                    <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i></a>
+            @if (ehSuperAdmin || ehTenantAdmin)
+            {
+                <div class="row">
+                    <div class="col-12 mt-3">
+                    <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #535353;"></i></a>
                 </div>
 
                 <div class="col-12 text-center">
@@ -95,8 +112,35 @@
                         </div>
                     </a>
                 </div>
-
             </div>
+            }
+
+            @if (ehSuperAdmin)
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Super Administrador</h3>
+                        <hr />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                            <a asp-area="Administrativo" asp-controller="Logauditoria" asp-action="Index">
+                                <div class="card card-scale" style="height: 16rem;">
+                                    <div class="card-body">
+
+                                        <i class="fa fa-user-secret fa-2x mt-5" aria-hidden="true"></i>
+
+                                        <h4 class="font-weight-bold mt-5">Log de auditoria</h4>
+
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

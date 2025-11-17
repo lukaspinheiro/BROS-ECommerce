@@ -22,7 +22,7 @@
     right: 0;
     width: 420px;
     height: 100%;
-    background-color: #fff;
+    background-color: var(--cor-secundaria);
     z-index: 9999;
     transform: translateX(100%);
     transition: transform 0.3s ease;
@@ -38,7 +38,6 @@
 .carrinho-sidebar-header {
     padding: 1.5rem;
     background-color: #000;
-    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -61,7 +60,6 @@
 .carrinho-sidebar-close {
     background: none;
     border: none;
-    color: white;
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
@@ -119,8 +117,8 @@
 
 .btn-continuar-comprando {
     background: transparent;
-    border: 2px solid #FF4E4E;
-    color: #FF4E4E;
+    border: 2px solid var(--cor-principal);
+    color: var(--cor-principal);
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     font-weight: 600;
@@ -132,7 +130,7 @@
 }
 
     .btn-continuar-comprando:hover {
-        background: #FF4E4E;
+        background: var(--cor-principal);
         color: white;
         transform: translateY(-2px);
         box-shadow: 0 4px 15px rgba(255, 78, 78, 0.3);
@@ -153,6 +151,7 @@
 
 .carrinho-item {
     display: flex;
+    background-color: #f8f9fa;
     gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid #f0f0f0;
@@ -199,7 +198,7 @@
 
 .item-preco {
     font-size: 0.85rem;
-    color: #FF4E4E;
+    color: var(--cor-principal);
     font-weight: 600;
 }
 
@@ -226,7 +225,7 @@
 
     .btn-quantidade:hover {
         background: #f8f9fa;
-        border-color: #FF4E4E;
+        border-color: var(--cor-principal);
     }
 
     .btn-quantidade:active {
@@ -271,7 +270,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #FF4E4E;
+    color: var(--cor-principal);
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -308,9 +307,9 @@
     }
 
 .btn-finalizar-compra {
-    background: #FF4E4E;
-    border: 2px solid #FF4E4E;
-    color: white;
+    background: var(--cor-principal);
+    border: 2px solid var(--cor-secundaria);
+    color: var(--cor-secundaria);
     padding: 1rem;
     border-radius: 8px;
     font-weight: 700;
@@ -321,10 +320,10 @@
 }
 
     .btn-finalizar-compra:hover {
-        background: #e43f3f;
-        border-color: #e43f3f;
+        background: var(--cor-secundaria);
+        color: var(--cor-principal);
+        border-color: var(--cor-principal);
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(255, 78, 78, 0.4);
     }
 
 .carrinho-toast {

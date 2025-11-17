@@ -1,11 +1,23 @@
-﻿<div class="carrinho-sidebar-overlay" id="carrinho-sidebar-overlay"></div>
+﻿@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+
+@{
+    var corBarraCarrinho = tenantService.TenantAtual?.CorMenu;
+    var corTextoBarraCarrinho = tenantService.TenantAtual?.CorTextoMenu;
+    <style>
+        :root {
+            --cor-principal: @corBarraCarrinho;
+            --cor-secundaria: @corTextoBarraCarrinho;
+        }
+    </style>
+}
+<div class="carrinho-sidebar-overlay" id="carrinho-sidebar-overlay"></div>
 <div class="carrinho-sidebar" id="carrinho-sidebar">
-    <div class="carrinho-sidebar-header">
+    <div class="carrinho-sidebar-header" style="background-color: @corBarraCarrinho; color: @corTextoBarraCarrinho;">
         <h3 class="carrinho-sidebar-titulo">
             <i class="fas fa-shopping-cart"></i>
             CARRINHO (<span id="carrinho-quantidade-items">0</span>)
         </h3>
-        <button class="carrinho-sidebar-close" id="carrinho-sidebar-close">
+        <button class="carrinho-sidebar-close" id="carrinho-sidebar-close" style="color: @corTextoBarraCarrinho;">
             <i class="fas fa-times"></i>
         </button>
     </div>

@@ -1,8 +1,18 @@
 ﻿@model BROS_ECommerce.Web.ViewModels.UserRegisterViewModel
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
 
 @{
     ViewData["Title"] = "Cadastro";
     Layout = "_LoginLayout";
+
+    var corPrincipal = tenantService.TenantAtual?.CorMenu;
+    var corSecundaria = tenantService.TenantAtual?.CorTextoMenu;
+    <style>
+        :root {
+            --cor-principal: @corPrincipal;
+            --cor-secundaria: @corSecundaria;
+        }
+    </style>
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -23,73 +33,73 @@
 }
 
 <div class="login-container">
-    <div class="login-card">
+    <div class="login-card" style="margin-top: 7rem;">
         <div class="login-form">
             <h1 class="login-title">Cadastro</h1>
 
             <form method="post" asp-controller="Autenticacao" asp-action="Cadastro" id="cadastroForm">
                 <div class="form-group">
-                    <label for="Email">Email</label>
+                    <label for="Email" class="label-icon">Email</label>
                     <div class="input-wrapper">
-                        <i class="fa-solid fa-envelope input-icon"></i>
+                        <i class="fa-solid fa-envelope input-icon label-icon"></i>
                         <input type="email" asp-for="Email" class="form-control" required />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="Cpf">CPF</label>
+                    <label for="Cpf" class="label-icon">CPF</label>
                     <div class="input-wrapper">
-                        <i class="fa-solid fa-id-card input-icon"></i>
+                        <i class="fa-solid fa-id-card input-icon label-icon"></i>
                         <input type="text" asp-for="Cpf" class="form-control" required />
                     </div>
-                    <small style="color: #666;">Digite apenas números (ex: 12345678909)</small>
+                    <small class="label-icon">Digite apenas números (ex: 12345678909)</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="Nome">Nome completo</label>
+                    <label for="Nome" class="label-icon">Nome completo</label>
                     <div class="input-wrapper">
-                        <i class="fa-solid fa-user input-icon"></i>
+                        <i class="fa-solid fa-user input-icon label-icon"></i>
                         <input type="text" asp-for="Nome" class="form-control" required />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="Nascimento">Data de nascimento</label>
+                    <label for="Nascimento" class="label-icon">Data de nascimento</label>
                     <div class="input-wrapper">
-                        <i class="fa-solid fa-calendar-days input-icon"></i>
+                        <i class="fa-solid fa-calendar-days input-icon label-icon"></i>
                         <input type="date" asp-for="Nascimento" class="form-control" required />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="Senha">Senha</label>
+                    <label for="Senha" class="label-icon">Senha</label>
                     <div class="input-wrapper">
-                        <i class="fa-solid fa-lock input-icon"></i>
+                        <i class="fa-solid fa-lock input-icon label-icon"></i>
                         <input type="password" asp-for="Senha" class="form-control" required />
                         <button type="button" class="password-toggle" onclick="togglePassword()">
-                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                            <i id="eyeIcon" class="fa-solid fa-eye label-icon"></i>
                         </button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Gênero</label>
+                    <label class="label-icon">Gênero</label>
                     <div class="checkbox-wrapper">
                         <input type="radio" asp-for="Genero" value="Masculino" id="masculino" required />
-                        <label for="masculino">Masculino</label>
+                        <label class="label-icon" for="masculino">Masculino</label>
                         &nbsp;&nbsp;
                         <input type="radio" asp-for="Genero" value="Feminino" id="feminino" />
-                        <label for="feminino">Feminino</label>
+                        <label class="label-icon" for="feminino">Feminino</label>
                         &nbsp;&nbsp;
                         <input type="radio" asp-for="Genero" value="Outro" id="outro" />
-                        <label for="outro">Outro</label>
+                        <label class="label-icon" for="outro">Outro</label>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-login" id="btnCadastrar">Cadastrar</button>
             </form>
 
-            <div class="register-link">
+            <div class="register-link label-icon">
                 Já tem uma conta? <a asp-action="Login">Faça Login</a>
             </div>
         </div>

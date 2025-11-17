@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BROS_ECommerce.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -10,12 +11,19 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var email = User.Identity?.Name;
-            var emailAdmin = "admin@bros.com";
+            var perfilClaim = User.Claims.FirstOrDefault(c => c.Type == "perfil")?.Value;
 
-            if (email != emailAdmin)
+            if (perfilClaim == null)
             {
                 context.Result = RedirectToAction("Login", "Autenticacao", new { area = "" });
+                return;
+            }
+
+            int.TryParse(perfilClaim, out int perfil);
+
+            if (perfil != (int)EPerfil.SuperAdmin && perfil != (int)EPerfil.TenantAdmin)
+            {
+                context.Result = RedirectToAction("SemPermissao", "Erros", new { area = "" });
                 return;
             }
 

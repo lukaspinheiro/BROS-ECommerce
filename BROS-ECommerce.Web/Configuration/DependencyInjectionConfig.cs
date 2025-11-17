@@ -17,6 +17,8 @@ namespace BROS_ECommerce.Web.Configuration
             #region Database
             services.AddDbContext<BrosContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<TenantDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             #endregion
 
             #region Identity/Authentication

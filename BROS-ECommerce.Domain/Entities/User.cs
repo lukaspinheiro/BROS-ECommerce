@@ -1,17 +1,23 @@
 ﻿
 
+using BROS_ECommerce.Domain.Enums;
 using BROS_ECommerce.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class User : IAggregateRoot
+    public class User : IAggregateRoot, ITemTenant
     {
         public User() { }
 
         [Key]
         public Guid IdUser { get; set; } = Guid.NewGuid();
+        
+        public string TenantId { get; set; }
+
+        [Required]
+        public EPerfil Perfil { get; set; } = EPerfil.TenantUser;
 
         [Required]
         [StringLength(255)]

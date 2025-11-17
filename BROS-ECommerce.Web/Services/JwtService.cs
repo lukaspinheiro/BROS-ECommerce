@@ -27,7 +27,9 @@ namespace BROS_ECommerce.Web.Services
                 new Claim("cpf", user.Cpf),
                 new Claim("genero", user.Genero),
                 new Claim("dataNascimento", user.Nascimento.ToString("yyyy-MM-dd")),
-                new Claim("dataLogin", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"))
+                new Claim("dataLogin", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")),
+                new Claim("perfil", ((int)user.Perfil).ToString())
+
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));

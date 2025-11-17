@@ -1,58 +1,64 @@
-﻿
+﻿@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+@{
+    var corTextoFundo = tenantService.TenantAtual?.CorTexto;
+    var corPrincipal = tenantService.TenantAtual?.CorMenu;
+    var corSecundaria = tenantService.TenantAtual?.CorTextoMenu;
+}
 
 <div class="w-100 my-5">
-    <h2 class="text-center extra-bold mb-4">SUPLEMENTOS</h2>
-    <div class="row justify-content-between">
+    <h2 class="text-center extra-bold mb-4" style="color: @corTextoFundo;">SUPLEMENTOS</h2>
+    
+    <div class="row justify-content-between" >
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="suplemento-card d-flex align-items-center justify-content-center">
+            <div class="suplemento-card d-flex align-items-center justify-content-center" style="background-color: @corSecundaria; border-color: @corPrincipal;">
                 <div class="row">
-                    <i class="fas fa-dumbbell inner-shadow"></i>
-                    <div class="suplemento-title">CREATINAS</div>
+                    <i class="fas fa-dumbbell inner-shadow" style="color: @corPrincipal;"></i>
+                    <div class="suplemento-title" style="color: @corPrincipal;">CREATINAS</div>
                 </div>
             </div>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="suplemento-card d-flex align-items-center justify-content-center">
+            <div class="suplemento-card d-flex align-items-center justify-content-center" style="background-color: @corSecundaria; border-color: @corPrincipal;">
                 <div class="row">
-                    <i class="fa-solid fa-jar inner-shadow"></i>
-                    <div class="suplemento-title">PROTEÍNAS</div>
+                    <i class="fa-solid fa-jar inner-shadow" style="color: @corPrincipal;"></i>
+                    <div class="suplemento-title" style="color: @corPrincipal;">PROTEÍNAS</div>
                 </div>
             </div>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="suplemento-card d-flex align-items-center justify-content-center">
+            <div class="suplemento-card d-flex align-items-center justify-content-center" style="background-color: @corSecundaria; border-color: @corPrincipal;">
                 <div class="row">
-                    <i class="fas fa-bread-slice inner-shadow"></i>
-                    <div class="suplemento-title">CARBOIDRATOS</div>
+                    <i class="fas fa-bread-slice inner-shadow" style="color: @corPrincipal;"></i>
+                    <div class="suplemento-title" style="color: @corPrincipal;">CARBOIDRATOS</div>
                 </div>
             </div>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="suplemento-card d-flex align-items-center justify-content-center">
+            <div class="suplemento-card d-flex align-items-center justify-content-center" style="background-color: @corSecundaria; border-color: @corPrincipal;">
                 <div class="row">
-                    <i class="fas fa-bolt inner-shadow"></i>
-                    <div class="suplemento-title">PRÉ-TREINOS</div>
+                    <i class="fas fa-bolt inner-shadow" style="color: @corPrincipal;"></i>
+                    <div class="suplemento-title" style="color: @corPrincipal;">PRÉ-TREINOS</div>
                 </div>
             </div>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="suplemento-card d-flex align-items-center justify-content-center">
+            <div class="suplemento-card d-flex align-items-center justify-content-center" style="background-color: @corSecundaria; border-color: @corPrincipal;">
                 <div class="row">
-                    <i class="fas fa-atom inner-shadow"></i>
-                    <div class="suplemento-title">AMINOÁCIDOS</div>
+                    <i class="fas fa-atom inner-shadow" style="color: @corPrincipal;"></i>
+                    <div class="suplemento-title" style="color: @corPrincipal;">AMINOÁCIDOS</div>
                 </div>
             </div>
         </div>
 
         <div class="col-6 col-md-4 col-lg-2">
-            <div class="suplemento-card d-flex align-items-center justify-content-center">
+                <div class="suplemento-card d-flex align-items-center justify-content-center" style="background-color: @corSecundaria; border-color: @corPrincipal;">
                 <div class="row">
-                    <i class="fas fa-fire inner-shadow"></i>
-                    <div class="suplemento-title">TERMOGÊNICOS</div>
+                    <i class="fas fa-fire inner-shadow" style="color: @corPrincipal;"></i>
+                    <div class="suplemento-title" style="color: @corPrincipal;">TERMOGÊNICOS</div>
                 </div>
             </div>
         </div>

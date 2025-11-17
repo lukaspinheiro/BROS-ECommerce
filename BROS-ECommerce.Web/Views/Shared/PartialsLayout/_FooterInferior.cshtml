@@ -1,7 +1,12 @@
-﻿<div class="container-fluid bg-white">
+﻿@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+@{
+    var corFooterInferior = tenantService.TenantAtual?.CorMenuInferior;
+    var corTextoFooterInferior = tenantService.TenantAtual?.CorTextoMenuInferior;
+}
+<div class="container-fluid shadow-lg" style="background-color: @corFooterInferior;">
     <div class="row">
-        <div class="col-8 ml-auto mr-auto text-white">
-            <p id="p1rodape" class="mb-0 text-dark fw-bolder">GymBros - StackOverBros </p>
+        <div class="col-8 ml-auto mr-auto">
+            <p id="p1rodape" class="mb-0 fw-bolder" style="color: @corTextoFooterInferior;">GymBros - StackOverBros </p>
         </div>
     </div>
 </div>

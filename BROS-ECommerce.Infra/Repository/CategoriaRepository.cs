@@ -52,10 +52,11 @@ namespace BROS_ECommerce.Infra.Repository
 
         public async Task<IEnumerable<Categoria>> ObterTodasCategorias()
         {
-            return await _dbSet
+            var categoria = await _dbSet
                 .AsNoTracking()
                 .OrderBy(c => c.NomeCategoria)
                 .ToListAsync();
+            return categoria;
         }
         public async Task<Categoria?> ObterPorIdAsync(Guid idCategoria)
         {

@@ -2,11 +2,12 @@
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class CategoriaProduto : IAggregateRoot
+    public class CategoriaProduto : IAggregateRoot, ITemTenant
     {
         public CategoriaProduto() { }
 
         public Guid IdCategoriaProduto { get; set; }
+        public string TenantId { get; set; }
         public Guid IdCategoria { get; set; }
         public Guid IdProduto { get; set; }
         public DateTime DataAssociacao { get; set; }

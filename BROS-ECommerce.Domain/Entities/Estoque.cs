@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class Estoque : IAggregateRoot
+    public class Estoque : IAggregateRoot, ITemTenant
     {
         public Estoque() { }
 
@@ -21,6 +21,8 @@ namespace BROS_ECommerce.Domain.Entities
 
         [Required]
         public Guid IdProduto { get; set; }
+
+        public string TenantId { get; set; }
 
         [Required]
         public int Quantidade { get; set; }

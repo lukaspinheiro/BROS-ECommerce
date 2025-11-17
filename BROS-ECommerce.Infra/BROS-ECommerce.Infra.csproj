@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BROS-ECommerce.Core\BROS-ECommerce.Core.csproj" />
     <ProjectReference Include="..\BROS-ECommerce.Domain\BROS-ECommerce.Domain.csproj" />
   </ItemGroup>
 

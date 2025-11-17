@@ -2,11 +2,12 @@
 
 namespace BROS_ECommerce.Domain.Entities
 {
-    public class Promocao : IAggregateRoot
+    public class Promocao : IAggregateRoot, ITemTenant
     {
         public Promocao() { }
 
         public Guid IdPromocao { get; set; }
+        public string TenantId { get; set; }
         public Guid IdProduto { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string? Descricao { get; set; }
