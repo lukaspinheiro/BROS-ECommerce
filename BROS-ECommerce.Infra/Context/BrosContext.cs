@@ -1,5 +1,6 @@
 ﻿using BROS_ECommerce.Core.Interfaces;
 using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Domain.Enums;
 using BROS_ECommerce.Domain.Interfaces;
 using BROS_ECommerce.Domain.Interfaces.Crud;
 using BROS_ECommerce.Infra.EntityConfig;
@@ -123,7 +124,8 @@ namespace BROS_ECommerce.Infra.Context
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true,
-                    TenantId = "admin"
+                    TenantId = "admin",
+                    Perfil = EPerfil.SuperAdmin
                 },
                 new User
                 {
@@ -136,7 +138,8 @@ namespace BROS_ECommerce.Infra.Context
                     Genero = "Masculino",
                     DataCriacao = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     Ativo = true,
-                    TenantId = "gamma"
+                    TenantId = "gamma",
+                    Perfil = EPerfil.TenantUser
                 }
             );
         }

@@ -750,6 +750,9 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("Perfil")
+                        .HasColumnType("int");
+
                     b.Property<string>("Senha")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -788,6 +791,7 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Masculino",
                             Nascimento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "Administrador Sistema",
+                            Perfil = 1,
                             Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=",
                             TenantId = "admin"
                         },
@@ -801,6 +805,7 @@ namespace BROS_ECommerce.Infra.Migrations
                             Genero = "Masculino",
                             Nascimento = new DateTime(1995, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nome = "João Silva Santos",
+                            Perfil = 3,
                             Senha = "sRZL6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF0L6wOaZHF=",
                             TenantId = "gamma"
                         });

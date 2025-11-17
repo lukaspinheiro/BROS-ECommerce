@@ -6,6 +6,10 @@
     padding: 0;
 }
 
+main {
+    padding-top: 4rem;
+}
+
 .login-container {
     display: flex;
     justify-content: center;
@@ -14,7 +18,7 @@
 }
 
 .login-card {
-    background: #ffffff;
+    background: var(--cor-secundaria);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     padding: 40px 60px;
@@ -32,7 +36,7 @@
     }
 
 .login-title {
-    color: #FF4E4E;
+    color: var(--cor-principal);
     margin-bottom: 30px;
     font-style: italic;
     font-weight: 800;
@@ -121,7 +125,7 @@
 
     .form-control:focus {
         outline: none;
-        border-color: #FF4E4E;
+        border-color: var(--cor-principal);
         box-shadow: 0 0 0 3px rgba(255, 78, 78, 0.15);
     }
 
@@ -139,7 +143,7 @@
 }
 
     .password-toggle:focus-visible {
-        outline: 2px solid #FF4E4E;
+        outline: 2px solid var(--cor-principal);
         outline-offset: 2px;
     }
 
@@ -155,7 +159,6 @@
     }
 
     .checkbox-wrapper label {
-        color: #666;
         font-size: 0.9rem;
         cursor: pointer;
     }
@@ -166,7 +169,7 @@
 }
 
     .forgot-password a {
-        color: #FF4E4E;
+        color: var(--cor-principal);
         font-size: 0.9rem;
         text-decoration: none;
     }
@@ -179,10 +182,14 @@
     padding-left: 3rem !important;
 }
 
+.label-icon {
+    color: var(--cor-principal);
+}
+
 .btn-login {
     width: 100%;
-    background-color: #FF4E4E;
-    color: #ffffff;
+    background-color: var(--cor-principal);
+    color: var(--cor-secundaria);
     border: none;
     padding: 15px;
     border-radius: 8px;
@@ -195,7 +202,7 @@
 
     .btn-login:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 78, 78, 0.4);
+        box-shadow: color-mix(in srgb, var(--cor-principal) 95%, transparent);
     }
 
     .btn-login:active {
@@ -205,12 +212,11 @@
 .register-link {
     margin-top: 25px;
     font-size: 0.9rem;
-    color: #666;
     text-align: center;
 }
 
     .register-link a {
-        color: #FF4E4E;
+        color: var(--cor-principal);
         font-weight: 600;
         text-decoration: none;
     }

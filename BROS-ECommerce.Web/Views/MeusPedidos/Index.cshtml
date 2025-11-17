@@ -11,16 +11,6 @@
 }
 
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Meus Pedidos</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
 
     @if (TempData["Sucesso"] != null)
     {
@@ -41,6 +31,16 @@
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 mt-3" style="display: flex; justify-content: start; align-items: center;">
+                            <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left pl-2"><i class="fa-solid fa-arrow-left fa-xl" style="color: #535353;"></i></a>
+                        </div>
+                        <div class="col-12">
+                            <h3 class="title text-center"> @ViewData["Title"]</h3>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
                         <i class="fa-solid fa-shopping-bag me-2"></i>Meus Pedidos

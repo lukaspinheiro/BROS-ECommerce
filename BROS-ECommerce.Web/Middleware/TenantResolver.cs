@@ -23,7 +23,7 @@ public class TenantResolver
         if (reservados.Contains(tenant.ToLower()))
             tenant = "default";
 
-        await tenantAtualService.SetTenant(tenant);
+       await tenantAtualService.SetTenant(tenant);
 
         await _next(context);
     }

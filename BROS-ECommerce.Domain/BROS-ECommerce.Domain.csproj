@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Enums\" />
+    <Compile Remove="Enums\NovaPasta\**" />
+    <EmbeddedResource Remove="Enums\NovaPasta\**" />
+    <None Remove="Enums\NovaPasta\**" />
   </ItemGroup>
 
   <ItemGroup>

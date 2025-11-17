@@ -1,8 +1,18 @@
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+
 @{
     ViewData["Title"] = "Painel administrativo";
+    var corPrincipal = tenantService.TenantAtual?.CorMenu;
+    var corTextoMenu = tenantService.TenantAtual?.CorTextoMenu;
 }
 
 @section Head {
+    <style>
+        :root {
+            --cor-principal: @corPrincipal;
+            --cor-secundaria: @corTextoMenu;
+        }
+    </style>
     <link rel="stylesheet" type="text/css" href="/css/Home/home-adm.css" />
 }
 
@@ -12,7 +22,7 @@
             <div class="row">
 
                 <div class="col-12 mt-3">
-                    <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #FF4E4E;"></i></a>
+                    <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #535353;"></i></a>
                 </div>
 
                 <div class="col-12 text-center">
