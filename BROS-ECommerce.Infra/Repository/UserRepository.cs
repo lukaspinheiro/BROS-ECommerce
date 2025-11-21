@@ -117,5 +117,14 @@ namespace BROS_ECommerce.Infra.Repository
                     u.Senha == senha &&
                     u.Ativo);
         }
+
+        public async Task<IEnumerable<User>> GetUsersByTenantAsync(string tenantId)
+        {
+            return await _context.Users
+                .Where(u => u.TenantId == tenantId)
+                .OrderBy(u => u.Nome)
+                .ToListAsync();
+        }
+
     }
 }

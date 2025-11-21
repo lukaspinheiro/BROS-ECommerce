@@ -1,16 +1,11 @@
-﻿@model BROS_ECommerce.Services.ViewModel.Produto.IndexProdutoViewModel
-
+﻿@model BROS_ECommerce.Services.ViewModel.Tenant.IndexTenantViewModel
 @{
-    ViewData["Title"] = "Gerenciar Produtos";
+    ViewData["Title"] = "Gerenciar Lojas";
 }
 @section Head {
-    <partial name="Css\_datatables" />
-    <link rel="stylesheet" type="text/css" href="~/css/Administrativo/Produto/produto.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/Administrativo/Produto/produto.modal.css"/>
+    <partial name="~/Views/Shared/Css/_datatables.cshtml" />
 }
-
 <partial name="PartialsLayout/_AlertasTempData" />
-
 
 <div class="container">
     <div class="card mt-0">
@@ -19,32 +14,31 @@
                 <div class="col-12 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
                     <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #535353"></i></a>
                     <div>
-                        <a class="btn btn-success pull-right text-white" data-toggle="modal" data-target="#modal-cadastrar-produto" id="btn-abrir-modal">
+                        <a class="btn btn-success pull-right text-white"
+                           data-bs-toggle="modal"
+                           data-bs-target="#modal-cadastrar-tenant">
                             <i class="fa fa-plus"></i> Cadastrar
                         </a>
+
                     </div>
                 </div>
                 <div class="col-12">
                     <h3 class="title text-center"> @ViewData["Title"]</h3>
 
                     <div class="col-12" id="tabela-partial">
-                        <partial name="Partials\_TabelaProduto" model="Model.Tabela" />
+                        <partial name="Partials\_Tabela" model="Model.Tabela" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<partial name="Partials/_Cadastrar" />
-<partial name="Partials/_ModalDetalhesProduto">
-<partial name="Partials/_ModalExclusaoProduto">
-<div id="div-modal-categorias"></div>
-
+<partial name="Partials/_Cadastrar" model="Model" />
+<partial name="Partials/_Editar" model="Model" />
 
 @section Scripts {
-    <partial name="Script\_datatables" />
-    <script type="module" src="~/js/Administrativo/Produto/produto.main.js"></script>
+    <partial name="~/Views/Shared/Script/_datatables.cshtml" />
     <script type="module" src="~/js/shared/temp-data.js"></script>
-    <script type="text/javascript" src="~/js/Administrativo/Produto/produto.categorias.js"></script>
+    <script type="module" src="~/js/Administrativo/Tenant/tenant-tabela.js"></script>
+    <script type="text/javascript" src="~/js/Administrativo/Tenant/editar-tenant.js"></script>
 }

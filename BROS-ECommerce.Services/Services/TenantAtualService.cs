@@ -25,6 +25,9 @@ public  class TenantAtualService : ITenantAtualService
         if (tenantInfo == null)
             return false;
 
+        if (!tenantInfo.Ativo)
+            return false;
+
         TenantId = tenantInfo.Id;
         TenantAtual = tenantInfo;
         return true;

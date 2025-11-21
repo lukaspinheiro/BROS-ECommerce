@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
+namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers;
+
+[Area("Administrativo")]
+public class HomeController : BaseAdminController
 {
-    [Area("Administrativo")]
-    public class HomeController : BaseAdminController
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }

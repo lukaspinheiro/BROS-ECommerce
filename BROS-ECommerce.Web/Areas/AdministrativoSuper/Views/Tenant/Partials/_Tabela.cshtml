@@ -1,0 +1,93 @@
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Tenant.TabelaTenantViewModel>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-light table-sm" id="tabela" data-order="[]">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th class="text-center" style ="width: 10%;">Status</th>
+                    <th>Data de Criação</th>
+                    <th class="text-center nao-exportar" style="width: 15%;">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tenant in Model)
+                {
+                    <tr>
+                        <td><strong>@tenant.Nome</strong></td>
+                        <td><strong>@tenant.Email</strong></td>
+                        <td><strong>@tenant.Telefone</strong></td>
+                        <td class="text-center">
+                            @if (tenant.Ativo)
+                            {
+                                <span class="badge bg-success fw-bold" style="width: 70px;">Ativo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger fw-bold" style="width: 70px;">Inativo</span>
+                            }
+                        </td>
+
+                        <td class="text-center">@tenant.DataCriacao.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <div class="btn-group btn-group-sm gap-1" role="group">
+
+                                <button type="button"
+                                        class="btn btn-sm btn-editar bg-white text-dark"
+                                        title="Editar"
+                                        data-id="@tenant.Id"
+                                        data-nome="@tenant.Nome"
+                                        data-email="@tenant.Email"
+                                        data-telefone="@tenant.Telefone"
+                                        data-ativo="@tenant.Ativo" 
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modal-editar-tenant">
+                                    <i class="fas fa-edit fa-lg"></i>
+                                </button>
+                                <a asp-area="AdministrativoSuper"
+                                   asp-controller="TenantUser"
+                                   asp-action="Index"
+                                   asp-route-tenantId="@tenant.Id"
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fa fa-users"></i>
+                                    Usuários
+                                </a>
+                            </div>
+                            <div class="d-flex gap-1">
+                                
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-light table-sm">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th class="nao-exportar">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="6" class="text-center py-4">
+                        <div class="text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            <strong>Nenhum Tenant encontrado</strong>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}

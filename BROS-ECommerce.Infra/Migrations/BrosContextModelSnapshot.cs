@@ -693,6 +693,10 @@ namespace BROS_ECommerce.Infra.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("IdFavicon")
                         .HasColumnType("uniqueidentifier");
 
@@ -700,6 +704,10 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -1,0 +1,66 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Tenant.IndexTenantViewModel
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="modal-editar-tenant">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="form-cadastrar-tenant" asp-area="Administrativo" asp-controller="Tenant" asp-action="EditarTenant" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
+                @Html.AntiForgeryToken()
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Cadastrar Tenant</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div style="overflow-x:auto;">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label asp-for="@Model.CadastrarTenant.Id" class="control-label"></label>
+                                <input asp-for="@Model.CadastrarTenant.Id" type="text" id="tenant-dominio" class="form-control" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="@Model.CadastrarTenant.Nome" class="control-label"></label>
+                                <input asp-for="@Model.CadastrarTenant.Nome" type="text" id="tenant-nome" class="form-control" autocomplete="off" required style="text-transform: unset;">
+                                <span asp-validation-for="@Model.CadastrarTenant.Nome" class="text-danger"></span>
+                                <span id="nome-error" class="text-danger small" style="display: none;">Informe um nome válido.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="@Model.CadastrarTenant.Email" class="control-label"></label>
+                                <input asp-for="@Model.CadastrarTenant.Email" type="text" id="tenant-email" class="form-control" autocomplete="off" required style="text-transform: unset;">
+                                <span asp-validation-for="@Model.CadastrarTenant.Email" class="text-danger"></span>
+                                <span id="email-error" class="text-danger small" style="display: none;">Informe um Email válido.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="@Model.CadastrarTenant.Telefone" class="control-label"></label>
+                                <input asp-for="@Model.CadastrarTenant.Telefone" type="text" id="tenant-telefone" class="form-control" autocomplete="off" required style="text-transform: unset;">
+                                <span asp-validation-for="@Model.CadastrarTenant.Telefone" class="text-danger"></span>
+                                <span id="telefone-error" class="text-danger small" style="display: none;">Informe um telefone válido.</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label asp-for="@Model.CadastrarTenant.Ativo" class="control-label"></label>
+                                <select asp-for="@Model.CadastrarTenant.Ativo" class="form-control">
+                                    <option value="true">Ativo</option>
+                                    <option value="false">Inativo</option>
+                                </select>
+                                <span asp-validation-for="@Model.CadastrarTenant.Ativo" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="btn-disable" type="submit" class="btn btn-success">SALVAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/shared/desabilitar-botao-ao-realizar-submit.js"></script>
