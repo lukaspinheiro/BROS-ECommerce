@@ -1,14 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BROS_ECommerce.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BROS_ECommerce.Domain.Entities;
 
-public class Tenant
+public class Tenant : IAggregateRoot
 {
+    public Tenant()
+    {
+    }
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public string Id { get; set; }
     public string Nome { get; set; }
+    public string Email { get; set; }
+    public string Telefone { get; set; }
 
     #region Identidade Visual
     public string CorMenu { get; set; }

@@ -25,119 +25,125 @@
 <div class="container">
     <div class="card mt-0">
         <div class="card-body">
-            @if (ehSuperAdmin || ehTenantAdmin)
-            {
-                <div class="row">
-                    <div class="col-12 mt-3">
+            <div class="row">
+                <div class="col-12 mt-3">
                     <a href="javascript:history.back()" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #535353;"></i></a>
                 </div>
 
                 <div class="col-12 text-center">
                     <h3 class="title"> @ViewData["Title"]</h3>
                 </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                    <a asp-area="Administrativo" asp-controller="Produto" asp-action="Index">
-                        <div class="card card-scale" style="height: 15rem;">
-                            <div class="card-body">
-                                <i class="fa-solid fa-box fa-2x mt-5" aria-hidden="true"></i>
-                                <h4 class="fw-bold mt-4">Gerenciar Produtos</h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                    <a asp-area="Administrativo" asp-controller="Estoque" asp-action="Index">
-                        <div class="card card-scale" style="height: 15rem;">
-                            <div class="card-body">
-                                <i class="fa-solid fa-boxes fa-2x mt-5" aria-hidden="true"></i>
-                                <h4 class="fw-bold mt-4">Gerenciar Estoque</h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                    <a asp-area="Administrativo" asp-controller="Imagem" asp-action="Index">
-                        <div class="card card-scale" style="height: 15rem;">
-                            <div class="card-body">
-                                <i class="fa-solid fa-images fa-2x mt-5" aria-hidden="true"></i>
-                                <h4 class="fw-bold mt-4">Gerenciar Imagens</h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                    <a asp-area="Administrativo" asp-controller="" asp-action="">
-                        <div class="card card-scale" style="height: 15rem;">
-                            <div class="card-body">
-                                <i class="fa-solid fa-hand-holding-dollar fa-2x mt-5" aria-hidden="true"></i>
-                                <h4 class="fw-bold mt-4">Gerenciar Promoções</h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                    <a asp-area="Administrativo" asp-controller="Categoria" asp-action="Index">
-                        <div class="card card-scale" style="height: 15rem;">
-                            <div class="card-body">
-                                <i class="fa-solid fa-layer-group fa-2x mt-5" aria-hidden="true"></i>
-                                <h4 class="fw-bold mt-4">Gerenciar Categorias</h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                    <a asp-area="Administrativo" asp-controller="Usuario" asp-action="Index">
-                        <div class="card card-scale" style="height: 15rem;">
-                            <div class="card-body">
-                                <i class="fa-solid fa-users fa-2x mt-5" aria-hidden="true"></i>
-                                <h4 class="fw-bold mt-4">Gerenciar Usuários</h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                    <a asp-area="Administrativo" asp-controller="Pedido" asp-action="Index">
-                        <div class="card card-scale" style="height: 15rem;">
-                            <div class="card-body">
-                                <i class="fa-solid fa-shopping-cart fa-2x mt-5" aria-hidden="true"></i>
-                                <h4 class="fw-bold mt-4">Gerenciar Pedidos</h4>
-                            </div>
-                        </div>
-                    </a>
-                </div>
             </div>
-            }
-
+             
             @if (ehSuperAdmin)
             {
-                <div class="row">
-                    <div class="col-12">
-                        <h3>Super Administrador</h3>
-                        <hr />
-                    </div>
-                </div>
                 <div class="col-12">
                     <div class="row">
+                        <div class="col-12">
+                            <h3>Super Administrador</h3>
+                            <hr />
+                        </div>
+
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                            <a asp-area="Administrativo" asp-controller="Logauditoria" asp-action="Index">
-                                <div class="card card-scale" style="height: 16rem;">
+                            <a asp-area="AdministrativoSuper" asp-controller="Tenant" asp-action="Index">
+                                <div class="card card-scale" style="height: 15rem;">
                                     <div class="card-body">
 
-                                        <i class="fa fa-user-secret fa-2x mt-5" aria-hidden="true"></i>
-
-                                        <h4 class="font-weight-bold mt-5">Log de auditoria</h4>
+                                        <i class="fa fa-shop fa-2x mt-5" aria-hidden="true"></i>
+                                        <h4 class="fw-bold mt-5">Gerenciar Lojas</h4>
 
                                     </div>
                                 </div>
                             </a>
                         </div>
+
+                    </div>
+                </div>
+            }
+
+            @if (ehSuperAdmin || ehTenantAdmin)
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <h3>Administrador</h3>
+                        <hr />
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="Produto" asp-action="Index">
+                            <div class="card card-scale" style="height: 15rem;">
+                                <div class="card-body">
+                                    <i class="fa-solid fa-box fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Produtos</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="Estoque" asp-action="Index">
+                            <div class="card card-scale" style="height: 15rem;">
+                                <div class="card-body">
+                                    <i class="fa-solid fa-boxes fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Estoque</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="Pedido" asp-action="Index">
+                            <div class="card card-scale" style="height: 15rem;">
+                                <div class="card-body">
+                                    <i class="fa-solid fa-shopping-cart fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Pedidos</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="" asp-action="">
+                            <div class="card card-scale" style="height: 15rem;">
+                                <div class="card-body">
+                                    <i class="fa-solid fa-hand-holding-dollar fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Promoções</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="Categoria" asp-action="Index">
+                            <div class="card card-scale" style="height: 15rem;">
+                                <div class="card-body">
+                                    <i class="fa-solid fa-layer-group fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Categorias</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="Usuario" asp-action="Index">
+                            <div class="card card-scale" style="height: 15rem;">
+                                <div class="card-body">
+                                    <i class="fa-solid fa-users fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Usuários</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="Imagem" asp-action="Index">
+                            <div class="card card-scale" style="height: 15rem;">
+                                <div class="card-body">
+                                    <i class="fa-solid fa-images fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Imagens</h4>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             }

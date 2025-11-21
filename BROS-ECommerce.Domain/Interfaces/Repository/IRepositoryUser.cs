@@ -15,5 +15,6 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
         Task<bool> EmailExistsAsync(string email);
         Task<bool> CpfExistsAsync(string cpf);
         Task<User?> ValidateUserAsync(string email, string senha);
+        Task<IEnumerable<User>> GetUsersByTenantAsync(string tenantId);
     }
 }

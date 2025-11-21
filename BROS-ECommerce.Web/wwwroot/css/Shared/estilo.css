@@ -15,6 +15,7 @@ header {
     right: 0;
     left: 0;
     z-index: 1030;
+    font-family: arial, sans-serif;
 }
 footer {
     margin-top: auto;

@@ -21,6 +21,7 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task<User?> GetByEmailAsync(string email);
         Task<bool> ResetarSenhaAsync(Guid id, string novaSenha);
         Task<PerfilUsuarioViewModel?> ObterUsuarioLogadoAsync(ClaimsPrincipal user);
+        Task<IEnumerable<User>> GetUsersByTenantAsync(string tenantId);
 
 
     }

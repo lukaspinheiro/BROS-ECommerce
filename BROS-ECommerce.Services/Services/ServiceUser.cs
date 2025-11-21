@@ -249,5 +249,11 @@ namespace BROS_ECommerce.Services.Services
                 return false;
             }
         }
+
+        public async Task<IEnumerable<User>> GetUsersByTenantAsync(string tenantId)
+        {
+            return await _userRepository.GetUsersByTenantAsync(tenantId);
+        }
+
     }
 }

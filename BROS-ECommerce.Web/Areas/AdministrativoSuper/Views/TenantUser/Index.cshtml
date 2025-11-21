@@ -1,0 +1,37 @@
+﻿@model IEnumerable<BROS_ECommerce.Domain.Entities.User>
+
+<h2>Usuários do Tenant: @ViewBag.TenantId</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>CPF</th>
+            <th>Perfil</th>
+            <th>Ativo?</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Nome</td>
+                <td>@u.Email</td>
+                <td>@u.CpfFormatado</td>
+                <td>@u.Perfil</td>
+                <td>
+                    @if (u.Ativo)
+                    {
+                        <span class="badge bg-success">Ativo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inativo</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

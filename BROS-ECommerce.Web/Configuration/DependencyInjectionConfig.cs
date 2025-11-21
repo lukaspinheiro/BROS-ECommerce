@@ -1,12 +1,12 @@
-﻿using BROS_ECommerce.Services.Interface.Services;
-using BROS_ECommerce.Services.Services;
-using BROS_ECommerce.Infra.Context;
+﻿using BROS_ECommerce.Domain.Entities;
 using BROS_ECommerce.Domain.Interfaces.Repository;
+using BROS_ECommerce.Infra.Context;
 using BROS_ECommerce.Infra.Repository;
-using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.Services;
 using BROS_ECommerce.Web.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BROS_ECommerce.Web.Configuration
 {
@@ -37,6 +37,7 @@ namespace BROS_ECommerce.Web.Configuration
             services.AddScoped<IRepositoryPedido, PedidoRepository>();
             services.AddScoped<IRepositoryPedidoItem, PedidoItemRepository>();
             services.AddScoped<IRepositoryCategoriaProduto, RepositoryCategoriaProduto>();
+            services.AddScoped<IRepositoryTenant, TenantRepository>();
             #endregion
 
             #region Serviços
@@ -50,6 +51,7 @@ namespace BROS_ECommerce.Web.Configuration
             services.AddScoped<IServicePedido, ServicePedido>();
             services.AddScoped<IServicePedidoIntegracao, ServicePedidoIntegracao>();
             services.AddScoped<IServiceCategoriaProduto, ServiceCategoriaProduto>();
+            services.AddScoped<IServiceTenant, ServiceTenant>();
             #endregion
 
             #region Serviços de Pagamento
