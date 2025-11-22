@@ -3,30 +3,37 @@
 @{
     var corMenu = tenantService.TenantAtual?.CorMenu;
     var corTextoMenu = tenantService.TenantAtual?.CorTextoMenu;
+    var logo = tenantService.TenantAtual?.Logo;
+    var email = tenantService.TenantAtual?.Email;
+    var telefone = tenantService.TenantAtual?.Telefone;
+    string caminhoLogo = logo != null
+        ? $"{logo.CaminhoArquivo}"
+        : Url.Content("~/img/logo-default-2.png");
 }
 
 <div class="container-fluid py-2 paddingX shadow-lg" style="background-color: @corMenu;">
     <div class="row align-items-center justify-content-between" style="margin-right: 0rem;">
 
         <div class="col d-flex flex-column align-items-start">
-            <h6 class="fw-bold" style="color: @corTextoMenu;">Pagamento</h6>
-            <div class="d-flex justify-content-center justify-content-lg-start gap-2">
+            <h6 class="fw-bold mt-0" style="color: @corTextoMenu;">Pagamento</h6>
+            <div class="d-flex justify-content-center align-content-center justify-content-lg-start gap-2">
                 <img src="/img/stripe-logo.png" class="rounded-1" width="55" height="23" alt="Forma de pagamento">
                 <img src="/img/mercadopago-logo.png" class="rounded-1" width="55" height="23" alt="Forma de pagamento">
             </div>
         </div>
 
         <div class="col d-flex flex-column">
-            <a class="fw-bold fst-italic" style="color: @corTextoMenu; font-size: 1.5rem; font-weight: 900 !important;" href="/">GymBros</a>
-            <a class="fw-bold fst-italic" style="color: @corTextoMenu; margin-top: -5px;" href="/">Supplements</a>
+            <a asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="@caminhoLogo" style="height: 60px; width: max-content;" />
+            </a>
         </div>
 
         <div class="col d-flex flex-column " style="text-align: end !important; padding-right: unset !important; color: @corTextoMenu;">
-            <a class="fw-bolder">Central de Atendimento</a>
+            <a class="fw-bold">Central de Atendimento</a>
             <div>
-                <i class="fa-solid fa-envelope"></i> <a class="fw-bold">gymbros@gmail.com</a>
+                <i class="fa-solid fa-envelope"></i> <a>@email</a><br />
+                <i class="fa-solid fa-phone"></i> <a>@telefone</a>
             </div>
-            <a class="fw-bolder">Seg a Sex das 9h-12h / 13-17h</a>
         </div>
     </div>
 </div>

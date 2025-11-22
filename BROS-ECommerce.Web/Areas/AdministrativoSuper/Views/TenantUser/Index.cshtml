@@ -1,37 +1,41 @@
-﻿@model IEnumerable<BROS_ECommerce.Domain.Entities.User>
+﻿@model BROS_ECommerce.Services.ViewModel.Usuario.IndexUsuarioViewModel
 
-<h2>Usuários do Tenant: @ViewBag.TenantId</h2>
+@{
+    ViewData["Title"] = "Usuários da Loja";
+}
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>CPF</th>
-            <th>Perfil</th>
-            <th>Ativo?</th>
-        </tr>
-    </thead>
+@section Head {
+    <partial name="Css\_datatables" />
+    <link rel="stylesheet" href="~/css/Administrativo/Usuario/usuario.css" />
+}
 
-    <tbody>
-        @foreach (var u in Model)
-        {
-            <tr>
-                <td>@u.Nome</td>
-                <td>@u.Email</td>
-                <td>@u.CpfFormatado</td>
-                <td>@u.Perfil</td>
-                <td>
-                    @if (u.Ativo)
-                    {
-                        <span class="badge bg-success">Ativo</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">Inativo</span>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+<div class="container">
+    <div class="card mt-0">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mt-3 d-flex justify-content-between align-items-center">
+                    <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left" style="color: #535353">
+                        <i class="fa-solid fa-arrow-left fa-xl"></i>
+                    </a>
+                </div>
+
+                <div class="col-12">
+                    <h3 class="title text-center">@ViewData["Title"] - @ViewBag.TenantId</h3>
+
+                    <div class="col-12" id="tabela-usuarios-partial">
+                        <partial name="Partials/_Tabela" model="Model.Tabela" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* <partial name="Partials/_Cadastrar" model="Model.CadastrarUsuario" /> *@
+@* <partial name="Partials/_ModalExclusao" /> *@
+
+@section Scripts {
+    <partial name="Script\_datatables" />
+    <script type="module" src="~/js/Administrativo/Tenant/tenant-user.js"></script>
+}

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BROS_ECommerce.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace BROS_ECommerce.Services.ViewModel.Usuario
 {
@@ -25,5 +26,8 @@ namespace BROS_ECommerce.Services.ViewModel.Usuario
 
         [Required]
         public string Genero { get; set; }
+
+        [Required]
+        public EPerfil Perfil { get; set; } = EPerfil.TenantUser;
     }
 }

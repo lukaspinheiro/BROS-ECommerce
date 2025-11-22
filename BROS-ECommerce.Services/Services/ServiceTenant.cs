@@ -2,16 +2,20 @@
 using BROS_ECommerce.Domain.Interfaces.Repository;
 using BROS_ECommerce.Services.Helpers;
 using BROS_ECommerce.Services.Interface.Services;
+using BROS_ECommerce.Services.ViewModel.Imagem;
 using BROS_ECommerce.Services.ViewModel.Tenant;
+using Microsoft.AspNetCore.Http;
 
 namespace BROS_ECommerce.Services.Services;
 
 public class ServiceTenant : IServiceTenant
 {
     private readonly IRepositoryTenant _repositoryTenant;
-    public ServiceTenant(IRepositoryTenant repositoryTenant)
+    private readonly IServiceImagem _serviceImagem;
+    public ServiceTenant(IRepositoryTenant repositoryTenant, IServiceImagem serviceImagem)
     {
         _repositoryTenant = repositoryTenant;
+        _serviceImagem = serviceImagem;
     }
 
     public async Task<List<TabelaTenantViewModel>> ObterTabelaTenantsAsync()
@@ -37,6 +41,19 @@ public class ServiceTenant : IServiceTenant
         if (tenantExiste)
             throw new InvalidOperationException($"Já existe uma loja com o Domínio: '{vm.Id}'");
 
+        Guid? idLogo = null;
+
+        if (vm.LogoArquivo != null)
+        {
+            var imagemVM = new CadastrarImagemViewModel
+            {
+                Arquivos = new List<IFormFile> { vm.LogoArquivo },
+                AltText = $"Logo da loja {vm.Nome}"
+            };
+
+            idLogo = await _serviceImagem.AdicionarAsync(imagemVM);
+        }
+
         var tenant = new Tenant
         {
             Id = vm.Id,
@@ -51,7 +68,8 @@ public class ServiceTenant : IServiceTenant
             CorMenuInferior = "#FFFFFF",
             CorTextoMenuInferior = "#FF4E4E",
             CorFundo = "#FFFFFF",
-            CorTexto = "#FF4E4E"
+            CorTexto = "#FF4E4E",
+            IdLogo = idLogo
 
         };
 

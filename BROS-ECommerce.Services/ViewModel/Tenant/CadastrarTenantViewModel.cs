@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace BROS_ECommerce.Services.ViewModel.Tenant;
 
@@ -41,6 +42,8 @@ public class CadastrarTenantViewModel
     public string CorTexto { get; set; }
 
     public Guid? IdLogo { get; set; }
+    public IFormFile LogoArquivo { get; set; }
+
     public Guid? IdFavicon { get; set; }
     #endregion
 

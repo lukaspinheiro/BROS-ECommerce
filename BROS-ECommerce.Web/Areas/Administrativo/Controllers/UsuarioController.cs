@@ -29,6 +29,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                     Nome = u.Nome,
                     Nascimento = u.Nascimento,
                     Genero = u.Genero,
+                    Perfil = u.Perfil,
                     Ativo = u.Ativo,
                     DataCriacao = u.DataCriacao,
                     DataAtualizacao = u.DataAtualizacao
@@ -49,7 +50,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 
             try
             {
-                await _serviceUser.CreateUserAsync(model.Email, model.Cpf, model.Nome, model.Nascimento, model.Senha, model.Genero);
+                await _serviceUser.CreateUserAsync(model.Email, model.Cpf, model.Nome, model.Nascimento, model.Senha, model.Genero, model.Perfil);
                 TempData["Sucesso"] = "Usuário cadastrado com sucesso!";
             }
             catch (Exception ex)
@@ -82,6 +83,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
                 user.Email = model.Email;
                 user.Cpf = model.Cpf;
                 user.Nascimento = model.Nascimento;
+                user.Perfil = model.Perfil;
                 user.Genero = model.Genero;
                 user.DataAtualizacao = DateTime.UtcNow;
 

@@ -19,7 +19,6 @@
                            data-bs-target="#modal-cadastrar-tenant">
                             <i class="fa fa-plus"></i> Cadastrar
                         </a>
-
                     </div>
                 </div>
                 <div class="col-12">
@@ -41,4 +40,19 @@
     <script type="module" src="~/js/shared/temp-data.js"></script>
     <script type="module" src="~/js/Administrativo/Tenant/tenant-tabela.js"></script>
     <script type="text/javascript" src="~/js/Administrativo/Tenant/editar-tenant.js"></script>
+    <script>
+        document.getElementById("LogoArquivo").addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            document.getElementById("nomes-arquivos").value = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("preview-imagens").innerHTML =
+                    `<img src="${e.target.result}" style="height:80px;border-radius:8px;">`;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
 }

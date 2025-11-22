@@ -10,6 +10,10 @@
 
     var corMenu = tenantService.TenantAtual?.CorMenu;
     var corTextoMenu = tenantService.TenantAtual?.CorTextoMenu;
+    var logo = tenantService.TenantAtual?.Logo;
+    string caminhoLogo = logo != null
+        ? $"{logo.CaminhoArquivo}"
+        : Url.Content("~/img/logo-default-2.png");
 }
 
 <style>
@@ -24,8 +28,12 @@
         <div class="row w-100 align-items-center">
 
             <div class="col-2 d-flex flex-column">
-                <a class="fw-bold fst-italic" style="color: @corTextoMenu; font-size: 1.5rem; font-weight: 900 !important;" href="/">GymBros</a>
-                <a class="fw-bold fst-italic" style="color: @corTextoMenu; margin-top: -5px;" href="/">Supplements</a>
+                <div class="col-2 d-flex flex-column">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="@caminhoLogo" style="height: 60px; width: max-content;" />
+                    </a>
+                </div>
+
             </div>
 
             <div class="col-5" style="padding-left: 0.50rem !important; padding-right: unset !important; max-width: 37%;">

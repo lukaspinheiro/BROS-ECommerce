@@ -7,11 +7,13 @@ namespace BROS_ECommerce.Services.Services;
 
 public  class TenantAtualService : ITenantAtualService
 {
-    private readonly TenantDbContext _context;
+    private readonly TenantDbContext _contextTenant;
+    private readonly ImagemDbContext _contextImagem;
 
-    public TenantAtualService (TenantDbContext context)
+    public TenantAtualService (TenantDbContext contextTenant, ImagemDbContext contextImagem)
     {
-        _context = context;
+        _contextTenant = contextTenant;
+        _contextImagem = contextImagem;
     }
 
     public string? TenantId { get; set; }
@@ -20,16 +22,23 @@ public  class TenantAtualService : ITenantAtualService
 
     public async Task<bool> SetTenant(string tenant)
     {
-        var tenantInfo = await _context.Tenants.Where(x => x.Id == tenant).FirstOrDefaultAsync();
-        
-        if (tenantInfo == null)
-            return false;
+        //var tenantInfo = await _context.Tenants.Where(x => x.Id == tenant).FirstOrDefaultAsync();
+        var tenantInfo = await _contextTenant.Tenants.FirstOrDefaultAsync(x => x.Id == tenant);
 
-        if (!tenantInfo.Ativo)
+        if (tenantInfo == null || !tenantInfo.Ativo)
             return false;
 
         TenantId = tenantInfo.Id;
         TenantAtual = tenantInfo;
+
+        if (tenantInfo.IdLogo.HasValue)
+        {
+            tenantInfo.Logo = await _contextImagem.Imagens
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.IdImagem == tenantInfo.IdLogo);
+        }
+
         return true;
     }
+
 }

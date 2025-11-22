@@ -1,5 +1,6 @@
 ﻿
 using BROS_ECommerce.Domain.Entities;
+using BROS_ECommerce.Domain.Enums;
 using BROS_ECommerce.Domain.Interfaces.Repository;
 using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Usuario;
@@ -34,7 +35,7 @@ namespace BROS_ECommerce.Services.Services
             return await _userRepository.GetAllAsync();
         }
 
-        public async Task<User> CreateUserAsync(string email, string cpf, string nome, DateTime nascimento, string senha, string genero)
+        public async Task<User> CreateUserAsync(string email, string cpf, string nome, DateTime nascimento, string senha, string genero, EPerfil perfil)
         {
             
             if (await _userRepository.EmailExistsAsync(email))
@@ -74,6 +75,7 @@ namespace BROS_ECommerce.Services.Services
                 Nome = nome.Trim(),
                 Nascimento = nascimento,
                 Genero = genero,
+                Perfil = perfil,
                 DataCriacao = DateTime.UtcNow,
                 Ativo = true
             };

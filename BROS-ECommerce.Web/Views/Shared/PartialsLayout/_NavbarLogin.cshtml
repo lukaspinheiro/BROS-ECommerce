@@ -3,19 +3,16 @@
 @{
     var corNavbar = tenantService.TenantAtual?.CorMenu;
     var corTexto = tenantService.TenantAtual?.CorTextoMenu;
+    var logo = tenantService.TenantAtual?.Logo;
+    string caminhoLogo = logo != null
+        ? $"{logo.CaminhoArquivo}"
+        : Url.Content("~/img/logo-default-2.png");
 }
 
 <nav class="navbar" style="background-color: @corNavbar; color: @corTexto; height: 90px;">
     <div class="container-fluid h-100 d-flex flex-column justify-content-center align-items-center">
-        <a class="fw-bold fst-italic"
-           href="/"
-           style="font-size: 1.5rem; font-weight: 900 !important; line-height: 1; color: @corTexto;">
-            GymBros
-        </a>
-        <a class="fw-bold fst-italic"
-           href="/"
-           style="font-size: 1.5rem; font-weight: 900 !important; line-height: 1; color: @corTexto;">
-            Supplements
+        <a asp-area="" asp-controller="Home" asp-action="Index">
+            <img src="@caminhoLogo" style="height: 60px; width: max-content;" />
         </a>
     </div>
 </nav>
