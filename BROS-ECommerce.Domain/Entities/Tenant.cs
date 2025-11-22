@@ -28,6 +28,12 @@ public class Tenant : IAggregateRoot
 
     public Guid? IdLogo { get; set; }
     public Guid? IdFavicon { get; set; }
+
+    [NotMapped]
+    public Imagem? Logo { get; set; }
+    [NotMapped]
+    public Imagem? Favicon { get; set; }
+
     #endregion
 
     #region Controle Interno

@@ -1,4 +1,5 @@
 ﻿
+using BROS_ECommerce.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace BROS_ECommerce.Web.ViewModels
@@ -35,7 +36,8 @@ namespace BROS_ECommerce.Web.ViewModels
         [Display(Name = "Gênero")]
         public string Genero { get; set; } = string.Empty;
 
-        
+        [Required]
+        public EPerfil Perfil { get; set; } = EPerfil.TenantUser;
         public bool IsValidAge()
         {
             var age = DateTime.Now.Year - Nascimento.Year;

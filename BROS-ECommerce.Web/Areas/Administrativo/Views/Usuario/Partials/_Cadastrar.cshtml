@@ -1,4 +1,11 @@
-﻿@model BROS_ECommerce.Services.ViewModel.Usuario.CadastrarUsuarioViewModel
+﻿@using BROS_ECommerce.Domain.Extensions
+@using BROS_ECommerce.Domain.Enums
+@model BROS_ECommerce.Services.ViewModel.Usuario.CadastrarUsuarioViewModel
+
+@{
+    var perfilLogado = int.Parse(User.Claims.First(c => c.Type == "perfil").Value);
+}
+
 
 <div class="modal fade" id="modal-cadastrar-usuario" tabindex="-1" role="dialog" aria-labelledby="modalCadastrarUsuarioLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -56,6 +63,21 @@
                                 <option value="O">Outro</option>
                             </select>
                             <span asp-validation-for="Genero" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Perfil"></label>
+                            @{var opcoes = Enum.GetValues(typeof(EPerfil)).Cast<EPerfil>();}
+                            <select asp-for="Perfil" class="form-control" id="Perfil">
+                                @foreach (var perfil in opcoes)
+                                {
+                                    if (perfil == EPerfil.SuperAdmin && perfilLogado != (int)EPerfil.SuperAdmin)
+                                        continue;
+
+                                    <option value="@((int)perfil)">@perfil.GetDisplayName()</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Perfil" class="text-danger"></span>
                         </div>
 
                         <div class="form-group senha-group">

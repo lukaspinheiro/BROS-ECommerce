@@ -124,7 +124,8 @@ namespace BROS_ECommerce.Web.Controllers
                     nome: model.Nome,
                     nascimento: model.Nascimento,
                     senha: model.Senha,
-                    genero: model.Genero
+                    genero: model.Genero,
+                    perfil: model.Perfil
                 );
 
                 TempData["SuccessMessage"] = "Cadastro realizado com sucesso!";

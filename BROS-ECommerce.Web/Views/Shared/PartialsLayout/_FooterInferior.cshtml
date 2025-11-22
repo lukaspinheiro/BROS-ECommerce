@@ -2,11 +2,12 @@
 @{
     var corFooterInferior = tenantService.TenantAtual?.CorMenuInferior;
     var corTextoFooterInferior = tenantService.TenantAtual?.CorTextoMenuInferior;
+    var nomeLoja = tenantService.TenantAtual?.Nome;
 }
 <div class="container-fluid shadow-lg" style="background-color: @corFooterInferior;">
     <div class="row">
         <div class="col-8 ml-auto mr-auto">
-            <p id="p1rodape" class="mb-0 fw-bolder" style="color: @corTextoFooterInferior;">GymBros - StackOverBros </p>
+            <p id="p1rodape" class="mb-0 fw-bolder" style="color: @corTextoFooterInferior;">@nomeLoja - Bros </p>
         </div>
     </div>
 </div>

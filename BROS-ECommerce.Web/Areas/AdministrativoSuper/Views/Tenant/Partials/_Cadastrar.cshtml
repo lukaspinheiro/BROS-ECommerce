@@ -3,7 +3,7 @@
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="modal-cadastrar-tenant">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="form-cadastrar-tenant" asp-area="Administrativo" asp-controller="Tenant" asp-action="CadastrarTenant" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
+            <form id="form-cadastrar-tenant" asp-area="AdministrativoSuper" asp-controller="Tenant" asp-action="CadastrarTenant" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="tenant-id-edicao" name="idTenant" />
 
@@ -17,6 +17,25 @@
                 <div style="overflow-x:auto;">
                     <div class="modal-body">
                         <div class="form-group">
+                                <div id="preview-imagens" class="mt-3 d-flex flex-wrap gap-2 justify-content-center"></div>
+                            <div class="form-group">
+                                <label class="control-label">Logo do Site</label>
+
+                                <input type="file" id="LogoArquivo" name="CadastrarTenant.LogoArquivo" accept="image/*" class="d-none" />
+                                 
+                                <div class="input-group" onclick="document.getElementById('LogoArquivo').click()">
+                                    <input type="text" id="nomes-arquivos" class="form-control" readonly placeholder="Nenhuma imagem selecionada" />
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default">
+                                            <i class="fa fa-paperclip"></i>
+                                            <span class="d-none d-sm-inline">Selecionar Logo</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
                             <div class="form-group">
                                 <label asp-for="@Model.CadastrarTenant.Id" class="control-label"></label>
                                 <input asp-for="@Model.CadastrarTenant.Id" type="text" id="Dominio" class="form-control" required autocomplete="off" style="text-transform: unset;">

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BROS_ECommerce.Domain.Enums;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BROS_ECommerce.Services.ViewModel.Usuario
 {
@@ -10,6 +12,7 @@ namespace BROS_ECommerce.Services.ViewModel.Usuario
         public string Cpf { get; set; }
         public string Genero { get; set; }
         public DateTime Nascimento { get; set; }
+        public EPerfil Perfil { get; set; } 
         public bool Ativo { get; set; }
         public DateTime DataCriacao { get; set; }
 

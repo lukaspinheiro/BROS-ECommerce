@@ -1,0 +1,38 @@
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Usuario.UsuarioTabelaViewModel>
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-light table-sm" id="tabela" data-order="[]">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Data de Criação</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr>
+                        <td>@u.Nome</td>
+                        <td>@u.Email</td>
+                        <td>
+                            @if (u.Ativo)
+                            {
+                                <span class="badge bg-success fw-bold" style="width: 70px;">Ativo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger fw-bold" style="width: 70px;">Inativo</span>
+                            }
+                        </td>
+                        <td class="text-center">@u.DataCriacao.ToString("dd/MM/yyyy HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

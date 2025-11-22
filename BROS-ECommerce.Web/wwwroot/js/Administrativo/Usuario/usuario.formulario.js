@@ -28,7 +28,7 @@ export function limparFormulario() {
     document.getElementById('usuario-id-edicao').value = '';
     document.querySelector('#modal-cadastrar-usuario .modal-title').textContent = 'Cadastrar Usuário';
     document.querySelector('#modal-cadastrar-usuario .btn-success').textContent = 'ADICIONAR';
-    document.getElementById('form-cadastrar-usuario').action = '/Administrativo/Usuario/CadastrarUsuario';
+    document.getElementById('form-cadastrar-usuario').action = '/Administrativo/Usuario/Cadastrar';
 
     // Mostrar campo senha para cadastro
     const senhaGroup = document.querySelector('.senha-group');

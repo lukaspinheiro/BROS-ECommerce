@@ -121,9 +121,10 @@ namespace BROS_ECommerce.Infra.Repository
         public async Task<IEnumerable<User>> GetUsersByTenantAsync(string tenantId)
         {
             return await _context.Users
+                .IgnoreQueryFilters() // <<<<<< REMOVE O TENANT FILTER
                 .Where(u => u.TenantId == tenantId)
                 .OrderBy(u => u.Nome)
-                .ToListAsync();
+                .ToListAsync(); 
         }
 
     }

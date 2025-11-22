@@ -3,7 +3,7 @@
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" id="modal-editar-tenant">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="form-cadastrar-tenant" asp-area="Administrativo" asp-controller="Tenant" asp-action="EditarTenant" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
+            <form id="form-cadastrar-tenant" asp-area="AdministrativoSuper" asp-controller="Tenant" asp-action="EditarTenant" enctype="multipart/form-data" autocomplete="off" method="post" onsubmit="desabilitarBotao()">
                 @Html.AntiForgeryToken()
 
                 <div class="modal-header">
