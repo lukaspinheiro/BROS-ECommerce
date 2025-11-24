@@ -44,6 +44,8 @@ public class TabelaTenantViewModel
 
     public string CorFundo { get; set; }
     public string CorTexto { get; set; }
+    public string? LogoUrl { get; set; }
+    public bool TemLogo => !string.IsNullOrWhiteSpace(LogoUrl);
 
     public DateTime DataCriacao { get; set; }
     public bool Ativo { get; set; }

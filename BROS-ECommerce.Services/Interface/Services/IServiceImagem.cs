@@ -8,6 +8,7 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task<List<ImagemViewModel>> ObterTodosAsync();
         Task<List<ImagemViewModel>> ObterAtivosAsync();
         Task<ImagemViewModel?> ObterPorIdAsync(Guid id);
+        Task<ImagemViewModel?> ObterImagemPorIdAsync(Guid id);
         Task<List<ImagemViewModel>> ObterPaginadoAsync(int pagina, int itensPorPagina, FiltroImagemViewModel? filtro = null);
         Task<List<ImagemViewModel>> ObterImagensNaoAssociadasAsync();
         Task<List<ImagemViewModel>> ObterImagensPorProdutoAsync(Guid idProduto);

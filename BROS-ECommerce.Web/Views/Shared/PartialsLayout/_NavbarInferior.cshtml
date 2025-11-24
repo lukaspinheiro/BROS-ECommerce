@@ -1,19 +1,5 @@
 ﻿@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
-@{
-    var corMenuInferior = tenantService.TenantAtual?.CorMenuInferior;
-    var corTextoMenuInferior = tenantService.TenantAtual?.CorTextoMenuInferior;
-}
 
-<div class="shadow-sm" style="background-color: @corMenuInferior;">
-    <div class="container-fluid d-flex justify-content-between align-items-center py-2 paddingX" style="height: 50px;">
-        <a href="#" style="color: @corTextoMenuInferior;" class="text-decoration-none d-flex align-items-center">
-            <i class="fas fa-bars me-2"></i> Categorias
-        </a>
-        <a href="/categoria/MaisVendidos" style="color: @corTextoMenuInferior;" class="text-decoration-none">Mais Vendidos</a>
-        <a href="/categoria/Hipertrofia" style="color: @corTextoMenuInferior;" class="text-decoration-none">Hipertrofia</a>
-        <a href="/categoria/Saude" style="color: @corTextoMenuInferior;" class="text-decoration-none">Saúde</a>
-        <a href="/categoria/Emagrecimento" style="color: @corTextoMenuInferior;" class="text-decoration-none">Emagrecimento</a>
-        <a href="/categoria/Acessorios" style="color: @corTextoMenuInferior;" class="text-decoration-none">Acessórios</a>
-        <a href="/categoria/Moda" style="color: @corTextoMenuInferior;" class="text-decoration-none">Moda</a>
-    </div>
+<div class="shadow-sm paddingX" style="background-color: @tenantService.TenantAtual?.CorMenuInferior;">
+    @await Component.InvokeAsync("MenuCategorias")
 </div>

@@ -12,7 +12,6 @@
             text: 'CSV',
             charset: "utf-8",
             bom: true,
-            title: 'GymBros - Relatório',
             exportOptions: {
                 modifier: { search: 'none' },
                 columns: function (idx, data, node) {
@@ -27,7 +26,6 @@
         {
             extend: 'excelHtml5',
             text: 'EXCEL',
-            title: 'GymBros - Relatório',
             exportOptions: {
                 modifier: { search: 'none' },
                 columns: function (idx, data, node) {
@@ -42,7 +40,6 @@
         {
             extend: 'pdfHtml5',
             text: 'PDF',
-            title: 'GymBros - Relatório',
             orientation: 'landscape',
             pageSize: 'A4',
             exportOptions: {

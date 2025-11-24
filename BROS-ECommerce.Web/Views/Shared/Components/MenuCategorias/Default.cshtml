@@ -1,0 +1,105 @@
+﻿@model List<BROS_ECommerce.Domain.Entities.Categoria>
+@{
+    var corTexto = ViewBag.CorTexto ?? "#000";
+}
+
+<link href="~/css/Shared/menu-categoria.css" rel="stylesheet" />
+
+<div class="container-fluid menu-categorias-container" style="background-color: @(ViewBag.CorMenuInferior ?? "transparent"); color: @corTexto;">
+    <div class="dropdown dropdown-categorias">
+        <a class="text-decoration-none d-flex align-items-center dropdown-toggle" id="btnCategoriasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:inherit; cursor:pointer;">
+            <i class="fas fa-bars me-2"></i> Categorias
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="btnCategoriasDropdown">
+            @foreach (var categoria in Model)
+            {
+                <li>
+                    <a class="dropdown-item" href="/categoria/@categoria.NomeCategoria">
+                        @categoria.Descricao
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="categorias-lista" id="menuCategoriasLista">
+        @foreach (var categoria in Model)
+        {
+            <a href="/categoria/@categoria.NomeCategoria?descricao=@categoria.Descricao" class="categoria-item" style="color:inherit;">
+                @categoria.Descricao
+            </a>
+
+        }
+    </div>
+</div>
+
+<script>
+    (function () {
+        const BREAKPOINT = 992;
+
+        function parsePx(value) {
+            return value ? parseFloat(value.replace('px', '')) : 0;
+        }
+
+        function ajustarMenuCategorias() {
+            const container = document.querySelector('.menu-categorias-container');
+            const lista = document.querySelector('.categorias-lista');
+            const dropdown = document.querySelector('.dropdown-categorias');
+            const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+
+            if (!container || !lista || !dropdown) return;
+
+            if (window.innerWidth < BREAKPOINT) {
+                lista.style.display = 'none';
+                dropdown.style.display = 'block';
+                return;
+            }
+
+            lista.style.display = 'flex';
+            dropdown.style.display = 'none';
+            dropdownMenu.innerHTML = "";
+
+            const containerStyle = getComputedStyle(container);
+            const paddingLeft = parsePx(containerStyle.paddingLeft);
+            const paddingRight = parsePx(containerStyle.paddingRight);
+            const larguraDisponivel = container.clientWidth - paddingLeft - paddingRight;
+
+            dropdown.style.display = 'block';
+            const larguraDropdown = dropdown.getBoundingClientRect().width;
+            dropdown.style.display = 'none';
+
+            let espacoRestante = larguraDisponivel - larguraDropdown - 10;
+
+            const itens = Array.from(lista.querySelectorAll('.categoria-item'));
+
+            itens.forEach(i => i.style.display = 'inline-block');
+
+            let encontrouOverflow = false;
+
+            itens.forEach(item => {
+                const larguraItem = item.getBoundingClientRect().width + 70;
+
+                if (!encontrouOverflow && larguraItem <= espacoRestante) {
+                    espacoRestante -= larguraItem;
+                } else {
+                    encontrouOverflow = true;
+                    item.style.display = 'none';
+
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.className = "dropdown-item";
+                    a.href = item.getAttribute("href");
+                    a.textContent = item.textContent.trim();
+                    li.appendChild(a);
+                    dropdownMenu.appendChild(li);
+                }
+            });
+
+            dropdown.style.display = dropdownMenu.children.length > 0 ? 'block' : 'none';
+        }
+
+        window.addEventListener('resize', () => setTimeout(ajustarMenuCategorias, 50));
+        window.addEventListener('load', () => setTimeout(ajustarMenuCategorias, 50));
+    })();
+</script>

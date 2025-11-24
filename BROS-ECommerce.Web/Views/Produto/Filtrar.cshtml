@@ -1,18 +1,30 @@
 ﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Produto.ProdutoViewModel>
-
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
 @{
+    var corTexto = tenantService.TenantAtual?.CorTexto;
     ViewData["Title"] = "Produtos";
+    var termo = ViewBag.TermoBusca != null
+        ? ViewBag.TermoBusca
+        : ViewBag.DescricaoCategoria;
+    var quantidade = Model.Count();
 }
 
 @section Head {
     <link href="~/css/Shared/card-produtos.css" rel="stylesheet" />
 }
 
-<h2 class="mb-4">Resultados da busca</h2>
+<h2 class="mb-4" style="color: @corTexto">Resultados da busca <strong> - @termo (@quantidade)</strong></h2>
 
-<div class="grid-produtos">
-    @foreach (var produto in Model)
-    {
-        @await Html.PartialAsync("Partials/_CardProduto", produto)
-    }
-</div>
+@if (Model != null && Model.Any())
+{
+    <div class="grid-produtos">
+        @foreach (var produto in Model)
+        {
+            @await Html.PartialAsync("Partials/_CardProduto", produto)
+        }
+    </div>
+}
+else
+{
+    <h3 class="mb-4" style="color: @corTexto">Não foi encontrado nenhum produto.</h3>
+}

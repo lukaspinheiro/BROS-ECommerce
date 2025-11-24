@@ -3,6 +3,8 @@
 @{
     var corBarraCarrinho = tenantService.TenantAtual?.CorMenu;
     var corTextoBarraCarrinho = tenantService.TenantAtual?.CorTextoMenu;
+    var nomeLoja = tenantService.TenantAtual?.Nome;
+
     <style>
         :root {
             --cor-principal: @corBarraCarrinho;
@@ -28,7 +30,7 @@
                 <i class="fas fa-shopping-cart"></i>
             </div>
             <h4>Seu carrinho ainda está vazio</h4>
-            <p>Que tal conferir algumas ofertas e produtos dos Gymbros?</p>
+            <p>Que tal conferir algumas ofertas e produtos em @nomeLoja?</p>
             <button class="btn-continuar-comprando" onclick="CarrinhoSidebar.fechar()">
                 Continuar comprando
             </button>

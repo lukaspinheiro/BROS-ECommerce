@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "GymBros";
+    ViewData["Title"] = "Início";
 }
 @section Head{
     <link href="~/css/Home/carousel.css" rel="stylesheet" />
@@ -8,8 +8,10 @@
 }
 
 <partial name="\Partials\_carousel" />
-<partial name="\PartialsLayout\_Promocoes" />
-<partial name="\Partials\_TipoSuplementos" />
+@* <partial name="\PartialsLayout\_Promocoes" /> *@
+<partial name="\PartialsLayout\_Produtos" />
+
+@* <partial name="\Partials\_TipoSuplementos" /> *@
 
 @section scripts {
     <script src="~/js/Home/carousel.js"></script>

@@ -11,6 +11,6 @@ namespace BROS_ECommerce.Services.Interface.Services
         Task EditarCategoriaAsync(CadastrarCategoriaViewModel model);
         Task<List<Categoria>> ListarTodasAsync();
         Task<CategoriaViewModel?> ObterPorIdAsync(Guid idCategoria);
-
+        Task<List<Categoria>> ListarParaMenuAsync();
     }
 }
