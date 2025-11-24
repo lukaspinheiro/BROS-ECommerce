@@ -2,7 +2,6 @@
 using BROS_ECommerce.Services.ViewModel.Carrinho;
 using MercadoPago.Client.Preference;
 using MercadoPago.Config;
-using MercadoPago.Resource.Preference;
 using Microsoft.Extensions.Configuration;
 
 public class MercadoPagoService : IMercadoPagoService

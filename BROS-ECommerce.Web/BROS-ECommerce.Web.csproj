@@ -37,6 +37,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Areas\Administrativo\Views\Personalizar\Partials\" />
 		<Folder Include="Areas\Administrativo\Views\Shared\Script\" />
 	</ItemGroup>
 

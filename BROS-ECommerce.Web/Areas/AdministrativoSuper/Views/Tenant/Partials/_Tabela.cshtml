@@ -6,6 +6,7 @@
         <table class="table table-light table-sm" id="tabela" data-order="[]">
             <thead>
                 <tr>
+                    <th class="img-relatorio">Logo</th>
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Telefone</th>
@@ -18,6 +19,29 @@
                 @foreach (var tenant in Model)
                 {
                     <tr>
+                        <td>
+                            @if (tenant.TemLogo)
+                            {
+                                <div class="d-flex justify-content-center" style="background-color: @tenant.CorMenu; height: 50px; width: 100%;">
+                                    <img src="@tenant.LogoUrl"
+                                         class="img-relatorio"
+                                         alt="@tenant.Nome"
+                                         style="max-width: 50px;max-height: 50px;object-fit: contain;border-radius: 4px;" />
+                                </div>
+                            }
+                            else
+                            {
+                                @* <div style="height: 50px; width: 100%; background-color: #f8f9fa; border: 1px dashed #dee2e6; display: flex; align-items: center; justify-content: center; border-radius: 4px;"> *@
+                                <div class="d-flex justify-content-center" style="background-color: @tenant.CorMenu; height: 50px; width: 100%; border: 1px dashed #dee2e6;">
+                                    
+                                    <img src="~/img/logo-default-2.png"
+                                         class="img-relatorio"
+                                         alt="@tenant.Nome"
+                                         style="max-width: 50px;max-height: 50px;object-fit: contain;border-radius: 4px;" />
+                                    
+                                </div>
+                            }
+                        </td>
                         <td><strong>@tenant.Nome</strong></td>
                         <td><strong>@tenant.Email</strong></td>
                         <td><strong>@tenant.Telefone</strong></td>

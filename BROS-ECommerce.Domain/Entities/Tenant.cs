@@ -32,6 +32,9 @@ public class Tenant : IAggregateRoot
     [NotMapped]
     public Imagem? Logo { get; set; }
     [NotMapped]
+    public string? LogoUrl { get; set; }
+
+    [NotMapped]
     public Imagem? Favicon { get; set; }
 
     #endregion

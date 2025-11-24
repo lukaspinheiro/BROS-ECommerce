@@ -56,6 +56,24 @@ namespace BROS_ECommerce.Services.Services
                 QuantidadeProdutos = quantidadeProdutos
             };
         }
+        public async Task<ImagemViewModel?> ObterImagemPorIdAsync(Guid id)
+        {
+            var imagem = await _repositoryImagem.ObterLogosPorIdAsync(id);
+            if (imagem == null) return null;
+
+            return new ImagemViewModel
+            {
+                IdImagem = imagem.IdImagem,
+                NomeArquivo = imagem.NomeArquivo,
+                CaminhoArquivo = imagem.CaminhoArquivo,
+                TamanhoArquivo = imagem.TamanhoArquivo,
+                TipoMime = imagem.TipoMime,
+                AltText = imagem.AltText,
+                DataCriacao = imagem.DataCriacao,
+                DataAtualizacao = imagem.DataAtualizacao,
+                Ativo = imagem.Ativo
+            };
+        }
 
         public async Task<List<ImagemViewModel>> ObterPaginadoAsync(int pagina, int itensPorPagina, FiltroImagemViewModel? filtro = null)
         {

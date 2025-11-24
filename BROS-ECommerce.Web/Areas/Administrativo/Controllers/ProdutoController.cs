@@ -9,7 +9,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 {
     [Area("Administrativo")]
     [Route("Administrativo/Produto")]
-    public class ProdutoController : Controller
+    public class ProdutoController : BaseAdminController
     {
         private readonly IServiceProduto _serviceProduto;
         private readonly IServiceImagem _serviceImagem;
@@ -24,7 +24,6 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             _serviceCategoriaProduto = serviceCategoriaProduto;
         }
 
-        [HttpGet("index")]
         public async Task<IActionResult> Index()
         {
             try

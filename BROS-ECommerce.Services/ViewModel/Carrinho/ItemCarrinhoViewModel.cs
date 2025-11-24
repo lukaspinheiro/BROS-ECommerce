@@ -12,7 +12,7 @@
         public string ImagemUrl { get; set; } = string.Empty;
 
         public decimal Subtotal => Quantidade * PrecoUnitario;
-        public string PrecoFormatado => PrecoUnitario.ToString("C2");
-        public string SubtotalFormatado => Subtotal.ToString("C2");
+        public string PrecoFormatado => PrecoUnitario.ToString("F2");
+        public string SubtotalFormatado => Subtotal.ToString("F2");
     }
 }

@@ -3,11 +3,11 @@
 export function criarConfiguracaoTabela(extraColumnDefs = []) {
 
     const tituloPagina = document.title.replace(' - GymBros', '');
-    const tituloRelatorio = `GymBros - Relatório (${tituloPagina})`;
+    const tituloRelatorio = `(${tituloPagina})`;
 
     const botoesComTitulo = configuracaoPadraoDatatables.buttons.map(botao => ({
         ...botao,
-        title: tituloRelatorio
+        title: tituloPagina
     }));
 
     return {

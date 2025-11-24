@@ -8,6 +8,7 @@ namespace BROS_ECommerce.Domain.Interfaces.Repository
         Task<List<Imagem>> ObterTodosAsync();
         Task<List<Imagem>> ObterAtivosAsync();
         Task<Imagem?> ObterPorIdAsync(Guid id);
+        Task<Imagem?> ObterLogosPorIdAsync(Guid id);
         Task<Imagem?> ObterPorNomeArquivoAsync(string nomeArquivo);
         Task<Imagem?> ObterPorCaminhoAsync(string caminho);
         Task<List<Imagem>> BuscarPorTipoMimeAsync(string tipoMime);

@@ -105,5 +105,15 @@ namespace BROS_ECommerce.Services.Services
             };
         }
 
+        public async Task<List<Categoria>> ListarParaMenuAsync()
+        {
+            var categorias = await _repositoryCategoria.ObterTodasCategorias();
+
+            return categorias
+                .Where(c => c.Ativo)
+                .OrderBy(c => c.NomeCategoria)
+                .ToList();
+        }
+
     }
 }

@@ -33,12 +33,15 @@ namespace BROS_ECommerce.Web.Controllers
 
         [HttpGet]
         [Route("categoria/{nomeCategoria}")]
-        public async Task<IActionResult> BuscarPorCategoria(string nomeCategoria)
+        public async Task<IActionResult> BuscarPorCategoria(string nomeCategoria, string descricao)
         {
             var produtos = await _serviceProduto.BuscarPorCategoriaAsync(nomeCategoria);
-            ViewBag.TermoBusca = nomeCategoria; // opcional, para mostrar no título
+
+            ViewBag.DescricaoCategoria = descricao;
+
             return View("Filtrar", produtos);
         }
+
 
     }
 }

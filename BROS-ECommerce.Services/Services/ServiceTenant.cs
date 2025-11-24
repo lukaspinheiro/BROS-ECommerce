@@ -21,16 +21,32 @@ public class ServiceTenant : IServiceTenant
     public async Task<List<TabelaTenantViewModel>> ObterTabelaTenantsAsync()
     {
         var tenants = await _repositoryTenant.ObterTodosAsync();
+        var lista = new List<TabelaTenantViewModel>();
 
-        return tenants.Select(e => new TabelaTenantViewModel
+        foreach (var e in tenants)
         {
-            Id = e.Id,
-            Nome = e.Nome,
-            Telefone = e.Telefone,
-            Email = e.Email,
-            DataCriacao = e.DataCriacao,
-            Ativo = e.Ativo
-        }).ToList();
+            string? logoUrl = null;
+
+            if (e.IdLogo.HasValue)
+            {
+                var imagem = await _serviceImagem.ObterImagemPorIdAsync(e.IdLogo.Value);
+                if (imagem != null)
+                    logoUrl = imagem.CaminhoArquivo;
+            }
+
+            lista.Add(new TabelaTenantViewModel
+            {
+                Id = e.Id,
+                Nome = e.Nome,
+                Telefone = e.Telefone,
+                Email = e.Email,
+                DataCriacao = e.DataCriacao,
+                Ativo = e.Ativo,
+                LogoUrl = logoUrl,
+                CorMenu = e.CorMenu
+            });
+        }
+        return lista;
     }
 
     public async Task CadastrarTenantAsync(IndexTenantViewModel indexTenantViewModel)

@@ -63,6 +63,16 @@ namespace BROS_ECommerce.Infra.Repository
                 .FirstOrDefaultAsync(i => i.IdImagem == id);
         }
 
+        public async Task<Imagem?> ObterLogosPorIdAsync(Guid id)
+        {
+            var imagem = await _dbSet
+                .IgnoreQueryFilters()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.IdImagem == id);
+            return imagem;
+        }
+
+
         public async Task<Imagem?> ObterPorNomeArquivoAsync(string nomeArquivo)
         {
             return await _dbSet

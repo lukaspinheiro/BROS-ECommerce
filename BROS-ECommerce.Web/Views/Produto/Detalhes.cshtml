@@ -1,7 +1,9 @@
 ﻿@model BROS_ECommerce.Services.ViewModel.Produto.ProdutoViewModel;
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
 
 @{
     ViewData["Title"] = Model.Nome;
+    var nomeLoja = tenantService.TenantAtual?.Nome;
 }
 
 @section Head {
@@ -52,7 +54,7 @@
     <!-- COLUNA: Compra + CEP -->
     <div class="produto-compra">
         <div class="text-end">
-            <p class="marca mb-0">Gymbros Suplemments</p>
+            <p class="marca mb-0">@nomeLoja</p>
             <h3 class="fw-bolder mt-0 mb-lg-5">@Model.Nome</h3>
             <p class="preco">R$@Model.Preco.ToString("F2")</p>
             <p class="parcelamento">ou R$@((Model.Preco * 1.02m / 6).ToString("F2")) em até 6x sem juros</p>

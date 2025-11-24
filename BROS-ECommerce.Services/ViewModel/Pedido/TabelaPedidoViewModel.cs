@@ -13,7 +13,7 @@
         public DateTime DataCriacao { get; set; }
 
         public string DataPedidoFormatada => DataPedido.ToString("dd/MM/yyyy HH:mm");
-        public string ValorTotalFormatado => ValorTotal.ToString("C");
+        public string ValorTotalFormatado => ValorTotal.ToString("F2");
         public string StatusFormatado => Status switch
         {
             "Pendente" => "Pendente",
