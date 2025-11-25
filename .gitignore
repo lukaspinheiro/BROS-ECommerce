@@ -56,7 +56,6 @@ Generated\ Files/
 *.vsmdi
 
 # Entity Framework
-Migrations/
 
 # Code Coverage
 *.coverage*

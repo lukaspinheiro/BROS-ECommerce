@@ -1,0 +1,198 @@
+﻿@using BROS_ECommerce.Domain.Enums;
+@using BROS_ECommerce.Web.Configuration
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+
+@{
+    var email = tenantService.TenantAtual?.Email;
+    var telefone = tenantService.TenantAtual?.Telefone;
+    var customMenu = tenantService.TenantAtual?.CorMenu ?? "#ffffff";
+    var customTextoMenu = tenantService.TenantAtual?.CorTextoMenu ?? "#000000";
+    var logo = tenantService.TenantAtual?.Logo;
+    string caminhoLogo = logo != null
+        ? $"{logo.CaminhoArquivo}"
+        : Url.Content("~/img/logo-default-2.png");
+
+    ViewData["Title"] = "Personalizar Loja";
+}
+
+<partial name="PartialsLayout/_AlertasTempData" />
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- PREVIEW -->
+                <div class="col-md-9 border-end">
+                    <div class="row">
+                        <h4 class="mb-3 text-center">@ViewData["Title"]</h4>
+
+                        <div class="preview-box shadow border rounded overflow-hidden">
+
+                            <!-- NAVBAR -->
+                            <nav id="preview-navbar" class="navbar navbar-expand-lg"
+                                 style="background-color: @customMenu; height: 90px; transition: 0.2s;">
+                                <div class="container-fluid py-2 w-100">
+                                    <div class="row w-100 align-items-center">
+                                        <div class="col-3">
+                                            <img src="@caminhoLogo" style="height: 60px; width: auto;" />
+                                        </div>
+
+                                        <div class="col-5" style="padding-left: 0.50rem !important; padding-right: unset !important; max-width: 37%;">
+                                            <form class="d-flex bg-light rounded-2 overflow-hidden w-100" style="height: 50px;">
+                                                <input disabled class="form-control border-0 h-100" name="busca" type="search" placeholder="Buscar..." aria-label="Buscar">
+                                                <button disabled class="btn btn-light bg-light d-flex align-items-center justify-content-center px-3 h-100" type="submit">
+                                                    <i class="fa-solid fa-magnifying-glass fa-2xl" style="color: #4a4a4a;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="col d-flex align-items-center justify-content-end gap-4"
+                                             id="preview-texto" style="color: @customTextoMenu;">
+                                            <a class="d-flex align-items-center gap-2" style="color: inherit;">
+                                                <div>
+                                                    <span class="d-block">Cadastre-se</span>
+                                                    <span>ou Faça Login</span>
+                                                </div>
+                                                <i class="fa-solid fa-user fa-2xl"></i>
+                                                <i class="fa-solid fa-cart-shopping fa-xl"></i>
+                                            </a>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </nav>
+
+                            <!-- MINI-CONTEÚDO (TELA DO MEIO) -->
+                            <div id="preview-content" class="p-4" style="background: #f9f9f9; min-height: 280px;">
+
+                                <div class="row g-3">
+
+                                    <!-- Card Fake 1 -->
+                                    <div class="col-4">
+                                        <div class="card shadow-sm border-0">
+                                            <div style="height: 120px; background: #e0e0e0;"></div>
+                                            <div class="card-body">
+                                                <h6 class="fw-bold mb-1">Produto Exemplo</h6>
+                                                <small class="text-muted">R$ 99,90</small>
+                                                <button class="btn btn-primary btn-sm w-100 mt-2" disabled>Ver mais</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Fake 2 -->
+                                    <div class="col-4">
+                                        <div class="card shadow-sm border-0">
+                                            <div style="height: 120px; background: #e0e0e0;"></div>
+                                            <div class="card-body">
+                                                <h6 class="fw-bold mb-1">Produto Exemplo</h6>
+                                                <small class="text-muted">R$ 75,90</small>
+                                                <button class="btn btn-primary btn-sm w-100 mt-2" disabled>Ver mais</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Fake 3 -->
+                                    <div class="col-4">
+                                        <div class="card shadow-sm border-0">
+                                            <div style="height: 120px; background: #e0e0e0;"></div>
+                                            <div class="card-body">
+                                                <h6 class="fw-bold mb-1">Produto Exemplo</h6>
+                                                <small class="text-muted">R$ 150,00</small>
+                                                <button class="btn btn-primary btn-sm w-100 mt-2" disabled>Ver mais</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- FOOTER -->
+                            <div class="container-fluid py-3 shadow-lg" style="background-color: @customMenu;" id="preview-footer">
+                                <div class="row align-items-center justify-content-between">
+
+                                    <div class="col d-flex flex-column align-items-start" id="preview-footer-txt" style="color: @customTextoMenu;">
+                                        <h6 class="fw-bold mt-0" >Pagamento</h6>
+                                        <div class="d-flex justify-content-center align-content-center justify-content-lg-start gap-2">
+                                            <img src="/img/stripe-logo.png" class="rounded-1" width="55" height="23" alt="Forma de pagamento">
+                                            <img src="/img/mercadopago-logo.png" class="rounded-1" width="55" height="23" alt="Forma de pagamento">
+                                        </div>
+                                    </div>
+
+                                    <div class="col d-flex justify-content-center">
+                                        <img src="@caminhoLogo" style="height: 60px;" />
+                                    </div>
+
+                                    <div class="col d-flex flex-column text-end" style="color: @customTextoMenu;" id="preview-footer-txt2">
+                                        <span class="fw-bold">Central de Atendimento</span>
+                                        <div>
+                                            <i class="fa-solid fa-envelope"></i> @email <br />
+                                            <i class="fa-solid fa-phone"></i> @telefone
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- CONTROLES -->
+                <div class="col-md-3">
+                    <h5 class="mb-3 text-center">Configurações</h5>
+
+                    <form asp-action="SalvarTema" asp-controller="LojaPersonalizacao" method="post">
+
+                        <div class="mb-3">
+                            <label>Cor do Menu Principal</label>
+                            <input type="color" name="CorMenu" id="input-cor-menu"
+                                   class="form-control form-control-color border rounded"
+                                   value="@customMenu" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Cor do Texto do Menu Principal</label>
+                            <input type="color" name="CorTextoMenu" id="input-cor-texto-menu"
+                                   class="form-control form-control-color border rounded"
+                                   value="@customTextoMenu" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                            Salvar Alterações
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // PREVIEW EM TEMPO REAL
+    document.getElementById("input-cor-menu").addEventListener("input", e => {
+        const bgcolor = e.target.value;
+        document.getElementById("preview-navbar").style.backgroundColor = bgcolor;
+        document.getElementById("preview-footer").style.backgroundColor = bgcolor;
+    });
+
+    document.getElementById("input-cor-texto-menu").addEventListener("input", e => {
+        const color = e.target.value;
+        document.getElementById("preview-texto").style.color = color;
+        document.getElementById("preview-footer-txt").style.color = color;
+        document.getElementById("preview-footer-txt2").style.color = color;
+
+        // Ícones dentro da navbar
+        document.querySelectorAll("#preview-texto i").forEach(i => {
+            i.style.color = color;
+        });
+    });
+</script>
