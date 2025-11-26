@@ -5,8 +5,13 @@
 @{
     var email = tenantService.TenantAtual?.Email;
     var telefone = tenantService.TenantAtual?.Telefone;
+    var loja = tenantService.TenantAtual?.Nome;
+    var corFundo = tenantService.TenantAtual?.CorFundo ?? "#ffffff";
     var customMenu = tenantService.TenantAtual?.CorMenu ?? "#ffffff";
+    var corTextoFundo = tenantService.TenantAtual?.CorTexto;
     var customTextoMenu = tenantService.TenantAtual?.CorTextoMenu ?? "#000000";
+    var customMenuInferior = tenantService.TenantAtual?.CorMenuInferior ?? "#ffffff";
+    var customTextoMenuInferior = tenantService.TenantAtual?.CorTextoMenuInferior ?? "#000000";
     var logo = tenantService.TenantAtual?.Logo;
     string caminhoLogo = logo != null
         ? $"{logo.CaminhoArquivo}"
@@ -17,27 +22,28 @@
 
 <partial name="PartialsLayout/_AlertasTempData" />
 
-<div class="container mt-4">
-
-    <div class="card shadow-sm">
+<div class="container-sm">
+    <div class="card mt-0">
         <div class="card-body">
 
-            <div class="row">
-
+            <div class="row mb-3">
+                <div class="col-12 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                    <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #535353"></i></a>
+                </div>
                 <!-- PREVIEW -->
-                <div class="col-md-9 border-end">
-                    <div class="row">
-                        <h4 class="mb-3 text-center">@ViewData["Title"]</h4>
+                <div class="col-md-8 border-end">
+                    <div class="row" style="padding-right: 15px !important">
+                        <h4 class="title mb-3 text-center">@ViewData["Title"]</h4>
 
-                        <div class="preview-box shadow border rounded overflow-hidden">
+                        <div class="preview-box shadow border rounded overflow-hidden p-0">
 
-                            <!-- NAVBAR -->
+                            <!-- NAVBAR superior-->
                             <nav id="preview-navbar" class="navbar navbar-expand-lg"
                                  style="background-color: @customMenu; height: 90px; transition: 0.2s;">
                                 <div class="container-fluid py-2 w-100">
                                     <div class="row w-100 align-items-center">
                                         <div class="col-3">
-                                            <img src="@caminhoLogo" style="height: 60px; width: auto;" />
+                                            <img src="@caminhoLogo" class="preview-logo" style="height: 60px; width: auto;" />
                                         </div>
 
                                         <div class="col-5" style="padding-left: 0.50rem !important; padding-right: unset !important; max-width: 37%;">
@@ -65,54 +71,27 @@
                                     </div>
                                 </div>
                             </nav>
-
-                            <!-- MINI-CONTEÚDO (TELA DO MEIO) -->
-                            <div id="preview-content" class="p-4" style="background: #f9f9f9; min-height: 280px;">
-
-                                <div class="row g-3">
-
-                                    <!-- Card Fake 1 -->
-                                    <div class="col-4">
-                                        <div class="card shadow-sm border-0">
-                                            <div style="height: 120px; background: #e0e0e0;"></div>
-                                            <div class="card-body">
-                                                <h6 class="fw-bold mb-1">Produto Exemplo</h6>
-                                                <small class="text-muted">R$ 99,90</small>
-                                                <button class="btn btn-primary btn-sm w-100 mt-2" disabled>Ver mais</button>
-                                            </div>
-                                        </div>
+                            <!-- Navbar Inferior -->
+                            <div class="shadow-sm" style="background-color: @customMenuInferior; !important">
+                                <div class="container-fluid menu-categorias-container preview-navbar-inf" style=" color: @customTextoMenuInferior;">
+                                    <div class="categorias-lista" id="menuCategoriasLista">
+                                        <a class="categoria-item" style="color:inherit;">
+                                             Menu Secundario - Categoria 1
+                                        </a>
+                                        <a class="categoria-item" style="color:inherit;">
+                                            Menu Secundario - Categoria 2
+                                        </a>
                                     </div>
-
-                                    <!-- Card Fake 2 -->
-                                    <div class="col-4">
-                                        <div class="card shadow-sm border-0">
-                                            <div style="height: 120px; background: #e0e0e0;"></div>
-                                            <div class="card-body">
-                                                <h6 class="fw-bold mb-1">Produto Exemplo</h6>
-                                                <small class="text-muted">R$ 75,90</small>
-                                                <button class="btn btn-primary btn-sm w-100 mt-2" disabled>Ver mais</button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Card Fake 3 -->
-                                    <div class="col-4">
-                                        <div class="card shadow-sm border-0">
-                                            <div style="height: 120px; background: #e0e0e0;"></div>
-                                            <div class="card-body">
-                                                <h6 class="fw-bold mb-1">Produto Exemplo</h6>
-                                                <small class="text-muted">R$ 150,00</small>
-                                                <button class="btn btn-primary btn-sm w-100 mt-2" disabled>Ver mais</button>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
-
                             </div>
 
-                            <!-- FOOTER -->
-                            <div class="container-fluid py-3 shadow-lg" style="background-color: @customMenu;" id="preview-footer">
+                            <!-- MINI-CONTEÚDO (TELA DO MEIO) -->
+                            <div id="preview-content" class="p-4" style="background-color: @corFundo; min-height: 280px;">
+                                <h3 class="mb-3 mt-0 title text-center" style="color: @corTextoFundo;">@ViewData["Title"]</h3>
+                            </div>
+
+                            <!-- FOOTER Superior -->
+                            <div class="container-fluid py-3 shadow-lg" style="background-color: @customMenu; height: 90px;" id="preview-footer">
                                 <div class="row align-items-center justify-content-between">
 
                                     <div class="col d-flex flex-column align-items-start" id="preview-footer-txt" style="color: @customTextoMenu;">
@@ -124,7 +103,7 @@
                                     </div>
 
                                     <div class="col d-flex justify-content-center">
-                                        <img src="@caminhoLogo" style="height: 60px;" />
+                                        <img src="@caminhoLogo" class="preview-logo" style="height: 60px;" alt="Logo da loja" />
                                     </div>
 
                                     <div class="col d-flex flex-column text-end" style="color: @customTextoMenu;" id="preview-footer-txt2">
@@ -138,38 +117,121 @@
                                 </div>
                             </div>
 
+                            <!-- FOOTER Inferior -->
+                            <div class="container-fluid shadow-lg" style="background-color: @customMenuInferior;">
+                                <div class="row">
+                                    <div class="col-8 ml-auto mr-auto">
+                                        <p id="preview-rodape-inf" class="mb-0 fw-bolder text-center" style="color: @customTextoMenuInferior;">@loja - Bros </p>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
 
-
-
                 <!-- CONTROLES -->
-                <div class="col-md-3">
-                    <h5 class="mb-3 text-center">Configurações</h5>
+                <div class="col-md-4">
+                    <h5 class="title mb-3 text-center">Configurações</h5>
+                    <form asp-action="SalvarTema" asp-controller="Personalizar" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- SUPERIOR -->
+                                <div class="border rounded px-2 mb-4" style="height: 210px;">
+                                    <h6 class="fw-bold mt-4">Cor Primária</h6>
 
-                    <form asp-action="SalvarTema" asp-controller="LojaPersonalizacao" method="post">
+                                    <div class="mb-3">
+                                        <label>Cor do Menu Superior</label>
+                                        <input type="color" name="CorMenu" id="input-cor-menu"
+                                               class="form-control form-control-color border rounded"
+                                               value="@customMenu" />
+                                    </div>
 
-                        <div class="mb-3">
-                            <label>Cor do Menu Principal</label>
-                            <input type="color" name="CorMenu" id="input-cor-menu"
-                                   class="form-control form-control-color border rounded"
-                                   value="@customMenu" />
+                                    <div class="mb-3">
+                                        <label>Cor do Texto Superior</label>
+                                        <input type="color" name="CorTextoMenu" id="input-cor-texto-menu"
+                                               class="form-control form-control-color border rounded"
+                                               value="@customTextoMenu" />
+                                    </div>
+                                </div>
+
+                                <!-- FUNDO DA PÁGINA -->
+                                <div class="border rounded px-2" style="height: 210px;">
+                                    <h6 class="fw-bold mt-4">Cor da Página</h6>
+
+                                    <div class="mb-3">
+                                        <label>Cor de Fundo</label>
+                                        <input type="color" name="CorFundo" id="input-cor-fundo"
+                                               class="form-control form-control-color border rounded"
+                                               value="@corFundo" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label>Cor do Texto</label>
+                                        <input type="color" name="CorTexto" id="input-cor-texto-fundo"
+                                               class="form-control form-control-color border rounded"
+                                               value="@corTextoFundo" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <!-- INFERIOR -->
+                                <div class="border rounded px-2 mb-4" style="height: 210px;">
+                                    <h6 class="fw-bold mt-4">Cor Secundária</h6>
+
+                                    <div class="mb-3">
+                                        <label>Cor do Menu Inferior</label>
+                                        <input type="color" name="CorMenuInferior" id="input-cor-menu-inferior"
+                                               class="form-control form-control-color border rounded"
+                                               value="@customMenuInferior" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label>Cor do Texto Inferior</label>
+                                        <input type="color" name="CorTextoMenuInferior" id="input-cor-texto-menu-inferior"
+                                               class="form-control form-control-color border rounded"
+                                               value="@customTextoMenuInferior" />
+                                    </div>
+                                </div>
+
+                                <!-- LOGO DA PÁGINA -->
+                                <div class="border rounded px-2" style="height: 210px;">
+                                    <h6 class="fw-bold mt-4">Logo</h6>
+
+                                    @if (!string.IsNullOrEmpty(caminhoLogo))
+                                    {
+                                        <div class="text-center mb-3">
+                                            <img src="@caminhoLogo" alt="Logo atual"
+                                                 class="img-fluid rounded logo-form-preview"
+                                                 style="max-height: 65px; background-color: @customMenu" />
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center mb-3">
+                                            <img src="/img/logo-default-2.png" alt="Logo atual"
+                                                 class="img-fluid rounded logo-form-preview"
+                                                 style="max-height: 65px;" />
+                                        </div>
+                                    }
+
+                                    <div class="mb-3">
+                                        <label>Enviar nova logo</label>
+                                        <input type="file" name="LogoArquivo"
+                                               accept="image/*"
+                                               class="form-control form-control-color border rounded" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label>Cor do Texto do Menu Principal</label>
-                            <input type="color" name="CorTextoMenu" id="input-cor-texto-menu"
-                                   class="form-control form-control-color border rounded"
-                                   value="@customTextoMenu" />
-                        </div>
-
                         <button type="submit" class="btn btn-primary w-100 mt-3">
                             Salvar Alterações
                         </button>
                     </form>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
@@ -177,22 +239,72 @@
 </div>
 
 <script>
-    // PREVIEW EM TEMPO REAL
+    // SUPERIOR
     document.getElementById("input-cor-menu").addEventListener("input", e => {
-        const bgcolor = e.target.value;
-        document.getElementById("preview-navbar").style.backgroundColor = bgcolor;
-        document.getElementById("preview-footer").style.backgroundColor = bgcolor;
+        const color = e.target.value;
+        document.getElementById("preview-navbar").style.backgroundColor = color;
+        document.getElementById("preview-footer").style.backgroundColor = color;
     });
 
     document.getElementById("input-cor-texto-menu").addEventListener("input", e => {
         const color = e.target.value;
+
         document.getElementById("preview-texto").style.color = color;
         document.getElementById("preview-footer-txt").style.color = color;
         document.getElementById("preview-footer-txt2").style.color = color;
 
-        // Ícones dentro da navbar
         document.querySelectorAll("#preview-texto i").forEach(i => {
             i.style.color = color;
         });
     });
+
+
+    // INFERIOR
+    document.getElementById("input-cor-menu-inferior").addEventListener("input", e => {
+        const color = e.target.value;
+        document.querySelector(".preview-navbar-inf").style.backgroundColor = color;
+        document.querySelector("#preview-rodape-inf").parentElement.parentElement.parentElement.style.backgroundColor = color;
+    });
+
+    document.getElementById("input-cor-texto-menu-inferior").addEventListener("input", e => {
+        const color = e.target.value;
+        document.querySelector(".preview-navbar-inf").style.color = color;
+        document.getElementById("preview-rodape-inf").style.color = color;
+    });
+
+
+    // FUNDO DA PÁGINA
+    document.getElementById("input-cor-fundo").addEventListener("input", e => {
+        document.getElementById("preview-content").style.backgroundColor = e.target.value;
+    });
+
+    document.getElementById("input-cor-texto-fundo").addEventListener("input", e => {
+        document.querySelector("#preview-content h3").style.color = e.target.value;
+    });
+
+
+    // PREVIEW DA LOGO AO TROCAR O ARQUIVO
+    const inputLogo = document.querySelector("input[name='LogoArquivo']");
+
+    // Apenas imagens de PREVIEW
+    const previewLogos = document.querySelectorAll(".preview-logo");
+    const previewLogoForm = document.querySelector(".logo-form-preview");
+
+    inputLogo.addEventListener("change", e => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = ev => {
+            const novaLogo = ev.target.result;
+
+            previewLogos.forEach(img => img.src = novaLogo);
+            previewLogoForm.src = novaLogo;
+        };
+
+
+        reader.readAsDataURL(file);
+    });
+
 </script>
