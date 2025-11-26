@@ -10,7 +10,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Remove="appsettings.json" />
 		<Content Remove="Areas\AdministrativoSuper\_ViewImports.cshtml" />
 	</ItemGroup>
 
@@ -39,9 +38,5 @@
 	<ItemGroup>
 		<Folder Include="Areas\Administrativo\Views\Personalizar\Partials\" />
 		<Folder Include="Areas\Administrativo\Views\Shared\Script\" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="appsettings.json" />
 	</ItemGroup>
 </Project>
