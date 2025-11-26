@@ -3,6 +3,7 @@ using BROS_ECommerce.Domain.Interfaces.Repository;
 using BROS_ECommerce.Services.Helpers;
 using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Imagem;
+using BROS_ECommerce.Services.ViewModel.Personalizar;
 using BROS_ECommerce.Services.ViewModel.Tenant;
 using Microsoft.AspNetCore.Http;
 
@@ -105,6 +106,34 @@ public class ServiceTenant : IServiceTenant
         tenant.Email = vm.Email;
         tenant.Telefone = vm.Telefone;
         tenant.Ativo = vm.Ativo;
+
+        await _repositoryTenant.AtualizarAsync(tenant);
+    }
+
+    public async Task AtualizarTemaAsync(Tenant tenant, PersonalizarLojaViewModel model)
+    {
+        // Atualiza as cores
+        tenant.CorMenu = model.CorMenu;
+        tenant.CorTextoMenu = model.CorTextoMenu;
+
+        tenant.CorFundo = model.CorFundo;
+        tenant.CorTexto = model.CorTexto;
+
+        tenant.CorMenuInferior = model.CorMenuInferior;
+        tenant.CorTextoMenuInferior = model.CorTextoMenuInferior;
+
+        // Atualiza a logo (opcional)
+        if (model.LogoArquivo != null)
+        {
+            var imagemVM = new CadastrarImagemViewModel
+            {
+                Arquivos = new List<IFormFile> { model.LogoArquivo },
+                AltText = $"Logo da loja {tenant.Nome}"
+            };
+
+            var novaLogoId = await _serviceImagem.AdicionarAsync(imagemVM);
+            tenant.IdLogo = novaLogoId;
+        }
 
         await _repositoryTenant.AtualizarAsync(tenant);
     }
