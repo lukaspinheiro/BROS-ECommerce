@@ -51,7 +51,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="stat-label">Total de Pedidos</div>
-                                            <div class="stat-number">@Model.TotalPedidos</div>
+                                            <div class="stat-number">@Model.TotalPedidos.ToString("F2")</div>
                                         </div>
                                         <div class="stat-icon">
                                             <i class="fa-solid fa-shopping-cart"></i>
@@ -63,7 +63,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="stat-label">Pedidos Pendentes</div>
-                                            <div class="stat-number">@Model.PedidosPendentes</div>
+                                            <div class="stat-number">@Model.PedidosPendentes.ToString("F2")</div>
                                         </div>
                                         <div class="stat-icon">
                                             <i class="fa-solid fa-clock"></i>
@@ -75,7 +75,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="stat-label">Pedidos Entregues</div>
-                                            <div class="stat-number">@Model.PedidosEntregues</div>
+                                            <div class="stat-number">@Model.PedidosEntregues.ToString("F2")</div>
                                         </div>
                                         <div class="stat-icon">
                                             <i class="fa-solid fa-check"></i>
@@ -87,7 +87,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <div class="stat-label">Valor Total</div>
-                                            <div class="stat-number">@Model.ValorTotalPedidos.ToString("C")</div>
+                                            <div class="stat-number">@Model.ValorTotalPedidos.ToString("F2")</div>
                                         </div>
                                         <div class="stat-icon">
                                             <i class="fa-solid fa-dollar-sign"></i>
@@ -191,7 +191,7 @@
                                                             <span class="badge bg-@statusClass">@pedido.Status</span>
                                                         </td>
                                                         <td>
-                                                            <span class="pedido-valor">@pedido.ValorTotal.ToString("C")</span>
+                                                            <span class="pedido-valor">@pedido.ValorTotal.ToString("F2")</span>
                                                         </td>
                                                         <td>
                                                             <div class="pedido-actions">

@@ -1,19 +1,20 @@
 ﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Usuario.UsuarioTabelaViewModel>
 
-@if (Model.Any())
-{
-    <div class="table-responsive">
-        <table class="table table-light table-sm" id="tabela" data-order="[]">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Data de Criação</th>
-                </tr>
-            </thead>
 
-            <tbody>
+<div class="table-responsive">
+    <table class="table table-light table-sm" id="tabela" data-order="[]">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Data de Criação</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.Any())
+            {
                 @foreach (var u in Model)
                 {
                     <tr>
@@ -32,7 +33,20 @@
                         <td class="text-center">@u.DataCriacao.ToString("dd/MM/yyyy HH:mm")</td>
                     </tr>
                 }
-            </tbody>
-        </table>
-    </div>
-}
+            }
+            else{
+                <tr>
+                <td colspan="6" class="text-center py-4">
+                    <div class="text-muted">
+                        <i class="fas fa-inbox fa-2x mb-2"></i>
+                        <br>
+                        <strong>Nenhum Usuário encontrado</strong>
+                        <br>
+                        <small>Cadastre um novo Usuário.</small>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

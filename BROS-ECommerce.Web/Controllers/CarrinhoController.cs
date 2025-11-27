@@ -73,7 +73,7 @@ namespace BROS_ECommerce.Web.Controllers
                 Console.WriteLine($"[CARRINHO] ✅ Produto adicionado com sucesso!");
                 Console.WriteLine($"[CARRINHO] Carrinho ID: {carrinho.IdCarrinho}");
                 Console.WriteLine($"[CARRINHO] Quantidade total: {carrinho.QuantidadeTotal}");
-                Console.WriteLine($"[CARRINHO] Valor total: {carrinho.ValorTotal:C}");
+                Console.WriteLine($"[CARRINHO] Valor total: {carrinho.ValorTotal:F2}");
                 Console.WriteLine($"[CARRINHO] Total de itens únicos: {carrinho.Itens?.Count ?? 0}");
 
                 var itensCarrinho = carrinho.Itens?.Select(item => new CarrinhoItemDto
@@ -448,7 +448,7 @@ namespace BROS_ECommerce.Web.Controllers
                 {
                     sucesso = true,
                     quantidadeItens = carrinho.QuantidadeTotal,
-                    valorTotal = carrinho.ValorTotal.ToString("C2")
+                    valorTotal = carrinho.ValorTotal.ToString("F2")
                 });
             }
             catch (Exception ex)
@@ -480,7 +480,7 @@ namespace BROS_ECommerce.Web.Controllers
                         sucesso = true,
                         mensagem = "Produto removido do carrinho",
                         quantidadeItens = carrinho?.QuantidadeTotal ?? 0,
-                        valorTotal = carrinho?.ValorTotal.ToString("C2") ?? "R$ 0,00",
+                        valorTotal = carrinho?.ValorTotal.ToString("F2") ?? "R$ 0,00",
                         temItens = carrinho?.TemItens ?? false
                     });
                 }

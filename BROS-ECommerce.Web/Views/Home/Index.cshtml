@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Produto.TabelaProdutoViewModel>
+@{
     ViewData["Title"] = "Início";
 }
 @section Head{
@@ -8,8 +9,8 @@
 }
 
 <partial name="\Partials\_carousel" />
-<partial name="\PartialsLayout\_Promocoes" />
-<partial name="\PartialsLayout\_Produtos" />
+@* <partial name="\PartialsLayout\_Promocoes" /> *@
+<partial name="PartialsLayout/_Produtos" model="Model" />
 
 @* <partial name="\Partials\_TipoSuplementos" /> *@
 

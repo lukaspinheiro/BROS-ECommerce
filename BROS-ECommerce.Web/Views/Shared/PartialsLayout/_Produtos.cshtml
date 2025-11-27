@@ -1,93 +1,63 @@
-﻿@* @inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+﻿@model IEnumerable<BROS_ECommerce.Services.ViewModel.Produto.TabelaProdutoViewModel>
+@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
 @{
     var corTextoFundo = tenantService.TenantAtual?.CorTexto;
     var corSeta = tenantService.TenantAtual?.CorFundo;
 }
-<section class="promocao-section">
-    <h2 class="text-center extra-bold mb-4" style="color: @corTextoFundo;">Produtos</h2>
-    <div class="carousel-wrapper">
-        <button class="scroll-btn left" id="btn-left" style="background-color: @corTextoFundo; color: @corSeta;">‹</button>
-        <div class="produtos-container d-flex justify-content-between gap-5" id="carousel">
 
-            <div class="card d-flex justify-content-between">
-                <div class="d-flex justify-content-center align-items-center imagem-produto">
-                    <img src="https://www.gsuplementos.com.br/upload/produto/layout/185/image01-interna.webp" alt="Produto 1">
-                </div>
-                <div class="desconto extra-bold">10% OFF</div>
-                <div class="descricao fw-bolder">Whey Protein Concentrado (1KG) - Growth Supplements</div>
-                <div class="precos">
-                    <del>De R$ 138,80</del>
-                    <strong>POR R$ 124,90</strong>
-                </div>
-                <button class="btn-comprar" onclick="adicionarAoCarrinho('11111111-1111-1111-1111-111111111111')">COMPRAR</button>
+    <section class="promocao-section">
+        <h2 class="text-center extra-bold mb-4" style="color: @corTextoFundo;">Produtos</h2>
+        <div class="carousel-wrapper">
+            <button class="scroll-btn left" id="btn-left" style="background-color: @corTextoFundo; color: @corSeta;">‹</button>
+            <div class="produtos-container d-flex justify-content-between gap-5" id="carousel">
+
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var produto in Model)
+                    {
+                        <div class="card d-flex justify-content-between">
+                            <div class="d-flex justify-content-center align-items-center imagem-produto">
+                                @if (produto.TemImagem)
+                                {
+                                    <img src="@produto.ImagemPrincipal"
+                                         alt="@produto.Nome" />
+                                }
+                                else
+                                {
+                                    <div style="max-width: 100%; max-height: 100%; background-color: #f8f9fa; border: 1px dashed #dee2e6; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                                        <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                }
+                            </div>
+                            <div class="desconto extra-bold">Compre já</div>
+                            <div class="descricao fw-bolder">@produto.Nome</div>
+                            <div class="precos">
+                                @* <del>De R$ 138,80</del> *@
+                                <strong>POR R$ @produto.Preco</strong>
+                            </div>
+                            <button class="btn-comprar" onclick="adicionarAoCarrinho('@produto.IdProduto')">COMPRAR</button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="card d-flex justify-content-between">
+                        <div class="d-flex justify-content-center align-items-center imagem-produto">
+                            <div style="max-width: 100%; max-height: 100%; background-color: #f8f9fa; border: 1px dashed #dee2e6; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                                <i class="fas fa-image text-muted"></i>
+                            </div>
+                        </div>
+                        <div class="desconto extra-bold">Compre já</div>
+                        <div class="descricao fw-bolder">Produto padrão 1</div>
+                        <div class="precos">
+                            @* <del>De R$ 138,80</del> *@
+                            <strong>POR R$ 20,00</strong>
+                        </div>
+                        <button class="btn-comprar" disabled>COMPRAR</button>
+                    </div>
+                }
+
             </div>
-
-            <div class="card d-flex justify-content-between">
-                <div class="d-flex justify-content-center align-items-center imagem-produto">
-                    <img src="https://lojamaxtitanium.vtexassets.com/arquivos/ids/157482-1920-0/horus-max-titanium-300g-citrus-1.jpg?v=638348659717270000" alt="Produto 2">
-                </div>
-                <div class="desconto extra-bold">22% OFF</div>
-                <div class="descricao">Pré-Treino Horus Max Titanium - 300g</div>
-                <div class="precos">
-                    <del>De R$ 169,90</del>
-                    <strong>POR R$ 125,30</strong>
-                </div>
-                <button class="btn-comprar" onclick="adicionarAoCarrinho('22222222-2222-2222-2222-222222222222')">COMPRAR</button>
-            </div>
-
-            <div class="card d-flex justify-content-between">
-                <div class="d-flex justify-content-center align-items-center imagem-produto">
-                    <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRQKCjiOjO5-MXRSsJZb6HfpM9Yet-2pAc0ETCtuidOPjH8HtZepjZoxTa-fPhq5XXdcveMxLtrM5POZqHsr5A_cCJhdx4N5fVELzzZ03-IcaJu0H-gdXFVV98UV375g_9th822BOM&usqp=CAc" alt="Produto 3">
-                </div>
-                <div class="desconto extra-bold">10% OFF</div>
-                <div class="descricao">Whey Protein Black Skull - 900G</div>
-                <div class="precos">
-                    <del>De R$ 99,90</del>
-                    <strong>POR R$ 89,91</strong>
-                </div>
-                <button class="btn-comprar" onclick="adicionarAoCarrinho('33333333-3333-3333-3333-333333333333')">COMPRAR</button>
-            </div>
-
-            <div class="card d-flex justify-content-between">
-                <div class="d-flex justify-content-center align-items-center imagem-produto">
-                    <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTk0H-OOXGQSqLAlFtChDo7GvN9_O_cm_-HgqqDINwfljFI1I0bqEfBUWJeo1SHfUNa-3xrPYNc4LcRhuxlMSbzmYnhPLyLTuxYJ9pROgIDJoc7wBRXqLvZxyTLyEY9Nsyneyi5iukbGtI&usqp=CAc" alt="Produto 4">
-                </div>
-                <div class="desconto extra-bold">10% OFF</div>
-                <div class="descricao">Pasta de Amendoim Growth Sabor Cookies - 500G</div>
-                <div class="precos">
-                    <del>De R$ 31,00</del>
-                    <strong>POR R$ 27,90</strong>
-                </div>
-                <button class="btn-comprar" onclick="adicionarAoCarrinho('44444444-4444-4444-4444-444444444444')">COMPRAR</button>
-            </div>
-
-            <div class="card d-flex justify-content-between">
-                <div class="d-flex justify-content-center align-items-center imagem-produto">
-                    <img src="https://lojamaxtitanium.vtexassets.com/arquivos/ids/157482-1920-0/horus-max-titanium-300g-citrus-1.jpg?v=638348659717270000" alt="Produto 5">
-                </div>
-                <div class="desconto extra-bold">15% OFF</div>
-                <div class="descricao">Creatina Monohidratada Growth - 250g</div>
-                <div class="precos">
-                    <del>De R$ 93,00</del>
-                    <strong>POR R$ 79,92</strong>
-                </div>
-                <button class="btn-comprar" onclick="adicionarAoCarrinho('55555555-5555-5555-5555-555555555555')">COMPRAR</button>
-            </div>
-
-            <div class="card d-flex justify-content-between">
-                <div class="d-flex justify-content-center align-items-center imagem-produto">
-                    <img src="https://lojamaxtitanium.vtexassets.com/arquivos/ids/157482-1920-0/horus-max-titanium-300g-citrus-1.jpg?v=638348659717270000" alt="Produto 6">
-                </div>
-                <div class="desconto extra-bold">20% OFF</div>
-                <div class="descricao">BCAA Aminoácidos Essenciais - 120 caps</div>
-                <div class="precos">
-                    <del>De R$ 85,00</del>
-                    <strong>POR R$ 68,00</strong>
-                </div>
-                <button class="btn-comprar" onclick="adicionarAoCarrinho('66666666-6666-6666-6666-666666666666')">COMPRAR</button>
-            </div>
-
+            <button class="scroll-btn right" id="btn-right" style="background-color: @corTextoFundo; color: @corSeta;">›</button>
         </div>
-        <button class="scroll-btn right" id="btn-right" style="background-color: @corTextoFundo; color: @corSeta;">›</button>
-    </div>
-</section> *@
+    </section>
