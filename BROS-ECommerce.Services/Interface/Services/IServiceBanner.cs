@@ -1,4 +1,5 @@
 ﻿using BROS_ECommerce.Services.ViewModel.Banner;
+using Microsoft.AspNetCore.Http;
 
 namespace BROS_ECommerce.Services.Interface.Services;
 
@@ -8,7 +9,7 @@ public interface IServiceBanner
     Task<BannerViewModel?> ObterPorIdAsync(Guid id);
     Task<Guid> AdicionarAsync(CriarBannerViewModel bannerVM);
 
-    Task AtualizarAsync(BannerViewModel bannerVM);
+    Task AtualizarAsync(BannerViewModel vm, IFormFile? arquivo = null);
     Task ExcluirAsync(Guid id);
     Task ExcluirLogicamenteAsync(Guid id);
 }

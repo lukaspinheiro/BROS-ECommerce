@@ -2,6 +2,7 @@
 using BROS_ECommerce.Domain.Interfaces.Repository;
 using BROS_ECommerce.Services.Interface.Services;
 using BROS_ECommerce.Services.ViewModel.Banner;
+using Microsoft.AspNetCore.Http;
 
 namespace BROS_ECommerce.Services.Services;
 
@@ -82,18 +83,35 @@ public class ServiceBanner : IServiceBanner
     }
 
 
-    public async Task AtualizarAsync(BannerViewModel vm)
+    public async Task AtualizarAsync(BannerViewModel vm, IFormFile? arquivo = null)
     {
         var banner = await _repositoryBanner.ObterPorIdAsync(vm.IdBanner);
 
         banner.Titulo = vm.Titulo;
-        banner.CaminhoImagem = vm.CaminhoImagem;
         banner.Link = vm.Link;
         banner.Ordem = vm.Ordem;
         banner.Ativo = vm.Ativo;
 
+        if (arquivo != null)
+        {
+            var folderPath = Path.Combine("wwwroot", "uploads", "banners");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            var nomeArquivo = Guid.NewGuid() + Path.GetExtension(arquivo.FileName);
+            var filePath = Path.Combine(folderPath, nomeArquivo);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await arquivo.CopyToAsync(stream);
+            }
+
+            banner.CaminhoImagem = "/uploads/banners/" + nomeArquivo;
+        }
+
         await _repositoryBanner.AtualizarAsync(banner);
     }
+
 
     public async Task ExcluirAsync(Guid id)
     {

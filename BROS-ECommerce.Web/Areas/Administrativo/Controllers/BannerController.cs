@@ -25,8 +25,9 @@ public class BannerController : Controller
 
     public IActionResult Create()
     {
-        return View();
+        return PartialView("Partials/_CriarBanner", new CriarBannerViewModel());
     }
+
 
     [HttpPost("Create")]
     public async Task<IActionResult> Create(CriarBannerViewModel vm)
@@ -35,6 +36,39 @@ public class BannerController : Controller
             return View(vm);
 
         await _serviceBanner.AdicionarAsync(vm);
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet("Edit/{id:guid}")]
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        var banner = await _serviceBanner.ObterPorIdAsync(id);
+        if (banner == null) return NotFound();
+
+        return PartialView("Partials/_EditarBanner", banner);
+    }
+
+    [HttpPost("Edit/{id:guid}")]
+    public async Task<IActionResult> Edit(Guid id, BannerViewModel vm)
+    {
+        await _serviceBanner.AtualizarAsync(vm, Request.Form.Files["Arquivo"]);
+        return RedirectToAction("Index");
+    }
+
+
+    [HttpGet("Delete/{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var banner = await _serviceBanner.ObterPorIdAsync(id);
+        if (banner == null) return NotFound();
+
+        return PartialView("Partials/_ExcluirBanner", banner);
+    }
+
+    [HttpPost("DeleteConfirmed/{id:guid}")]
+    public async Task<IActionResult> DeleteConfirmed(Guid id)
+    {
+        await _serviceBanner.ExcluirAsync(id);
         return RedirectToAction("Index");
     }
 }

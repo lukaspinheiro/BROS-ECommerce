@@ -1,0 +1,39 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Banner.BannerViewModel
+
+<div class="container mt-4">
+    <h3>Editar Banner</h3>
+
+    <form id="formEditarBanner" enctype="multipart/form-data">
+        <input type="hidden" asp-for="IdBanner" />
+
+        <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input asp-for="Titulo" class="form-control" />
+            <span asp-validation-for="Titulo" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Link</label>
+            <input asp-for="Link" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Imagem Atual</label><br />
+            @if (!string.IsNullOrEmpty(Model.CaminhoImagem))
+            {
+                <img src="@Model.CaminhoImagem" width="200" class="img-thumbnail" />
+            }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Alterar Imagem</label>
+            <input type="file" name="Arquivo" class="form-control" accept="image/*" />
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="salvarEdicaoBanner('@Model.IdBanner')">
+            Salvar Alterações
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+    </form>
+</div>

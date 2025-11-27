@@ -45,12 +45,12 @@
                                                 <td>@banner.Titulo</td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm gap-1" role="group">
-                                                        <a asp-action="Edit" asp-route-id="@banner.IdBanner" class="btn btn-sm bg-white text-success">
-                                                            <i class="fas fa-edit fa-lg"></i>Editar</a>
-
-                                                        <a asp-action="Delete" asp-route-id="@banner.IdBanner" class="btn btn-sm bg-white text-danger">
+                                                        <button class="btn btn-sm bg-white text-success" onclick="carregarEditar('@banner.IdBanner')">
+                                                            <i class="fas fa-edit fa-lg"></i>Editar
+                                                        </button>
+                                                        <button class="btn btn-sm bg-white text-danger" onclick="carregarExcluir('@banner.IdBanner')">
                                                             <i class="fas fa-trash-alt fa-lg" style="color: #dc3545;"></i>Excluir
-                                                        </a>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -80,7 +80,7 @@
     </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL ADICIONAR-->
 <div class="modal fade" id="modalCriarBanner" tabindex="-1" aria-labelledby="modalCriarBannerLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -97,3 +97,72 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL EDITAR -->
+<div class="modal fade" id="modalEditarBanner" tabindex="-1" aria-labelledby="modalEditarBannerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarBannerLabel">Editar Banner</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="conteudoEditarBanner">
+                <!-- Conteúdo carregado por AJAX -->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EXCLUIR -->
+<div class="modal fade" id="modalExcluirBanner" tabindex="-1" aria-labelledby="modalExcluirBannerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExcluirBannerLabel">Excluir Banner</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="conteudoExcluirBanner">
+                <!-- Conteúdo carregado por AJAX -->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function carregarEditar(id) {
+        $.get('/Administrativo/Banner/Edit/' + id, function (data) {
+            $("#conteudoEditarBanner").html(data);
+            $("#modalEditarBanner").modal('show');
+        });
+    }
+
+    function carregarExcluir(id) {
+        $.get('/Administrativo/Banner/Delete/' + id, function (data) {
+            $("#conteudoExcluirBanner").html(data);
+            $("#modalExcluirBanner").modal('show');
+        });
+    }
+    
+    function salvarEdicaoBanner(id) {
+        const form = document.getElementById("formEditarBanner");
+        const formData = new FormData(form);
+
+        fetch('/Administrativo/Banner/Edit/' + id, {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => {
+            if (r.redirected) {
+                window.location.href = r.url;
+            } else {
+                $("#conteudoEditarBanner").html(r);
+            }
+        });
+    }
+</script>
