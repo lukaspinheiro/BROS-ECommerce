@@ -102,12 +102,23 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                    @* <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
                         <a asp-area="Administrativo" asp-controller="" asp-action="">
                             <div class="card card-scale" style="height: 15rem;">
                                 <div class="card-body">
                                     <i class="fa-solid fa-hand-holding-dollar fa-2x mt-5" aria-hidden="true"></i>
                                     <h4 class="fw-bold mt-4">Gerenciar Promoções</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div> *@
+
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="Usuario" asp-action="Index">
+                            <div class="card card-scale" style="height: 15rem;">
+                                <div class="card-body">
+                                    <i class="fa-solid fa-users fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Usuários</h4>
                                 </div>
                             </div>
                         </a>
@@ -124,7 +135,7 @@
                         </a>
                     </div>
                     
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                   @*  <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
                         <a asp-area="Administrativo" asp-controller="Home" asp-action="">
                             <div class="card card-scale" style="height: 15rem;">
                                 <div class="card-body">
@@ -133,19 +144,19 @@
                                 </div>
                             </div>
                         </a>
-                    </div>
+                    </div> *@
 
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
-                        <a asp-area="Administrativo" asp-controller="Usuario" asp-action="Index">
+                    @* <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
+                        <a asp-area="Administrativo" asp-controller="Home" asp-action="">
                             <div class="card card-scale" style="height: 15rem;">
                                 <div class="card-body">
-                                    <i class="fa-solid fa-users fa-2x mt-5" aria-hidden="true"></i>
-                                    <h4 class="fw-bold mt-4">Gerenciar Usuários</h4>
+                                    <i class="fa-solid fa-panorama fa-2x mt-5" aria-hidden="true"></i>
+                                    <h4 class="fw-bold mt-4">Gerenciar Banners</h4>
                                 </div>
                             </div>
                         </a>
-                    </div>
-                    
+                    </div> *@
+
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3 hvr-bob">
                         <a asp-area="Administrativo" asp-controller="Personalizar" asp-action="Index">
                             <div class="card card-scale" style="height: 15rem;">
