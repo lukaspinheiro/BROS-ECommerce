@@ -1,0 +1,99 @@
+﻿@using BROS_ECommerce.Services.ViewModel.Banner
+@model List<BannerViewModel>
+
+@{
+    ViewData["Title"] = "Banners";
+}
+
+<div class="container">
+    <div class="card mt-0">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                    <a asp-area="Administrativo" asp-controller="Home" asp-action="Index" class="pull-left"><i class="fa-solid fa-arrow-left fa-xl" style="color: #535353"></i></a>
+                    <div>
+                        <a class="btn btn-success pull-right text-white" data-bs-toggle="modal" data-bs-target="#modalCriarBanner">
+                            <i class="fa fa-plus"></i> Adicionar Banner
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <h3 class="title text-center"> @ViewData["Title"]</h3>
+
+                    <div class="col-12" id="tabela-partial">
+                        <div class="table-responsive">
+                            <table class="table table-light table-sm" id="tabela">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 15%">Imagem</th>
+                                        <th>Título</th>
+                                        <th style="width: 15%">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Any() && Model!=null)
+                                    {
+                                        @foreach (var banner in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(banner.CaminhoImagem))
+                                                    {
+                                                        <img src="@banner.CaminhoImagem" width="120" class="img-thumbnail" />
+                                                    }
+                                                </td>
+                                                <td>@banner.Titulo</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm gap-1" role="group">
+                                                        <a asp-action="Edit" asp-route-id="@banner.IdBanner" class="btn btn-sm bg-white text-success">
+                                                            <i class="fas fa-edit fa-lg"></i>Editar</a>
+
+                                                        <a asp-action="Delete" asp-route-id="@banner.IdBanner" class="btn btn-sm bg-white text-danger">
+                                                            <i class="fas fa-trash-alt fa-lg" style="color: #dc3545;"></i>Excluir
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="7" class="text-center py-4">
+                                                <div class="text-muted">
+                                                    <i class="fas fa-inbox fa-2x mb-2"></i>
+                                                    <br>
+                                                    <strong>Nenhum banner encontrado</strong>
+                                                    <br>
+                                                    <small>Adicione um banner para começar primeiro.</small>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="modalCriarBanner" tabindex="-1" aria-labelledby="modalCriarBannerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCriarBannerLabel">Criar Novo Banner</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                @await Html.PartialAsync("Partials/_CriarBanner", new CriarBannerViewModel())
+            </div>
+
+        </div>
+    </div>
+</div>

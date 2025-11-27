@@ -4,6 +4,7 @@ using BROS_ECommerce.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BROS_ECommerce.Infra.Migrations
 {
     [DbContext(typeof(BrosContext))]
-    partial class BrosContextModelSnapshot : ModelSnapshot
+    [Migration("20251127060612_AddBanner")]
+    partial class AddBanner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +35,7 @@ namespace BROS_ECommerce.Infra.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CaminhoImagem")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DataAtualizacao")
@@ -49,6 +53,10 @@ namespace BROS_ECommerce.Infra.Migrations
 
                     b.Property<int>("Ordem")
                         .HasColumnType("int");
+
+                    b.Property<string>("Subtitulo")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("TenantId")
                         .IsRequired()

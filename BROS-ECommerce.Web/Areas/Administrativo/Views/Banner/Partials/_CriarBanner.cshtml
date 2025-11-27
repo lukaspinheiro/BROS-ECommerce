@@ -1,0 +1,25 @@
+﻿@using BROS_ECommerce.Services.ViewModel.Banner
+@model CriarBannerViewModel
+
+<form asp-action="Create" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label class="form-label">Título</label>
+        <input asp-for="Titulo" class="form-control" required />
+        <span asp-validation-for="Titulo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Link</label>
+        <input asp-for="Link" class="form-control" />
+        <span asp-validation-for="Link" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Imagem</label>
+        <input type="file" asp-for="Arquivo" class="form-control" accept="image/*" required />
+        <span asp-validation-for="Arquivo" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Salvar</button>
+</form>

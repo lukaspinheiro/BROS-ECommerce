@@ -37,6 +37,7 @@ namespace BROS_ECommerce.Infra.Context
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<PedidoItem> PedidoItens { get; set; }
         public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<Banner> Banners { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +53,7 @@ namespace BROS_ECommerce.Infra.Context
             modelBuilder.ApplyConfiguration(new PedidoItemMap());
             modelBuilder.ApplyConfiguration(new CarrinhoMap());
             modelBuilder.ApplyConfiguration(new CarrinhoItemMap());
+            modelBuilder.ApplyConfiguration(new BannerMap());
 
             SeedUsers(modelBuilder);
             SeedEstoque(modelBuilder);
@@ -70,6 +72,7 @@ namespace BROS_ECommerce.Infra.Context
             modelBuilder.Entity<Promocao>().HasQueryFilter(a => a.TenantId == TenantAtualId);
             modelBuilder.Entity<Pedido>().HasQueryFilter(a => a.TenantId == TenantAtualId);
             modelBuilder.Entity<PedidoItem>().HasQueryFilter(a => a.TenantId == TenantAtualId);
+            modelBuilder.Entity<Banner>().HasQueryFilter(a => a.TenantId == TenantAtualId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
