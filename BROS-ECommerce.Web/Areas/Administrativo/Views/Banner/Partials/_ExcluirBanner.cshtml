@@ -1,0 +1,20 @@
+﻿@model BROS_ECommerce.Services.ViewModel.Banner.BannerViewModel
+
+<div class="container mt-4">
+    <h3>Excluir Banner</h3>
+
+    <p>Tem certeza que deseja excluir o banner abaixo?</p>
+
+    <div class="card p-3 mb-3">
+        <strong>Título:</strong> @Model.Titulo <br />
+        @if (!string.IsNullOrEmpty(Model.CaminhoImagem))
+        {
+            <img src="@Model.CaminhoImagem" width="300" class="img-thumbnail mt-2" />
+        }
+    </div>
+
+    <form asp-action="DeleteConfirmed" method="post" asp-route-id="@Model.IdBanner">
+        <button class="btn btn-danger">Excluir</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

@@ -41,6 +41,7 @@ namespace BROS_ECommerce.Web.Configuration
             services.AddScoped<IRepositoryPedidoItem, PedidoItemRepository>();
             services.AddScoped<IRepositoryCategoriaProduto, RepositoryCategoriaProduto>();
             services.AddScoped<IRepositoryTenant, TenantRepository>();
+            services.AddScoped<IRepositoryBanner, BannerRepository>();
             #endregion
 
             #region Serviços
@@ -55,6 +56,7 @@ namespace BROS_ECommerce.Web.Configuration
             services.AddScoped<IServicePedidoIntegracao, ServicePedidoIntegracao>();
             services.AddScoped<IServiceCategoriaProduto, ServiceCategoriaProduto>();
             services.AddScoped<IServiceTenant, ServiceTenant>();
+            services.AddScoped<IServiceBanner, ServiceBanner>();
             #endregion
 
             #region Serviços de Pagamento
