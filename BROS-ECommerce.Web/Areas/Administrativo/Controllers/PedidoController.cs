@@ -7,7 +7,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 {
     [Area("Administrativo")]
     [Route("Administrativo/Pedido")]
-    public class PedidoController : Controller
+    public class PedidoController : BaseAdminController
     {
         private readonly IServicePedido _servicePedido;
 
@@ -16,20 +16,9 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
             _servicePedido = servicePedido;
         }
 
-        private bool IsAdmin()
-        {
-            var email = User.Identity?.Name;
-            return email == Constants.ADMIN_EMAIL;
-        }
-
         [HttpGet("index")]
         public async Task<IActionResult> Index()
         {
-            if (!IsAdmin())
-            {
-                return Forbid();
-            }
-
             try
             {
                 var pedidosTabela = await _servicePedido.ObterTabelaPedidoAsync();
@@ -51,11 +40,6 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         [HttpPost("Filtrar")]
         public async Task<IActionResult> Filtrar(IndexPedidoViewModel indexPedidoViewModel)
         {
-            if (!IsAdmin())
-            {
-                return Forbid();
-            }
-
             try
             {
                 var filtro = indexPedidoViewModel.Filtro;
@@ -77,10 +61,6 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         [HttpGet("detalhes/{idPedido}")]
         public async Task<IActionResult> Detalhes(Guid idPedido)
         {
-            if (!IsAdmin())
-            {
-                return Forbid();
-            }
 
             try
             {
@@ -104,10 +84,6 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AtualizarStatus(Guid idPedido, string novoStatus)
         {
-            if (!IsAdmin())
-            {
-                return Forbid();
-            }
 
             try
             {
@@ -133,11 +109,6 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelarPedido(Guid idPedido, string motivoCancelamento)
         {
-            if (!IsAdmin())
-            {
-                return Forbid();
-            }
-
             try
             {
                 var resultado = await _servicePedido.CancelarPedidoAsync(idPedido, motivoCancelamento);
@@ -162,11 +133,6 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExcluirPedido(Guid idPedido)
         {
-            if (!IsAdmin())
-            {
-                return Forbid();
-            }
-
             try
             {
                 var resultado = await _servicePedido.ExcluirPedidoAsync(idPedido);

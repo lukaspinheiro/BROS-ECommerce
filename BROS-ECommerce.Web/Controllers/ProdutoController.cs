@@ -13,12 +13,13 @@ namespace BROS_ECommerce.Web.Controllers
         }
 
         [Route("Produto/{slug}")]
-        public ActionResult Detalhes(string slug)
+        public async Task<IActionResult> Detalhes(string slug)
         {
             var produto = _serviceProduto.ObterPorSlug(slug);
             if (produto == null)
                 return NotFound();
 
+            ViewBag.CardsProdutos = await _serviceProduto.ObterTabelaProdutosAsync();
             return View(produto);
         }
 

@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = Model.Nome;
     var nomeLoja = tenantService.TenantAtual?.Nome;
+    var cardsProdutos = ViewBag.CardsProdutos;
 }
 
 @section Head {
@@ -62,7 +63,7 @@
 
         <div class="frete row w-100">
             <button class="btn-finalizar" onclick="adicionarProdutoCarrinho('@Model.IdProduto')" id="btn-adicionar-carrinho">
-                <span class="btn-text">Finalizar compra</span>
+                <span class="btn-text">Adicionar ao Carrinho</span>
                 <i class="fas fa-cart-plus btn-icon"></i>
                 <div class="btn-loader" style="display: none;">
                     <i class="fas fa-spinner fa-spin"></i>
@@ -112,7 +113,7 @@
     </div>
 </div>
 
-<partial name="\PartialsLayout\_Promocoes" />
+<partial name="\PartialsLayout\_Produtos" model="cardsProdutos" />
 
 @section Scripts {
     <script src="~/js/shared/promocoes.js"></script>

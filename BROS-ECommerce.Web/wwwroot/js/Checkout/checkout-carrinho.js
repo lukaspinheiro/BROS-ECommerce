@@ -181,7 +181,7 @@
 
         const resumoFrete = document.querySelector('#resumo-frete, .resumo-frete');
         if (resumoFrete) {
-            resumoFrete.textContent = 'A calcular';
+            resumoFrete.textContent = 'Grátis';
         }
     }
 
@@ -255,7 +255,7 @@
         const total = subtotal + valorFrete;
 
         const freteElements = document.querySelectorAll('[data-resumo="frete"]');
-        const valorFreteFormatado = valorFrete > 0 ? this.formatarMoeda(valorFrete) : 'A calcular';
+        const valorFreteFormatado = valorFrete > 0 ? this.formatarMoeda(valorFrete) : 'Grátis';
 
         freteElements.forEach(element => {
             if (element) element.textContent = valorFreteFormatado;

@@ -3,16 +3,27 @@
 @{
     ViewData["Title"] = "Carrinho de Compras";
     var nomeLoja = tenantService.TenantAtual?.Nome;
+    var textoFundo = tenantService.TenantAtual?.CorTexto;
+    var corPrimaria = tenantService.TenantAtual?.CorMenu;
+    var corTextoPrimaria = tenantService.TenantAtual?.CorTextoMenu;
+
 }
 @section Head {
     <link href="~/css/Carrinho/carrinho.css" rel="stylesheet" />
+    <style>
+        :root {
+            --cor-primaria: @corPrimaria;
+            --cor-primaria-texto: @corTextoPrimaria;
+            --texto-fundo: @textoFundo;
+        }
+    </style>
 }
 
 <div class="carrinho-page">
     <div class="carrinho-container">
         <div class="carrinho-header">
-            <h2 class="carrinho-titulo">
-                <i class="fa-solid fa-cart-shopping me-3"></i>
+            <h2 class="carrinho-titulo" style="color: @textoFundo">
+                <i class="fa-solid fa-cart-shopping me-3" style="color: @textoFundo !important"></i>
                 CARRINHO (@(Model?.QuantidadeTotal ?? 0))
             </h2>
         </div>

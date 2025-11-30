@@ -1,10 +1,21 @@
-﻿@{
+﻿@inject BROS_ECommerce.Core.Interfaces.ITenantAtualService tenantService
+@{
     ViewData["Title"] = "Finalizar Compra";
+    var textoFundo = tenantService.TenantAtual?.CorTexto;
+    var corPrimaria = tenantService.TenantAtual?.CorMenu;
+    var corTextoPrimaria = tenantService.TenantAtual?.CorTextoMenu;
 }
 
 @section Head {
     <link href="~/css/Checkout/checkout.css" rel="stylesheet" />
     <link href="~/css/Checkout/checkout-user-data.css" rel="stylesheet" />
+    <style>
+        :root {
+            --cor-primaria: @corPrimaria;
+            --cor-primaria-texto: @corTextoPrimaria;
+            --texto-fundo: @textoFundo;
+        }
+    </style>
 }
 
 <div class="checkout-container">

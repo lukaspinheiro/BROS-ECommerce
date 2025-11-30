@@ -8,7 +8,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 {
     [Area("Administrativo")]
     [Route("Administrativo/Estoque")]
-    public class EstoqueController : Controller
+    public class EstoqueController : BaseAdminController
     {
         private readonly IServiceEstoque _serviceEstoque;
         private readonly IServiceProduto _serviceProduto;

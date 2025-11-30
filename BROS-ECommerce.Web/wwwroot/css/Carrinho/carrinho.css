@@ -167,9 +167,9 @@
 }
 
     .carrinho-page .btn-quantidade:hover:not(:disabled) {
-        background: #FF4E4E;
+        background-color: rgb(0, 197, 0);
         color: white;
-        border-color: #FF4E4E;
+        border-color: rgb(0, 197, 0);
         transform: translateY(-2px);
         box-shadow: 0 4px 15px rgba(255, 78, 78, 0.3);
     }
@@ -244,9 +244,9 @@
 }
 
 .carrinho-page .btn-continuar-comprando {
-    background: transparent;
-    border: 2px solid #FF4E4E;
-    color: #FF4E4E;
+    background: var(--cor-primaria);
+    border: 2px solid var(--cor-primaria-texto);
+    color: var(--cor-primaria-texto);
     padding: 1rem 2rem;
     border-radius: 15px;
     font-weight: 600;
@@ -258,9 +258,10 @@
     font-size: 1rem;
 }
 
+
     .carrinho-page .btn-continuar-comprando:hover {
-        background: #FF4E4E;
-        color: white;
+        background: var(--cor-primaria-texto);
+        color: var(--cor-primaria);
         transform: translateY(-2px);
         box-shadow: 0 4px 15px rgba(255, 78, 78, 0.3);
     }
@@ -320,7 +321,7 @@
 
 .carrinho-page .btn-finalizar-compra {
     width: 100%;
-    background: linear-gradient(135deg, #FF4E4E 0%, #e43f3f 100%);
+    background-color: rgb(0, 197, 0);
     border: none;
     color: white;
     padding: 1.2rem 2rem;
@@ -336,7 +337,7 @@
 }
 
     .carrinho-page .btn-finalizar-compra:hover {
-        background: linear-gradient(135deg, #e43f3f 0%, #d32f2f 100%);
+        background: linear-gradient(135deg, rgb(0, 197, 0) 0%, rgb(0, 197, 0) 100%);
         transform: translateY(-2px);
         box-shadow: 0 8px 25px rgba(255, 78, 78, 0.4);
     }
