@@ -6,7 +6,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 {
     [Area("Administrativo")]
     [Route("Administrativo/Imagem")]
-    public class ImagemController : Controller
+    public class ImagemController : BaseAdminController
     {
         private readonly IServiceImagem _serviceImagem;
 

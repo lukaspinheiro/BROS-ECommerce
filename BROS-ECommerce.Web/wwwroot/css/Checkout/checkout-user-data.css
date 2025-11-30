@@ -144,12 +144,12 @@
 }
 
     .payment-label:hover {
-        border-color: #FF4E4E;
+        border-color: var(--cor-primaria);
         background: #fff5f5;
     }
 
 .payment-radio:checked + .payment-label {
-    border-color: #FF4E4E;
+    border-color: var(--cor-primaria);
     background: #fff5f5;
     box-shadow: 0 0 0 3px rgba(255, 78, 78, 0.1);
 }

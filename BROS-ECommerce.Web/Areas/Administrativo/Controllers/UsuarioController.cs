@@ -6,7 +6,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 {
     [Area("Administrativo")]
     [Route("Administrativo/Usuario")]
-    public class UsuarioController : Controller
+    public class UsuarioController : BaseAdminController
     {
         private readonly IServiceUser _serviceUser;
 

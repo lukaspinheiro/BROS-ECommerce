@@ -13,7 +13,7 @@
 }
 
     .checkout-header h2 {
-        color: #FF4E4E;
+        color: var(--texto-fundo);
         font-weight: 900;
         font-size: 2.5rem;
         margin-bottom: 0.5rem;
@@ -58,7 +58,7 @@
 
     .progress-step.active::after,
     .progress-step.completed::after {
-        background: #FF4E4E;
+        background: #636363;
     }
 
 .step-icon {
@@ -76,7 +76,7 @@
 }
 
 .progress-step.active .step-icon {
-    background: #FF4E4E;
+    background: #636363;
     color: white;
     transform: scale(1.1);
 }
@@ -94,7 +94,7 @@
 }
 
 .progress-step.active span {
-    color: #FF4E4E;
+    color: #636363;
     font-weight: 700;
 }
 
@@ -139,7 +139,7 @@
         font-size: 1.6rem;
         margin-bottom: 2rem;
         padding-bottom: 1rem;
-        border-bottom: 2px solid #FF4E4E;
+        border-bottom: 2px solid var(--cor-primaria);
         display: flex;
         align-items: center;
     }
@@ -174,7 +174,7 @@
 }
 
     .form-control:focus {
-        border-color: #FF4E4E;
+        border-color: var(--cor-primaria);
         box-shadow: 0 0 0 0.2rem rgba(255, 78, 78, 0.25);
         outline: none;
     }
@@ -352,7 +352,7 @@
     }
 
         .payment-option label:hover {
-            border-color: #FF4E4E;
+            border-color: var(--cor-primaria);
             box-shadow: 0 0 8px rgba(255, 78, 78, 0.2);
         }
 
@@ -400,7 +400,7 @@
         font-size: 1.4rem;
         margin-bottom: 1.5rem;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid #FF4E4E;
+        border-bottom: 2px solid var(--cor-primaria);
     }
 
 .summary-placeholder {

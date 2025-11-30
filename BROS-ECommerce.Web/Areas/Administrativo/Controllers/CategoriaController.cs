@@ -6,7 +6,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers
 {
     [Area("Administrativo")]
     [Route("Administrativo/Categoria")]
-    public class CategoriaController : Controller
+    public class CategoriaController : BaseAdminController
     {
         private readonly IServiceCategoria _serviceCategoria;
 

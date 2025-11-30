@@ -7,7 +7,7 @@ namespace BROS_ECommerce.Web.Areas.Administrativo.Controllers;
 [Area("Administrativo")]
 [Route("Administrativo/Banner")]
 
-public class BannerController : Controller
+public class BannerController : BaseAdminController
 {
     private readonly IServiceBanner _serviceBanner;
 

@@ -58,16 +58,16 @@
         let freteValue = 0;
         let freteDescription = '';
 
-        if (cepPrefix === this.freteRules.mesmaRegiao.prefixo) {
-            freteValue = this.freteRules.mesmaRegiao.valor;
-            freteDescription = this.freteRules.mesmaRegiao.descricao;
-        } else if (estado === this.freteRules.mesmoEstado.estado) {
-            freteValue = this.freteRules.mesmoEstado.valor;
-            freteDescription = this.freteRules.mesmoEstado.descricao;
-        } else {
-            freteValue = this.freteRules.outroEstado.valor;
-            freteDescription = this.freteRules.outroEstado.descricao;
-        }
+        //if (cepPrefix === this.freteRules.mesmaRegiao.prefixo) {
+        //    freteValue = this.freteRules.mesmaRegiao.valor;
+        //    freteDescription = this.freteRules.mesmaRegiao.descricao;
+        //} else if (estado === this.freteRules.mesmoEstado.estado) {
+        //    freteValue = this.freteRules.mesmoEstado.valor;
+        //    freteDescription = this.freteRules.mesmoEstado.descricao;
+        //} else {
+        //    freteValue = this.freteRules.outroEstado.valor;
+        //    freteDescription = this.freteRules.outroEstado.descricao;
+        //}
 
         this.valorFreteAtual = freteValue;
         this.updateFreteDisplay(freteValue, freteDescription);
